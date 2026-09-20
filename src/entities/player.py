@@ -6,3 +6,4 @@ class Player:
         self.entity = entity
         self.currentX = self.entity.entityOriginalX
         self.currentY = self.entity.entityOriginalY
+        self.nextDirection = "None"
