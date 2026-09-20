@@ -2,18 +2,19 @@ from typing import Any
 
 
 class Game:
-    def __init__(self, width: int, height: int, grid: list[list[int]], player: Any, ghost: Any) -> None:
+    def __init__(self, width: int, height: int, grid: list[list[int]], player: Any, ghost: Any, pickups: Any) -> None:
         self.width = width
         self.height = height
         self.grid = grid
         self.player = player
         self.ghost = ghost
+        self.pickups = pickups
    
     def display_map(self) -> None:
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] == 1:
-                    print("*", end="")
+                    print("|", end="")
                 elif x == self.player.currentX and y == self.player.currentY:
                     print("P", end="")
                 elif x == self.ghost.pinkyCurrentX and y == self.ghost.pinkyCurrentY:
@@ -24,6 +25,10 @@ class Game:
                     print("i", end="")
                 elif x == self.ghost.clydeCurrentX and y == self.ghost.clydeCurrentY:
                     print("c", end="")
+                elif self.pickups.pacgums[y][x] == 10:
+                    print(".", end="")
+                elif self.pickups.pacgums[y][x] == 50:
+                    print("O", end="")
                 else:
                     print(" ", end="")
             print()
