@@ -5,9 +5,7 @@ from src.entities.player import Player
 from src.entities.pickups import Pickups
 from src.entities.ghost import Ghost
 from src.maze.maze_model import MazeModel
-import os
-import time
-
+from src.ui.renderer import Renderer
 
 if __name__ == "__main__":
     loader = Loader("config.json")
@@ -27,7 +25,7 @@ if __name__ == "__main__":
     )
     pickups = Pickups(width, height, grid, ghost)
     game = Game(width, height, grid, player, ghost, pickups)
-    while 1:
-        time.sleep(0.1)
-        os.system("clear")
-        game.display_map()
+    renderer = Renderer(player, game);
+    renderer.setup_hooks()
+    renderer.mlx.mlx_loop_hook(renderer.mlx_ptr, game.gameLoop, param=renderer)
+    renderer.mlx.mlx_loop(renderer.mlx_ptr)
