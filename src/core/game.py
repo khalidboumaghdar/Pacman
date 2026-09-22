@@ -38,7 +38,7 @@ class Game:
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] == 1:
-                    text = font.render("|", True, self.white, self.black)
+                    text = font.render("#", True, self.white, self.black)
                     text_rect = text.get_rect()
                     text_rect.center = (x * 20, y * 20)
                     renderer.screen.blit(text, text_rect)
