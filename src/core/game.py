@@ -1,5 +1,6 @@
 from typing import Any
-from mlx import Mlx
+import pygame
+
 
 class Game:
     def __init__(self, width: int, height: int, grid: list[list[int]], player: Any, ghost: Any, pickups: Any) -> None:
@@ -10,8 +11,10 @@ class Game:
         self.ghost = ghost
         self.pickups = pickups
         self.isRunning = True
+        self.white = (255, 255, 255)
+        self.black = (0, 0, 0)
 
-    def moveThePacman(self):
+    def movePacmanClearOldPosition(self, renderer: Any):
         if self.player.nextDirection == "UP":
             if (self.player.currentY - 1 == 0):
                 return 
@@ -20,7 +23,7 @@ class Game:
             if (self.player.currentX + 1 == self.width - 1):
                 return
             self.player.currentX += 1
-        if self.player.nextDirection == "LEFT":
+        elif self.player.nextDirection == "LEFT":
             if (self.player.currentX - 1 == 0):
                 return
             self.player.currentX -= 1
@@ -29,29 +32,48 @@ class Game:
                 return
             self.player.currentY += 1
 
-   
     def displayMap(self, renderer: Any) -> None:
+        pygame.time.delay(100)
+        font = pygame.font.Font('freesansbold.ttf', 20)
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] == 1:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFF0000, "|")
+                    text = font.render("|", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif x == self.player.currentX and y == self.player.currentY:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, "P")
+                    text = font.render("P", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif x == self.ghost.pinkyCurrentX and y == self.ghost.pinkyCurrentY:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, "p")
+                    text = font.render("p", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif x == self.ghost.blinkyCurrentX and y == self.ghost.blinkyCurrentY:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, "b")
+                    text = font.render("b", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif x == self.ghost.inkyCurrentX and y == self.ghost.inkyCurrentY:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, "i")
+                    text = font.render("i", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif x == self.ghost.clydeCurrentX and y == self.ghost.clydeCurrentY:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, "c")
+                    text = font.render("c", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif self.pickups.pacgums[y][x] == 10:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, ".")
+                    text = font.render(".", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)
                 elif self.pickups.pacgums[y][x] == 50:
-                    renderer.mlx.mlx_string_put(renderer.mlx_ptr, renderer.win, x * 20, y * 20, 0xFFFFFFFF, "O")
-
-    def gameLoop(self, renderer: Any):
-        self.displayMap(renderer)
-        renderer.mlx.mlx_clear_window(renderer.mlx_ptr, renderer.win)
-        self.moveThePacman()
-
+                    text = font.render("O", True, self.white, self.black)
+                    text_rect = text.get_rect()
+                    text_rect.center = (x * 20, y * 20)
+                    renderer.screen.blit(text, text_rect)

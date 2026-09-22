@@ -6,6 +6,7 @@ from src.entities.pickups import Pickups
 from src.entities.ghost import Ghost
 from src.maze.maze_model import MazeModel
 from src.ui.renderer import Renderer
+import pygame
 
 if __name__ == "__main__":
     loader = Loader("config.json")
@@ -26,6 +27,10 @@ if __name__ == "__main__":
     pickups = Pickups(width, height, grid, ghost)
     game = Game(width, height, grid, player, ghost, pickups)
     renderer = Renderer(player, game);
-    renderer.setup_hooks()
-    renderer.mlx.mlx_loop_hook(renderer.mlx_ptr, game.gameLoop, param=renderer)
-    renderer.mlx.mlx_loop(renderer.mlx_ptr)
+    while game.isRunning == True:
+        pygame.display.update()
+        black = (0, 0, 0)
+        renderer.screen.fill(black)
+        game.displayMap(renderer)
+        renderer.handleEvents()
+        game.movePacmanClearOldPosition(renderer)
