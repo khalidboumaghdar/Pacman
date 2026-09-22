@@ -29,8 +29,11 @@ if __name__ == "__main__":
     renderer = Renderer(player, game);
     while game.isRunning == True:
         pygame.display.update()
+        pygame.time.delay(60)
+        player.previousDirection = player.nextDirection
         black = (0, 0, 0)
         renderer.screen.fill(black)
-        game.displayMap(renderer)
         renderer.handleEvents()
-        game.movePacmanClearOldPosition(renderer)
+        game.movePacman()
+        if game.isRunning == True:
+            game.displayMap(renderer)

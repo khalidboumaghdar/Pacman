@@ -7,3 +7,5 @@ class Player:
         self.currentX = self.entity.entityOriginalX
         self.currentY = self.entity.entityOriginalY
         self.nextDirection = "None"
+        self.previousDirection = "None"
+        self.ignoredDirection = "None"
