@@ -13,6 +13,7 @@ class Game:
         self.isRunning = True
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
+        self.score = 0
 
     def isDirectionOpen(self, direction) -> bool:
         if direction == "UP":
@@ -77,13 +78,21 @@ class Game:
         text_rect.center = (x * 20, y * 20)
         window.blit(text, text_rect)
 
+    def checkIsGhostEatedPacman(self, renderer):
+        if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
+            self.isRunning = False
+        elif self.player.currentX == self.ghost.blinkyCurrentX and self.player.currentY == self.ghost.blinkyCurrentY:
+            self.isRunning = False
+        elif self.player.currentX == self.ghost.inkyCurrentX and self.player.currentY == self.ghost.inkyCurrentY:
+            self.isRunning = False
+        elif self.player.currentX == self.ghost.clydeCurrentX and self.player.currentY == self.ghost.clydeCurrentY:
+            self.isRunning = False
+
     def displayMap(self, renderer: Any) -> None:
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] == 1:
                     self.pygamePygameStringPut(renderer.screen, x, y, "#")
-                elif x == self.player.currentX and y == self.player.currentY:
-                    self.pygamePygameStringPut(renderer.screen, x, y, "P")
                 elif x == self.ghost.pinkyCurrentX and y == self.ghost.pinkyCurrentY:
                     self.pygamePygameStringPut(renderer.screen, x, y, "p")
                 elif x == self.ghost.blinkyCurrentX and y == self.ghost.blinkyCurrentY:
@@ -92,7 +101,16 @@ class Game:
                     self.pygamePygameStringPut(renderer.screen, x, y, "i")
                 elif x == self.ghost.clydeCurrentX and y == self.ghost.clydeCurrentY:
                     self.pygamePygameStringPut(renderer.screen, x, y, "c")
+                elif self.player.currentX == x and self.player.currentY == y:
+                    self.pygamePygameStringPut(renderer.screen, x, y, "P")
+                    if self.pickups.pacgums[y][x] == 10:
+                        self.score += 10
+                        self.pickups.pacgums[y][x] = 0
+                    elif self.pickups.pacgums[y][x] == 50:
+                        self.score += 50
+                        self.pickups.pacgums[y][x] = 0
                 elif self.pickups.pacgums[y][x] == 10:
                     self.pygamePygameStringPut(renderer.screen, x, y, ".")
                 elif self.pickups.pacgums[y][x] == 50:
                     self.pygamePygameStringPut(renderer.screen, x, y, "O")
+        self.pygamePygameStringPut(renderer.screen, 0, self.height, f"                     score: {self.score}")

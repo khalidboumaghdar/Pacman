@@ -26,15 +26,14 @@ class Ghost:
         self.inkyPossibleMoves = []
         self.clydePossibleMoves = []
         self.currentMode = "SCATTER"
-        self.previous_pinky_x = -1
-        self.previous_pinky_y = -1
-        self.previous_blinky_x = -1
-        self.previous_blinky_y = -1
-        self.previous_inky_x = -1
-        self.previous_inky_y = -1
-        self.previous_clyde_x = -1
-        self.previous_clyde_y = -1
-
+        self.previousPinkyX = -1
+        self.previousPinkyY = -1
+        self.previousBlinkyX = -1
+        self.previousBlinkyY = -1
+        self.previousInkyX = -1
+        self.previousInkyY = -1
+        self.previousClydeX = -1
+        self.previousClydeY = -1
 
     def prepareGhostsPossibleMoves(self, grid):
         self.pinkyPossibleMoves = []
@@ -113,21 +112,31 @@ class Ghost:
                 (self.clydeCurrentX - 1, self.clydeCurrentY, "LEFT")
             )
 
+    def initialize_ghosts(self):
+        self.previousPinkyX = -1
+        self.previousPinkyY = -1
+        self.previousBlinkyX = -1
+        self.previousBlinkyY = -1
+        self.previousInkyX = -1
+        self.previousInkyY = -1
+        self.previousClydeX = -1
+        self.previousClydeY = -1
+
     def MoveGhostToTarget(self, ghost: str, goalX, goalY) -> str:
         if ghost == "pinky":
             pinkyNewPathCost = float("inf")
             pinkyWinnerDirection = "None"
             for i in range(len(self.pinkyPossibleMoves)):
-                if self.previous_pinky_x == self.pinkyPossibleMoves[i][0]:
-                    if self.previous_pinky_y == self.pinkyPossibleMoves[i][1]:
+                if self.previousPinkyX == self.pinkyPossibleMoves[i][0]:
+                    if self.previousPinkyY == self.pinkyPossibleMoves[i][1]:
                         continue
                 value = (self.pinkyPossibleMoves[i][0] - goalX) ** 2
                 value += (self.pinkyPossibleMoves[i][1] - goalY) ** 2
                 if pinkyNewPathCost > value:
                     pinkyNewPathCost = value
                     pinkyWinnerDirection = self.pinkyPossibleMoves[i][2]
-            self.previous_pinky_x = self.pinkyCurrentX
-            self.previous_pinky_y = self.pinkyCurrentY
+            self.previousPinkyX = self.pinkyCurrentX
+            self.previousPinkyY = self.pinkyCurrentY
             if pinkyWinnerDirection == "UP":
                 self.pinkyCurrentY -= 1
             elif pinkyWinnerDirection == "RIGHT":
@@ -137,21 +146,19 @@ class Ghost:
             elif pinkyWinnerDirection == "DOWN":
                 self.pinkyCurrentY += 1
         elif ghost == "blinky":
-            previous_blinky_x = -1
-            previous_blinky_y = -1
             blinkyNewPathCost = float("inf")
             blinkyWinnerDirection = "None"
             for i in range(len(self.blinkyPossibleMoves)):
-                if self.previous_blinky_x == self.blinkyPossibleMoves[i][0]:
-                    if self.previous_blinky_y == self.blinkyPossibleMoves[i][1]:
+                if self.previousBlinkyX == self.blinkyPossibleMoves[i][0]:
+                    if self.previousBlinkyY == self.blinkyPossibleMoves[i][1]:
                         continue
                 value = (self.blinkyPossibleMoves[i][0] - goalX) ** 2
                 value += (self.blinkyPossibleMoves[i][1] - goalY) ** 2
                 if blinkyNewPathCost > value:
                     blinkyNewPathCost = value
                     blinkyWinnerDirection = self.blinkyPossibleMoves[i][2]
-            self.previous_blinky_x = self.blinkyCurrentX
-            self.previous_blinky_y = self.blinkyCurrentY
+            self.previousBlinkyX = self.blinkyCurrentX
+            self.previousBlinkyY = self.blinkyCurrentY
             if blinkyWinnerDirection == "UP":
                 self.blinkyCurrentY -= 1
             elif blinkyWinnerDirection == "RIGHT":
@@ -161,21 +168,19 @@ class Ghost:
             elif blinkyWinnerDirection == "DOWN":
                 self.blinkyCurrentY += 1
         elif ghost == "inky":
-            previous_inky_x = -1
-            previous_inky_y = -1
             inkyNewPathCost = float("inf")
             inkyWinnerDirection = "None"
             for i in range(len(self.inkyPossibleMoves)):
-                if self.previous_inky_x == self.inkyPossibleMoves[i][0]:
-                    if self.previous_inky_y == self.inkyPossibleMoves[i][1]:
+                if self.previousInkyX == self.inkyPossibleMoves[i][0]:
+                    if self.previousInkyY == self.inkyPossibleMoves[i][1]:
                         continue
                 value = (self.inkyPossibleMoves[i][0] - goalX) ** 2
                 value += (self.inkyPossibleMoves[i][1] - goalY) ** 2
                 if inkyNewPathCost > value:
                     inkyNewPathCost = value
                     inkyWinnerDirection = self.inkyPossibleMoves[i][2]
-            self.previous_inky_x = self.inkyCurrentX
-            self.previous_inky_y = self.inkyCurrentY
+            self.previousInkyX = self.inkyCurrentX
+            self.previousInkyY = self.inkyCurrentY
             if inkyWinnerDirection == "UP":
                 self.inkyCurrentY -= 1
             elif inkyWinnerDirection == "RIGHT":
@@ -185,21 +190,19 @@ class Ghost:
             elif inkyWinnerDirection == "DOWN":
                 self.inkyCurrentY += 1
         elif ghost == "clyde":
-            previous_clyde_x = -1
-            previous_clyde_y = -1
             clydeNewPathCost = float("inf")
             clydeWinnerDirection = "None"
             for i in range(len(self.clydePossibleMoves)):
-                if self.previous_clyde_x == self.clydePossibleMoves[i][0]:
-                    if self.previous_clyde_y == self.clydePossibleMoves[i][1]:
+                if self.previousClydeX == self.clydePossibleMoves[i][0]:
+                    if self.previousClydeY == self.clydePossibleMoves[i][1]:
                         continue
                 value = (self.clydePossibleMoves[i][0] - goalX) ** 2
                 value += (self.clydePossibleMoves[i][1] - goalY) ** 2
                 if clydeNewPathCost > value:
                     clydeNewPathCost = value
                     clydeWinnerDirection = self.clydePossibleMoves[i][2]
-            self.previous_clyde_x = self.clydeCurrentX
-            self.previous_clyde_y = self.clydeCurrentY
+            self.previousClydeX = self.clydeCurrentX
+            self.previousClydeY = self.clydeCurrentY
             if clydeWinnerDirection == "UP":
                 self.clydeCurrentY -= 1
             elif clydeWinnerDirection == "RIGHT":
