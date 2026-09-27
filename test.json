@@ -1,0 +1,3 @@
+! Warning: you have 9 levels
+! Adding 1 default levels
+{'highscore_filename': 'highscores.json', 'width': 21, 'height': 21, 'lives': 3, 'pacgum': 42, 'points_per_pacgum': 10, 'points_per_super_pacgum': 50, 'points_per_ghost': 200, 'seed': 42, 'level_max_time': 90, 'levels': [{'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 20, 'height': 20, 'pacgum': 15}, {'width': 21, 'height': 21, 'pacgum': 12}]}
