@@ -29,7 +29,6 @@ if __name__ == "__main__":
     pickups = Pickups(width, height, grid, ghost)
     game = Game(width, height, grid, player, ghost, pickups)
     renderer = Renderer(player, game);
-    counter = 0
     while 1:
         pygame.display.update()
         player.previousDirection = player.nextDirection
@@ -39,7 +38,10 @@ if __name__ == "__main__":
             break
         renderer.handleEvents()
         game.movePacman()
-        game.checkIsGhostEatedPacman(renderer)
+        if game.checkIsPacmanEatedGhost() == True:
+            game.changeGhostModeToEaten()
+        if game.checkIsAGhostEatedPacman() == True:
+            game.isRunning = False
         if game.isRunning == False:
             try:
                 game.displayMap(renderer)
@@ -50,31 +52,16 @@ if __name__ == "__main__":
             renderer.screen.fill(black)
             break
         ghost.prepareGhostsPossibleMoves(grid)
-        if ghost.currentMode == "SCATTER":
-            print("SCATTER MODE")
-            ghost.MoveGhostToTarget("pinky", 0, 0)
-            ghost.MoveGhostToTarget("blinky", width - 1, 0)
-            ghost.MoveGhostToTarget("inky", 0, height - 1)
-            ghost.MoveGhostToTarget("clyde", width - 1, height - 1)
-        elif ghost.currentMode == "CHASE":
-            print("CHASE MODE")
-            ghost.MoveGhostToTarget("pinky", player.currentX, player.currentY)
-            ghost.MoveGhostToTarget("blinky", player.currentX, player.currentY)
-            ghost.MoveGhostToTarget("inky", player.currentX, player.currentY)
-            ghost.MoveGhostToTarget("clyde", player.currentX, player.currentY)
+        game.moveGhosts()
         try:
             game.displayMap(renderer)
         except Exception:
             sys.exit()
-        game.checkIsGhostEatedPacman(renderer)
+        if game.checkIsPacmanEatedGhost() == True:
+            game.changeGhostModeToEaten()
+        if game.checkIsAGhostEatedPacman() == True:
+            game.isRunning = False
         pygame.time.delay(60)
-        counter += 1
-        if counter == 116 and ghost.currentMode == "SCATTER":
-            counter = 0
-            ghost.currentMode = "CHASE"
-            ghost.initialize_ghosts()
-        elif counter == 333 and ghost.currentMode == "CHASE":
-            counter = 0
-            ghost.currentMode = "SCATTER"
-            ghost.initialize_ghosts()
+        print("\nPINKY: ", ghost.currentPinkyMode, "\nblinky: ", ghost.currentBlinkyMode, "\nINKY: ", ghost.currentInkyMode, "\nCLYDE: ", ghost.currentClydeMode)
+        game.updateGhostModesIfNecessary()
     pygame.time.delay(2000)
