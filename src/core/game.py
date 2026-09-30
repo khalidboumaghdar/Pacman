@@ -32,6 +32,37 @@ class Game:
             return False
         return True
 
+    def miniIntialize(self):
+        self.player.currentX = self.player.entity.entityOriginalX
+        self.player.currentY = self.player.entity.entityOriginalY
+        self.player.nextDirection = "None"
+        self.player.previousDirection = "None"
+        self.player.ignoredDirection = "None"
+
+        self.ghost.pinkyCurrentX = self.ghost.pinkyEntity.entityOriginalX
+        self.ghost.pinkyCurrentY = self.ghost.pinkyEntity.entityOriginalY
+
+        self.ghost.blinkyCurrentX = self.ghost.blinkyEntity.entityOriginalX
+        self.ghost.blinkyCurrentY = self.ghost.blinkyEntity.entityOriginalY
+
+        self.ghost.inkyCurrentX = self.ghost.inkyEntity.entityOriginalX
+        self.ghost.inkyCurrentY = self.ghost.inkyEntity.entityOriginalY
+
+        self.ghost.clydeCurrentX = self.ghost.clydeEntity.entityOriginalX
+        self.ghost.clydeCurrentY = self.ghost.clydeEntity.entityOriginalY
+
+        self.ghost.currentPinkyMode = "SCATTER"
+        self.ghost.pinkyCounter = 0
+
+        self.ghost.currentBlinkyMode = "SCATTER"
+        self.ghost.blinkyCounter = 0
+
+        self.ghost.currentInkyMode = "SCATTER"
+        self.ghost.inkyCounter = 0
+
+        self.ghost.currentClydeMode = "SCATTER"
+        self.ghost.clydeCounter = 0
+
     def movePacman(self):
         if self.isDirectionOpen(self.player.ignoredDirection) == True:
             self.player.nextDirection = self.player.ignoredDirection
@@ -183,6 +214,8 @@ class Game:
                 elif self.pickups.pacgums[y][x] == 50:
                     self.pygamePygameStringPut(renderer.screen, x, y, "O")
         self.pygamePygameStringPut(renderer.screen, 0, self.height, f"                     score: {self.score}")
+        self.pygamePygameStringPut(renderer.screen, 15, self.height, f" level: {self.player.currentLevel + 1}/{self.player.allLevels}")
+        self.pygamePygameStringPut(renderer.screen, 30, self.height, f" lives: {self.player.lives}")
 
     def updateGhostModesIfNecessary(self):
         self.ghost.pinkyCounter += 1
