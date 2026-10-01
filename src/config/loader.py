@@ -63,7 +63,13 @@ class Parser:
                 continue
 
             value = data[key]
-            # if key == "highscore_filename":
+            if key == "highscore_filename":
+                if not isinstance(value, str) or not Path(value).suffix:
+                    print(
+                        f"! Invalid highscore_filename: {value}"
+                        f" -> using default: {default_value}"
+                    )
+                    continue
                 
             
             if key == "levels":
