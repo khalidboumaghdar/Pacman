@@ -24,3 +24,10 @@ class Pickups:
                 elif self.grid[y][x] == 0:
                     pacgums[y][x] = 10
         return pacgums
+
+    def allPacgumsAreEaten(self):
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.pacgums[y][x] != 0:
+                    return False
+        return True

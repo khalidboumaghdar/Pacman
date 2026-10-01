@@ -140,6 +140,80 @@ class Ghost:
                 (self.clydeCurrentX - 1, self.clydeCurrentY, "LEFT")
             )
 
+    def updateGhostModesIfNecessary(self):
+        self.pinkyCounter += 1
+        if self.pinkyCounter == 116 and self.currentPinkyMode == "SCATTER":
+            self.pinkyCounter = 0
+            self.currentPinkyMode = "CHASE"
+            self.initialize_ghosts("pinky")
+        elif self.pinkyCounter == 333 and self.currentPinkyMode == "CHASE":
+            self.pinkyCounter = 0
+            self.currentPinkyMode = "SCATTER"
+            self.initialize_ghosts("pinky")
+        elif self.pinkyCounter == 116 and self.currentPinkyMode == "FRIGHTENED":
+            self.pinkyCounter = self.previousPinkyCounterValue
+            self.currentPinkyMode = self.previousPinkyMode
+            self.initialize_ghosts("pinky")
+        elif self.pinkyCounter == 83 and self.currentPinkyMode == "EATEN":
+            self.pinkyCounter = self.previousPinkyCounterValue
+            self.currentPinkyMode = self.previousPinkyMode
+            self.initialize_ghosts("pinky")
+
+
+        self.blinkyCounter += 1
+        if self.blinkyCounter == 116 and self.currentBlinkyMode == "SCATTER":
+            self.blinkyCounter = 0
+            self.currentBlinkyMode = "CHASE"
+            self.initialize_ghosts("blinky")
+        elif self.blinkyCounter == 333 and self.currentBlinkyMode == "CHASE":
+            self.blinkyCounter = 0
+            self.currentBlinkyMode = "SCATTER"
+            self.initialize_ghosts("blinky")
+        elif self.blinkyCounter == 116 and self.currentBlinkyMode == "FRIGHTENED":
+            self.blinkyCounter = self.previousBlinkyCounterValue
+            self.currentBlinkyMode = self.previousBlinkyMode
+            self.initialize_ghosts("blinky")
+        elif self.blinkyCounter == 83 and self.currentBlinkyMode == "EATEN":
+            self.blinkyCounter = self.previousBlinkyCounterValue
+            self.currentBlinkyMode = self.previousBlinkyMode
+            self.initialize_ghosts("blinky")
+
+        self.inkyCounter += 1
+        if self.inkyCounter == 116 and self.currentInkyMode == "SCATTER":
+            self.inkyCounter = 0
+            self.currentInkyMode = "CHASE"
+            self.initialize_ghosts("inky")
+        elif self.inkyCounter == 333 and self.currentInkyMode == "CHASE":
+            self.inkyCounter = 0
+            self.currentInkyMode = "SCATTER"
+            self.initialize_ghosts("inky")
+        elif self.inkyCounter == 116 and self.currentInkyMode == "FRIGHTENED":
+            self.inkyCounter = self.previousInkyCounterValue
+            self.currentInkyMode = self.previousInkyMode
+            self.initialize_ghosts("inky")
+        elif self.inkyCounter == 83 and self.currentInkyMode == "EATEN":
+            self.inkyCounter = self.previousInkyCounterValue
+            self.currentInkyMode = self.previousInkyMode
+            self.initialize_ghosts("inky")
+
+        self.clydeCounter += 1
+        if self.clydeCounter == 116 and self.currentClydeMode == "SCATTER":
+            self.clydeCounter = 0
+            self.currentClydeMode = "CHASE"
+            self.initialize_ghosts("clyde")
+        elif self.clydeCounter == 333 and self.currentClydeMode == "CHASE":
+            self.clydeCounter = 0
+            self.currentClydeMode = "SCATTER"
+            self.initialize_ghosts("clyde")
+        elif self.clydeCounter == 116 and self.currentClydeMode == "FRIGHTENED":
+            self.clydeCounter = self.previousClydeCounterValue
+            self.currentClydeMode = self.previousClydeMode
+            self.initialize_ghosts("clyde")
+        elif self.clydeCounter == 83 and self.currentClydeMode == "EATEN":
+            self.clydeCounter = self.previousClydeCounterValue
+            self.currentClydeMode = self.previousClydeMode
+            self.initialize_ghosts("clyde")
+
     def initialize_ghosts(self, ghost:str):
         if ghost == "pinky":
             self.previousPinkyX = -1
