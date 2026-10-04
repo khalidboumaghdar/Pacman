@@ -9,6 +9,3 @@ class Player:
         self.nextDirection = "None"
         self.previousDirection = "None"
         self.ignoredDirection = "None"
-        self.currentLevel = 0
-        self.lives = -1
-        self.allLevels = 0

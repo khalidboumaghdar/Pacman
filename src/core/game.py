@@ -4,7 +4,7 @@ import sys
 
 
 class Game:
-    def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any) -> None:
+    def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
         self.mapWidth = mapWidth
         self.mapHeight = mapHeight
         self.player = player
@@ -12,9 +12,9 @@ class Game:
         self.isRunning = True
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
-        self.score = 0
         self.screen = None
         self.map = None
+        self.specialData = specialData
 
     def buildGameMap(self, generated_maze) -> None:
         self.map = [[0 for x in range(self.mapWidth)] for y in range(self.mapHeight)]
@@ -37,6 +37,19 @@ class Game:
                         if generated_maze[clums][rwo]["S"] == 1:
                             if generated_maze[clums][rwo]["W"] == 1:
                                 self.map[(clums * 2 + 1) ][(rwo * 2 + 1)] = 1
+        if self.map[self.player.currentY][self.player.currentX] == 1:
+            if self.map[self.player.currentY][self.player.currentX - 1] == 0:
+                self.player.currentX -= 1
+                self.player.entity.entityOriginalX -= 1
+            elif self.map[self.player.currentY][self.player.currentX + 1] == 0:
+                self.player.currentX += 1
+                self.player.entity.entityOriginalX += 1
+            elif self.map[self.player.currentY + 1][self.player.currentX] == 0:
+                self.player.currentY += 1
+                self.player.entity.entityOriginalY += 1
+            elif self.map[self.player.currentY - 1][self.player.currentX] == 0:
+                self.player.currentY -= 1
+                self.player.entity.entityOriginalY -= 1
 
     def runGameWindow(self):
         pygame.init()
@@ -274,16 +287,16 @@ class Game:
                 elif self.player.currentX == x and self.player.currentY == y:
                     self.pygamePygameStringPut(self.screen, x, y, "P")
                     if pickups.pacgums[y][x] == 10:
-                        self.score += 10
+                        self.specialData.score += 10
                         pickups.pacgums[y][x] = 0
                     elif pickups.pacgums[y][x] == 50:
-                        self.score += 50
+                        self.specialData.score += 50
                         pickups.pacgums[y][x] = 0
                         self.ghost.setFrightenedMode()
                 elif pickups.pacgums[y][x] == 10:
                     self.pygamePygameStringPut(self.screen, x, y, ".")
                 elif pickups.pacgums[y][x] == 50:
                     self.pygamePygameStringPut(self.screen, x, y, "O")
-        self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.score}")
-        self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" level: {self.player.currentLevel + 1}/{self.player.allLevels}")
-        self.pygamePygameStringPut(self.screen, 30, self.mapHeight, f" lives: {self.player.lives}")
+        self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.specialData.score}")
+        self.pygamePygameStringPut(self.screen, 9, self.mapHeight, f" level: {self.specialData.currentLevel + 1}/{self.specialData.allLevels}")
+        self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" lives: {self.specialData.lives}")

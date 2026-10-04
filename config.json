@@ -1,6 +1,6 @@
 {
   "highscore_filename": "hkfhdkfh.txt",
-  "lives": 4,
+  "lives": 30,
   "width": 33,
   "height": 33,
   "pacgum": 42,
@@ -11,19 +11,19 @@
   "level_max_time": 90,
   "levels": [
     {
-      "width": 25,
+      "width": 10,
       "height": 20,
+      "pacgum": 15
+    },
+    {
+      "width": 25,
+      "height": 15,
       "pacgum": 46
     },
     {
       "width": 9,
       "height": 7,
       "pacgum": 45
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 15
     },
     {
       "width": 20,

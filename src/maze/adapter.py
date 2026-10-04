@@ -37,10 +37,3 @@ class MazeAdapter(MazeGenerator):
             result.append(new_row)
 
         return result
-
-
-adapter1 = MazeAdapter(size=(4, 4), seed=55, level=1)
-maze1 = adapter1.get_maze()
-
-for m in maze1:
-    print(m)
