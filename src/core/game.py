@@ -4,22 +4,43 @@ import sys
 
 
 class Game:
-    def __init__(self, width: int, height: int, grid: list[list[int]], player: Any, ghost: Any, pickups: Any) -> None:
-        self.width = width
-        self.height = height
-        self.grid = grid
+    def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any) -> None:
+        self.mapWidth = mapWidth
+        self.mapHeight = mapHeight
         self.player = player
         self.ghost = ghost
-        self.pickups = pickups
         self.isRunning = True
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
         self.score = 0
         self.screen = None
+        self.map = None
+
+    def buildGameMap(self, generated_maze) -> None:
+        self.map = [[0 for x in range(self.mapWidth)] for y in range(self.mapHeight)]
+        for clums in range(len(generated_maze)):
+            for rwo in range(len(generated_maze[0])):
+                self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) - 1] = 1
+                self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) + 1] = 1
+                self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1) + 1] = 1
+                self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1) - 1] = 1
+                if generated_maze[clums][rwo]["N"] == 1:
+                    self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1)] = 1
+                if generated_maze[clums][rwo]["E"] == 1:
+                    self.map[(clums * 2 + 1) ][(rwo * 2 + 1) + 1] = 1
+                if generated_maze[clums][rwo]["S"] == 1:
+                    self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1)] = 1
+                if generated_maze[clums][rwo]["W"] == 1:
+                    self.map[(clums * 2 + 1) ][(rwo * 2 + 1) - 1] = 1
+                if generated_maze[clums][rwo]["N"] == 1:
+                    if generated_maze[clums][rwo]["E"] == 1:
+                        if generated_maze[clums][rwo]["S"] == 1:
+                            if generated_maze[clums][rwo]["W"] == 1:
+                                self.map[(clums * 2 + 1) ][(rwo * 2 + 1)] = 1
 
     def runGameWindow(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((self.width * 21, self.height * 21))
+        self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21))
         pygame.display.set_caption("pacman")
 
     def detectKeyboardInput(self):
@@ -60,16 +81,16 @@ class Game:
 
     def isDirectionOpen(self, direction) -> bool:
         if direction == "UP":
-            if (self.grid[int(self.player.currentY - 1)][int(self.player.currentX)] == 1):
+            if (self.map[int(self.player.currentY - 1)][int(self.player.currentX)] == 1):
                 return False
         elif direction == "RIGHT":
-            if (self.grid[int(self.player.currentY)][int(self.player.currentX + 1)] == 1):
+            if (self.map[int(self.player.currentY)][int(self.player.currentX + 1)] == 1):
                 return False
         elif direction == "LEFT":
-            if (self.grid[int(self.player.currentY)][int(self.player.currentX - 1)] == 1):
+            if (self.map[int(self.player.currentY)][int(self.player.currentX - 1)] == 1):
                 return False
         elif direction == "DOWN":
-            if (self.grid[int(self.player.currentY + 1)][int(self.player.currentX)] == 1):
+            if (self.map[int(self.player.currentY + 1)][int(self.player.currentX)] == 1):
                 return False
         if direction == "None":
             return False
@@ -111,7 +132,7 @@ class Game:
             self.player.nextDirection = self.player.ignoredDirection
             self.player.ignoredDirection = "None"
         if self.player.nextDirection == "UP":
-            if (self.grid[int(self.player.currentY - 1)][int(self.player.currentX)] == 1):
+            if (self.map[int(self.player.currentY - 1)][int(self.player.currentX)] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -119,7 +140,7 @@ class Game:
                 return
             self.player.currentY -= 1
         elif self.player.nextDirection == "RIGHT":
-            if (self.grid[int(self.player.currentY)][int(self.player.currentX + 1)] == 1):
+            if (self.map[int(self.player.currentY)][int(self.player.currentX + 1)] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -127,7 +148,7 @@ class Game:
                 return
             self.player.currentX += 1
         elif self.player.nextDirection == "LEFT":
-            if (self.grid[int(self.player.currentY)][int(self.player.currentX - 1)] == 1):
+            if (self.map[int(self.player.currentY)][int(self.player.currentX - 1)] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -135,7 +156,7 @@ class Game:
                 return
             self.player.currentX -= 1
         elif self.player.nextDirection == "DOWN":
-            if (self.grid[int(self.player.currentY + 1)][int(self.player.currentX)] == 1):
+            if (self.map[int(self.player.currentY + 1)][int(self.player.currentX)] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -178,21 +199,21 @@ class Game:
             self.ghost.runAwayFromPacman("pinky", self.player.currentX, self.player.currentY)
 
         if self.ghost.currentBlinkyMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("blinky", self.width - 1, 0)
+            self.ghost.MoveGhostToTarget("blinky", self.mapWidth - 1, 0)
         elif self.ghost.currentBlinkyMode == "CHASE":
             self.ghost.MoveGhostToTarget("blinky", self.player.currentX, self.player.currentY)
         elif self.ghost.currentBlinkyMode == "FRIGHTENED":
             self.ghost.runAwayFromPacman("blinky", self.player.currentX, self.player.currentY)
 
         if self.ghost.currentInkyMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("inky", 0, self.height - 1)
+            self.ghost.MoveGhostToTarget("inky", 0, self.mapHeight - 1)
         elif self.ghost.currentInkyMode == "CHASE":
             self.ghost.MoveGhostToTarget("inky", self.player.currentX, self.player.currentY)
         elif self.ghost.currentInkyMode == "FRIGHTENED":
             self.ghost.runAwayFromPacman("inky", self.player.currentX, self.player.currentY)
 
         if self.ghost.currentClydeMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("clyde", self.width - 1, self.height - 1)
+            self.ghost.MoveGhostToTarget("clyde", self.mapWidth - 1, self.mapHeight - 1)
         elif self.ghost.currentClydeMode == "CHASE":
             self.ghost.MoveGhostToTarget("clyde", self.player.currentX, self.player.currentY)
         elif self.ghost.currentClydeMode == "FRIGHTENED":
@@ -217,13 +238,10 @@ class Game:
                     return True
         return False
 
-    def displayMap(self) -> None:
-        for y in range(self.height):
-            for x in range(self.width):
-                if self.pickups.pacgums[y][x] == 50:
-                    if self.player.currentX == x and self.player.currentY == y:
-                        self.ghost.setFrightenedMode()
-                if self.grid[y][x] == 1:
+    def displayMap(self, pickups) -> None:
+        for y in range(self.mapHeight):
+            for x in range(self.mapWidth):
+                if self.map[y][x] == 1:
                     self.pygamePygameStringPut(self.screen, x, y, "#")
                 elif x == self.ghost.pinkyCurrentX and y == self.ghost.pinkyCurrentY:
                     if self.ghost.currentPinkyMode == "EATEN":
@@ -255,16 +273,17 @@ class Game:
                         self.pygamePygameStringPut(self.screen, x, y, "c")
                 elif self.player.currentX == x and self.player.currentY == y:
                     self.pygamePygameStringPut(self.screen, x, y, "P")
-                    if self.pickups.pacgums[y][x] == 10:
+                    if pickups.pacgums[y][x] == 10:
                         self.score += 10
-                        self.pickups.pacgums[y][x] = 0
-                    elif self.pickups.pacgums[y][x] == 50:
+                        pickups.pacgums[y][x] = 0
+                    elif pickups.pacgums[y][x] == 50:
                         self.score += 50
-                        self.pickups.pacgums[y][x] = 0
-                elif self.pickups.pacgums[y][x] == 10:
+                        pickups.pacgums[y][x] = 0
+                        self.ghost.setFrightenedMode()
+                elif pickups.pacgums[y][x] == 10:
                     self.pygamePygameStringPut(self.screen, x, y, ".")
-                elif self.pickups.pacgums[y][x] == 50:
+                elif pickups.pacgums[y][x] == 50:
                     self.pygamePygameStringPut(self.screen, x, y, "O")
-        self.pygamePygameStringPut(self.screen, 0, self.height, f"                     score: {self.score}")
-        self.pygamePygameStringPut(self.screen, 15, self.height, f" level: {self.player.currentLevel + 1}/{self.player.allLevels}")
-        self.pygamePygameStringPut(self.screen, 30, self.height, f" lives: {self.player.lives}")
+        self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.score}")
+        self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" level: {self.player.currentLevel + 1}/{self.player.allLevels}")
+        self.pygamePygameStringPut(self.screen, 30, self.mapHeight, f" lives: {self.player.lives}")

@@ -1,17 +1,15 @@
-PYTHON = python3
 CONFIG = config.json
 
 all: run
 
 install:
-	pip install -r requirements.txt
-	pip install libs/*.whl
+	uv sync
 
 run:
-	$(PYTHON) pac-man.py $(CONFIG)
+	uv run python pac-man.py $(CONFIG)
 
 debug:
-	$(PYTHON) -m pdb pac-man.py $(CONFIG)
+	uv run python -m pdb pac-man.py $(CONFIG)
 
 clean:
 	rm -rf __pycache__ .mypy_cache .pytest_cache
@@ -19,11 +17,11 @@ clean:
 	find . -type f -name "*.pyc" -delete
 
 lint:
-	flake8 .
-	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	uv run flake8 .
+	uv run mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	flake8 .
-	mypy . --strict
+	uv run flake8 .
+	uv run mypy . --strict
 
 .PHONY: all install run debug clean lint lint-strict

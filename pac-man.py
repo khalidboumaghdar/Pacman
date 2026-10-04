@@ -1,39 +1,40 @@
 from src.core.game import Game
-from src.config.loader import Loader
+from src.config.loader import Parser
 from src.entities.entity import Entity
 from src.entities.player import Player
+from src.maze.adapter import MazeAdapter
 from src.entities.pickups import Pickups
 from src.entities.ghost import Ghost
-from src.maze.maze_model import MazeModel
 import sys
 import pygame
 
 
 if __name__ == "__main__":
-    loader = Loader("config.json")
-    levels = len(loader.config_data["levels"])
+    parser = Parser()
+    config = parser.parse(sys.argv[1])
+    levels = len(config["levels"])
     player = None
     for i in range(levels):
-        width = loader.config_data["levels"][i]["width"]
-        height = loader.config_data["levels"][i]["height"]
-        mazeModel = MazeModel(width, height, 50)
-        grid = mazeModel.grid
-        width = (width * 2) + 1
-        height = (height * 2) + 1
-        player_entity = Entity((width - 1) / 2, (height - 1) / 2)
+        map_width = config["levels"][i]["width"]
+        map_height = config["levels"][i]["height"]
+        maze_adapter = MazeAdapter(size=(map_width, map_height), seed=55, level=i)
+        map_width = (map_width * 2) + 1
+        map_height = (map_height * 2) + 1
+        ghost = Ghost(
+            Entity(1, 1), 
+            Entity(map_width - 2, 1),
+            Entity(1, map_height - 2),
+            Entity(map_width - 2, map_height - 2)
+        )
+        player_entity = Entity((map_width - 1) / 2, (map_height - 1) / 2)
         if player == None:
             player = Player(player_entity)
         if player.lives == -1:
-            player.lives = loader.config_data["lives"]
+            player.lives = config["lives"]
+        game = Game(map_width, map_height, player, ghost)
+        game.buildGameMap(maze_adapter.get_maze())
         player.allLevels = levels
-        ghost = Ghost(
-            Entity(1, 1), 
-            Entity(width - 2, 1),
-            Entity(1, height - 2),
-            Entity(width - 2, height - 2)
-        )
-        pickups = Pickups(width, height, grid, ghost)
-        game = Game(width, height, grid, player, ghost, pickups)
+        pickups = Pickups(map_width, map_height, game.map, ghost)
         game.runGameWindow()
         player.currentLevel = i
         while pickups.allPacgumsAreEaten() == False:
@@ -56,7 +57,7 @@ if __name__ == "__main__":
                 game.isRunning = False
             if game.isRunning == False:
                 try:
-                    game.displayMap()
+                    game.displayMap(pickups)
                 except Exception:
                     sys.exit()
                 pygame.display.update()
@@ -68,10 +69,10 @@ if __name__ == "__main__":
                 if player.lives <= 0:
                     sys.exit()
                 game.miniIntialize()
-            ghost.prepareGhostsPossibleMoves(grid)
+            ghost.prepareGhostsPossibleMoves(game.map)
             game.moveGhosts()
             try:
-                game.displayMap()
+                game.displayMap(pickups)
             except Exception:
                 sys.exit()
             if game.checkIsPacmanEatedGhost() == True:
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         black = (0, 0, 0)
         game.screen.fill(black)
         try:
-            game.displayMap()
+            game.displayMap(pickups)
         except Exception:
             sys.exit()
         pygame.time.delay(2000)

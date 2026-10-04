@@ -2,10 +2,10 @@ from typing import Any
 
 
 class Pickups:
-    def __init__(self, width: int, height: int, grid: list[list[int]], ghost: Any) -> None:
+    def __init__(self, width: int, height: int, map: list[list[int]], ghost: Any) -> None:
         self.width = width
         self.height = height
-        self.grid = grid
+        self.map = map
         self.ghost = ghost
         self.pacgums = self.build_pacgums()
 
@@ -21,7 +21,7 @@ class Pickups:
                     pacgums[y][x] = 50
                 elif x == self.ghost.clydeEntity.entityOriginalX and y == self.ghost.clydeEntity.entityOriginalY:
                     pacgums[y][x] = 50
-                elif self.grid[y][x] == 0:
+                elif self.map[y][x] == 0:
                     pacgums[y][x] = 10
         return pacgums
 
