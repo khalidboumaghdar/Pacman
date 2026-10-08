@@ -1,19 +1,23 @@
 from typing import Any
 import pygame
 import sys
-
+from src.core.cheats import Cheat
+import os
 
 class Game:
     def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
+        pygame.init()
+        self.c = Cheat(False)
         self.mapWidth = mapWidth
         self.mapHeight = mapHeight
         self.player = player
         self.ghost = ghost
         self.isRunning = True
         self.white = (255, 255, 255)
-        self.black = (0, 0, 0)
         self.screen = None
+        self.font = pygame.font.Font(None, 20)
         self.map = None
+        self.wall42 = []
         self.specialData = specialData
 
     def buildGameMap(self, generated_maze) -> None:
@@ -37,6 +41,33 @@ class Game:
                         if generated_maze[clums][rwo]["S"] == 1:
                             if generated_maze[clums][rwo]["W"] == 1:
                                 self.map[(clums * 2 + 1) ][(rwo * 2 + 1)] = 1
+                                self.wall42.append(
+                                    (str(clums * 2 + 1) + "y", str(rwo * 2 + 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1 - 1) + "y", str(rwo * 2 + 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1) + "y", str(rwo * 2 + 1 + 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1 + 1) + "y", str(rwo * 2 + 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1) + "y", str(rwo * 2 + 1 - 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1 - 1) + "y", str(rwo * 2 + 1 + 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1 + 1) + "y", str(rwo * 2 + 1 + 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1 + 1) + "y", str(rwo * 2 + 1 - 1) + "x")
+                                )
+                                self.wall42.append(
+                                    (str(clums * 2 + 1 - 1) + "y", str(rwo * 2 + 1 - 1) + "x")
+                                )
         if self.map[self.player.currentY][self.player.currentX] == 1:
             if self.map[self.player.currentY][self.player.currentX - 1] == 0:
                 self.player.currentX -= 1
@@ -52,15 +83,21 @@ class Game:
                 self.player.entity.entityOriginalY -= 1
 
     def runGameWindow(self):
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
-        self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21))
-        pygame.display.set_caption("pacman")
+        self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21), pygame.NOFRAME)
 
     def detectKeyboardInput(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F5:
+                    if self.c.check == False:
+                        self.c.check = True
+                    else:
+                        self.c.check = False
+                        break
                 if event.key == pygame.K_DOWN:
                     self.player.nextDirection = "DOWN"
                 if event.key == pygame.K_UP:
@@ -69,6 +106,10 @@ class Game:
                     self.player.nextDirection = "RIGHT"
                 if event.key == pygame.K_LEFT:
                     self.player.nextDirection = "LEFT"
+                if event.key == pygame.K_p:
+                    while 1:
+                        print("MS khalid impelment the pause menu, jazaka Allaho khayran fi dunywa w Akhira")
+                        #bkhit chi method nraniha hona khouya khalid, b7al hadiik run lik sawabti f hub.py
 
     def changeGhostModeToEaten(self):
         if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
@@ -179,13 +220,9 @@ class Game:
         if self.player.nextDirection != self.player.previousDirection:
             self.player.ignoredDirection = "None"
 
-    def pygamePygameStringPut(self, window: Any, x: int, y: int, stringToPutInWindow):
-        dddd = pygame.font.Font('freesansbold.ttf', 20)
-        text = dddd.render(stringToPutInWindow, True, self.white, self.black)
-        text_rect = text.get_rect()
-        text_rect.center = (x * 20, y * 20)
-        window.blit(text, text_rect)
-
+    def pygamePygameImagePut(self, window: Any, x: int, y: int, imagesToPutInWindow: str):
+        image = pygame.image.load(imagesToPutInWindow)
+        window.blit(image, (x * 20, y * 20))
 
     def checkIsPacmanEatedGhost(self) -> bool:
         if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
@@ -201,6 +238,11 @@ class Game:
             if self.ghost.currentClydeMode == "FRIGHTENED":
                 return True
         return False
+
+    def pygamePygameStringPut(self, window: Any, x: int, y: int, stringToPutInWindow):
+        text = self.font.render(stringToPutInWindow, True, self.white)
+        window.blit(text, (x * 20, y * 20))
+
 
     def moveGhosts(self):
         self.ghost.frightenedCounter += 1
@@ -255,37 +297,52 @@ class Game:
         for y in range(self.mapHeight):
             for x in range(self.mapWidth):
                 if self.map[y][x] == 1:
-                    self.pygamePygameStringPut(self.screen, x, y, "#")
+                    if ((str(y) + "y", str(x) + "x")) in self.wall42:
+                        self.pygamePygameImagePut(self.screen, x, y, "images/wall42.png")
+                    else:
+                        if (x > 0 and self.map[y][x - 1] == 1):
+                            self.pygamePygameImagePut(self.screen, x, y, "images/wall.png")
+                        elif (x < self.mapWidth - 1 and self.map[y][x + 1] == 1):
+                            self.pygamePygameImagePut(self.screen, x, y, "images/wall.png")
+                        else:
+                            self.pygamePygameImagePut(self.screen, x, y, "images/wall.png")
                 elif x == self.ghost.pinkyCurrentX and y == self.ghost.pinkyCurrentY:
                     if self.ghost.currentPinkyMode == "EATEN":
-                        self.pygamePygameStringPut(self.screen, x, y, "@")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/eaten.png")
                     elif self.ghost.currentPinkyMode == "FRIGHTENED":
-                        self.pygamePygameStringPut(self.screen, x, y, "1")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/Frightened.png")
                     else:
-                        self.pygamePygameStringPut(self.screen, x, y, "p")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/pinky.png")
                 elif x == self.ghost.blinkyCurrentX and y == self.ghost.blinkyCurrentY:
                     if self.ghost.currentBlinkyMode == "EATEN":
-                        self.pygamePygameStringPut(self.screen, x, y, "@")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/eaten.png")
                     elif self.ghost.currentBlinkyMode == "FRIGHTENED":
-                        self.pygamePygameStringPut(self.screen, x, y, "2")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/Frightened.png")
                     else:
-                        self.pygamePygameStringPut(self.screen, x, y, "b")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/blinky.png")
                 elif x == self.ghost.inkyCurrentX and y == self.ghost.inkyCurrentY:
                     if self.ghost.currentInkyMode == "EATEN":
-                        self.pygamePygameStringPut(self.screen, x, y, "@")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/eaten.png")
                     elif self.ghost.currentInkyMode == "FRIGHTENED":
-                        self.pygamePygameStringPut(self.screen, x, y, "3")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/Frightened.png")
                     else:
-                        self.pygamePygameStringPut(self.screen, x, y, "i")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/inky.png")
                 elif x == self.ghost.clydeCurrentX and y == self.ghost.clydeCurrentY:
                     if self.ghost.currentClydeMode == "EATEN":
-                        self.pygamePygameStringPut(self.screen, x, y, "@")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/eaten.png")
                     elif self.ghost.currentClydeMode == "FRIGHTENED":
-                        self.pygamePygameStringPut(self.screen, x, y, "4")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/Frightened.png")
                     else:
-                        self.pygamePygameStringPut(self.screen, x, y, "c")
+                        self.pygamePygameImagePut(self.screen, x, y, "images/clyde.png")
                 elif self.player.currentX == x and self.player.currentY == y:
-                    self.pygamePygameStringPut(self.screen, x, y, "P")
+                    if self.player.nextDirection == "UP":
+                        self.pygamePygameImagePut(self.screen, x, y, "images/pacmantop.png")
+                    elif self.player.nextDirection == "RIGHT":
+                        self.pygamePygameImagePut(self.screen, x, y, "images/pacmanright.png")
+                    elif self.player.nextDirection == "LEFT":
+                        self.pygamePygameImagePut(self.screen, x, y, "images/pacmanleft.png")
+                    else:
+                        self.pygamePygameImagePut(self.screen, x, y, "images/pacmanbottom.png")
                     if pickups.pacgums[y][x] == 10:
                         self.specialData.score += 10
                         pickups.pacgums[y][x] = 0
@@ -294,9 +351,9 @@ class Game:
                         pickups.pacgums[y][x] = 0
                         self.ghost.setFrightenedMode()
                 elif pickups.pacgums[y][x] == 10:
-                    self.pygamePygameStringPut(self.screen, x, y, ".")
+                    self.pygamePygameImagePut(self.screen, x, y, "images/smallpickups.png")
                 elif pickups.pacgums[y][x] == 50:
-                    self.pygamePygameStringPut(self.screen, x, y, "O")
+                    self.pygamePygameImagePut(self.screen, x, y, "images/bigpickups.png")
         self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.specialData.score}")
         self.pygamePygameStringPut(self.screen, 9, self.mapHeight, f" level: {self.specialData.currentLevel + 1}/{self.specialData.allLevels}")
         self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" lives: {self.specialData.lives}")
