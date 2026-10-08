@@ -23,9 +23,12 @@ class Hub:
                     result = self.menu.check_event(event)
                     if result == "START":
                         print("start game...")
-                        self.runGame = RunGame(self.renderer)
-                        self.runGame.runGame()
-                        self.renderer = Renderer(2000, 1500, "Pac-Man")
+                        try:
+                            self.runGame = RunGame(self.renderer)
+                            self.runGame.runGame()
+                            self.renderer = Renderer(2000, 1500, "Pac-Man")
+                        except Exception as e:
+                            print(e)
                     elif result == "SCORES":
                         print("open scores...")
                         self.screen = "SCORES"

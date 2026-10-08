@@ -85,9 +85,12 @@ class Game:
                 self.player.entity.entityOriginalY -= 1
 
     def runGameWindow(self):
-        os.environ['SDL_VIDEO_CENTERED'] = '1'
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21), pygame.NOFRAME)
+        try:
+            os.environ['SDL_VIDEO_CENTERED'] = '1'
+            pygame.init()
+            self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21), pygame.NOFRAME)
+        except Exception as e:
+            print(e)
 
     def detectKeyboardInput(self):
         for event in pygame.event.get():
@@ -97,8 +100,10 @@ class Game:
                 if event.key == pygame.K_F5:
                     if self.c.check == False:
                         self.c.check = True
+                        print("Activated Cheat mode!")
                     else:
                         self.c.check = False
+                        print("Desactivate cheat mode !")
                         break
                 if event.key == pygame.K_DOWN:
                     self.player.nextDirection = "DOWN"
