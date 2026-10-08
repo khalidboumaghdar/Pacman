@@ -2,7 +2,7 @@ from src.ui.renderer import Renderer
 from src.ui.menu import Menu
 from src.ui.screens import Score, Insruction
 from src.core.runGame import RunGame
-import sys
+# import sys
 
 
 class Hub:
@@ -15,7 +15,6 @@ class Hub:
         self.run = True
         self.runGame = None
 
-
     def runMenu(self):
         while self.run:
             events = self.renderer.event()
@@ -24,8 +23,9 @@ class Hub:
                     result = self.menu.check_event(event)
                     if result == "START":
                         print("start game...")
-                        self.runGame = RunGame()
+                        self.runGame = RunGame(self.renderer)
                         self.runGame.runGame()
+                        self.renderer = Renderer(2000, 1500, "Pac-Man")
                     elif result == "SCORES":
                         print("open scores...")
                         self.screen = "SCORES"

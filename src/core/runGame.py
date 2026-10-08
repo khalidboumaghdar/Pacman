@@ -9,10 +9,13 @@ from src.entities.specialData import SpecialData
 import sys
 import pygame
 import time
+from src.ui.menu import Resume_game
+from src.ui.renderer import Renderer
 
 
 class RunGame:
-    def __init__(self):
+    def __init__(self, renderer: Renderer):
+        self.renderer: Renderer = renderer
         self.parser = Parser()
         self.config = self.parser.parse(sys.argv[1])
         self.levels = len(self.config["levels"])
@@ -38,8 +41,30 @@ class RunGame:
             self.specialData.allLevels = self.levels
             pickups = Pickups(map_width, map_height, game.map, ghost)
             game.runGameWindow()
+            p_menu = Resume_game(self.renderer)
             self.specialData.currentLevel = i
             while pickups.allPacgumsAreEaten() == False:
+                if game.isPaused:
+                    for ev in pygame.event.get():
+                        if ev.type == pygame.QUIT:
+                            pygame.quit()
+                            sys.exit()
+                        if ev.type == pygame.KEYDOWN:
+                            if ev.key == pygame.K_p:
+                                game.isPaused = False
+                            elif ev.key == pygame.K_UP:
+                                p_menu.check_event("UP")
+                            elif ev.key == pygame.K_DOWN:
+                                p_menu.check_event("DOWN")
+                            elif ev.key == pygame.K_RETURN:
+                                result = p_menu.check_event("ENTER")
+                                if result == "Resume the game":
+                                    game.isPaused = False
+                                elif result == "Return to the main menu":
+                                    return
+                    p_menu.draw()
+                    time.sleep(0.05)
+                    continue
                 pygame.display.flip()
                 player.previousDirection = player.nextDirection
                 black = (0, 0, 0)
@@ -60,6 +85,7 @@ class RunGame:
                 if game.isRunning == False:
                     try:
                         game.displayMap(pickups)
+                        p_menu.draw()
                     except Exception:
                         sys.exit()
                     pygame.display.flip()

@@ -4,6 +4,7 @@ import sys
 from src.core.cheats import Cheat
 import os
 
+
 class Game:
     def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
         pygame.init()
@@ -19,6 +20,7 @@ class Game:
         self.map = None
         self.wall42 = []
         self.specialData = specialData
+        self.isPaused = False
 
     def buildGameMap(self, generated_maze) -> None:
         self.map = [[0 for x in range(self.mapWidth)] for y in range(self.mapHeight)]
@@ -107,31 +109,31 @@ class Game:
                 if event.key == pygame.K_LEFT:
                     self.player.nextDirection = "LEFT"
                 if event.key == pygame.K_p:
-                    while 1:
-                        print("MS khalid impelment the pause menu, jazaka Allaho khayran fi dunywa w Akhira")
-                        #bkhit chi method nraniha hona khouya khalid, b7al hadiik run lik sawabti f hub.py
+                    # print("run menu")
+                    self.isPaused = True
+                    break
 
     def changeGhostModeToEaten(self):
         if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
-                self.ghost.currentPinkyMode = "EATEN"
-                self.ghost.pinkyCounter = 0
-                self.ghost.pinkyCurrentX = self.ghost.pinkyEntity.entityOriginalX
-                self.ghost.pinkyCurrentY = self.ghost.pinkyEntity.entityOriginalY
+            self.ghost.currentPinkyMode = "EATEN"
+            self.ghost.pinkyCounter = 0
+            self.ghost.pinkyCurrentX = self.ghost.pinkyEntity.entityOriginalX
+            self.ghost.pinkyCurrentY = self.ghost.pinkyEntity.entityOriginalY
         if self.player.currentX == self.ghost.blinkyCurrentX and self.player.currentY == self.ghost.blinkyCurrentY:
-                self.ghost.currentBlinkyMode = "EATEN"
-                self.ghost.blinkyCounter = 0
-                self.ghost.blinkyCurrentX = self.ghost.blinkyEntity.entityOriginalX
-                self.ghost.blinkyCurrentY = self.ghost.blinkyEntity.entityOriginalY
+            self.ghost.currentBlinkyMode = "EATEN"
+            self.ghost.blinkyCounter = 0
+            self.ghost.blinkyCurrentX = self.ghost.blinkyEntity.entityOriginalX
+            self.ghost.blinkyCurrentY = self.ghost.blinkyEntity.entityOriginalY
         if self.player.currentX == self.ghost.inkyCurrentX and self.player.currentY == self.ghost.inkyCurrentY:
-                self.ghost.currentInkyMode = "EATEN"
-                self.ghost.inkyCounter = 0
-                self.ghost.inkyCurrentX = self.ghost.inkyEntity.entityOriginalX
-                self.ghost.inkyCurrentY = self.ghost.inkyEntity.entityOriginalY
+            self.ghost.currentInkyMode = "EATEN"
+            self.ghost.inkyCounter = 0
+            self.ghost.inkyCurrentX = self.ghost.inkyEntity.entityOriginalX
+            self.ghost.inkyCurrentY = self.ghost.inkyEntity.entityOriginalY
         if self.player.currentX == self.ghost.clydeCurrentX and self.player.currentY == self.ghost.clydeCurrentY:
-                self.ghost.currentClydeMode = "EATEN"
-                self.ghost.clydeCounter = 0
-                self.ghost.clydeCurrentX = self.ghost.clydeEntity.entityOriginalX
-                self.ghost.clydeCurrentY = self.ghost.clydeEntity.entityOriginalY
+            self.ghost.currentClydeMode = "EATEN"
+            self.ghost.clydeCounter = 0
+            self.ghost.clydeCurrentX = self.ghost.clydeEntity.entityOriginalX
+            self.ghost.clydeCurrentY = self.ghost.clydeEntity.entityOriginalY
 
     def isDirectionOpen(self, direction) -> bool:
         if direction == "UP":
