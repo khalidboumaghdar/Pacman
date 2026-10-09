@@ -1,4 +1,5 @@
 from src.core.game import Game
+from src.core.clock import Clock
 from src.config.loader import Parser
 from src.entities.entity import Entity
 from src.entities.player import Player
@@ -36,7 +37,8 @@ class RunGame:
             )
             player_entity = Entity(int((map_width - 1) / 2), int((map_height - 1) / 2))
             player = Player(player_entity)
-            game = Game(map_width, map_height, player, ghost, self.specialData)
+            clock = Clock(self.config["level_max_time"])
+            game = Game(clock, map_width, map_height, player, ghost, self.specialData)
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
             pickups = Pickups(
@@ -64,13 +66,18 @@ class RunGame:
                                     game.isPaused = False
                                 elif result == "Return to the main menu":
                                     return
+
                     p_menu.draw()
                     time.sleep(0.05)
+                    if game.isPaused == False:
+                        clock.oldTime = clock.oldTime + (time.time() - clock.pauseTime)
                     continue
                 pygame.display.flip()
                 player.previousDirection = player.nextDirection
                 black = (0, 0, 0)
                 game.screen.fill(black)
+                if clock.getRemainingTime() <= 0:
+                    return
                 if game.isRunning == False:
                     time.sleep(0.2)
                     game.isRunning = True
@@ -84,6 +91,8 @@ class RunGame:
                     game.changeGhostModeToEaten()
                 if game.checkIsAGhostEatedPacman() == True and game.c.check == False:
                     game.isRunning = False
+                if clock.getRemainingTime() <= 0:
+                    return
                 if game.isRunning == False:
                     try:
                         game.displayMap(pickups)

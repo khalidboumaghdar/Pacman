@@ -3,10 +3,11 @@ import pygame
 import sys
 from src.core.cheats import Cheat
 import os
+import time
 
 
 class Game:
-    def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
+    def __init__(self, clock: Any, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
         pygame.init()
         self.c = Cheat(False)
         self.mapWidth = mapWidth
@@ -18,6 +19,7 @@ class Game:
         self.screen = None
         self.font = pygame.font.Font(None, 20)
         self.map = None
+        self.clock = clock
         self.wall42 = []
         self.specialData = specialData
         self.isPaused = False
@@ -117,6 +119,8 @@ class Game:
                     self.player.nextDirection = "LEFT"
                 if event.key == pygame.K_p:
                     # print("run menu")
+                    if self.isPaused == False:
+                        self.clock.pauseTime = time.time()
                     self.isPaused = True
                     break
 
@@ -367,3 +371,4 @@ class Game:
         self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.specialData.score}")
         self.pygamePygameStringPut(self.screen, 9, self.mapHeight, f" level: {self.specialData.currentLevel + 1}/{self.specialData.allLevels}")
         self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" lives: {self.specialData.lives}")
+        self.pygamePygameStringPut(self.screen, 20, self.mapHeight, f" Time: {self.clock.getRemainingTime()}")
