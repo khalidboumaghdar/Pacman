@@ -39,7 +39,9 @@ class RunGame:
             game = Game(map_width, map_height, player, ghost, self.specialData)
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
-            pickups = Pickups(map_width, map_height, game.map, ghost)
+            pickups = Pickups(
+                player, self.config["levels"][i].get("pacgum"), map_width, map_height, game.map, ghost
+            )
             game.runGameWindow()
             p_menu = Resume_game(self.renderer)
             self.specialData.currentLevel = i

@@ -305,6 +305,14 @@ class Game:
     def displayMap(self, pickups) -> None:
         for y in range(self.mapHeight):
             for x in range(self.mapWidth):
+                if self.player.currentX == x and self.player.currentY == y:
+                    if pickups.pacgums[y][x] == 10:
+                        self.specialData.score += 10
+                        pickups.pacgums[y][x] = 0
+                    elif pickups.pacgums[y][x] == 50:
+                        self.specialData.score += 50
+                        pickups.pacgums[y][x] = 0
+                        self.ghost.setFrightenedMode()
                 if self.map[y][x] == 1:
                     if ((str(y) + "y", str(x) + "x")) in self.wall42:
                         self.pygamePygameImagePut(self.screen, x, y, "images/wall42.png")
@@ -352,13 +360,6 @@ class Game:
                         self.pygamePygameImagePut(self.screen, x, y, "images/pacmanleft.png")
                     else:
                         self.pygamePygameImagePut(self.screen, x, y, "images/pacmanbottom.png")
-                    if pickups.pacgums[y][x] == 10:
-                        self.specialData.score += 10
-                        pickups.pacgums[y][x] = 0
-                    elif pickups.pacgums[y][x] == 50:
-                        self.specialData.score += 50
-                        pickups.pacgums[y][x] = 0
-                        self.ghost.setFrightenedMode()
                 elif pickups.pacgums[y][x] == 10:
                     self.pygamePygameImagePut(self.screen, x, y, "images/smallpickups.png")
                 elif pickups.pacgums[y][x] == 50:
