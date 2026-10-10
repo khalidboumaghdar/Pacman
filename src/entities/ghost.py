@@ -13,10 +13,14 @@ class Ghost:
         self.blinkyEntity = blinkyEntity
         self.inkyEntity = inkyEntity
         self.clydeEntity = clydeEntity
-        self.pinkyCurrentX = self.pinkyEntity.entityOriginalX
-        self.pinkyCurrentY = self.pinkyEntity.entityOriginalY
-        self.blinkyCurrentX = self.blinkyEntity.entityOriginalX
-        self.blinkyCurrentY = self.blinkyEntity.entityOriginalY
+        self.pinkyCurrentX = \
+            self.pinkyEntity.entityOriginalX
+        self.pinkyCurrentY = \
+            self.pinkyEntity.entityOriginalY
+        self.blinkyCurrentX = \
+            self.blinkyEntity.entityOriginalX
+        self.blinkyCurrentY = \
+            self.blinkyEntity.entityOriginalY
         self.inkyCurrentX = self.inkyEntity.entityOriginalX
         self.inkyCurrentY = self.inkyEntity.entityOriginalY
         self.clydeCurrentX = self.clydeEntity.entityOriginalX
@@ -25,30 +29,19 @@ class Ghost:
         self.blinkyPossibleMoves = []
         self.inkyPossibleMoves = []
         self.clydePossibleMoves = []
-
         self.frightenedCounter = 0
-
         self.currentPinkyMode = "SCATTER"
         self.currentBlinkyMode = "SCATTER"
         self.currentInkyMode = "SCATTER"
         self.currentClydeMode = "SCATTER"
-
-
-
         self.previousPinkyMode = "None"
         self.previousBlinkyMode = "None"
         self.previousInkyMode = "None"
         self.previousClydeMode = "None"
-
-
-        self.previousPinkyCounterValue = -1;
-        self.previousBlinkyCounterValue = -1;
-        self.previousInkyCounterValue = -1;
-        self.previousClydeCounterValue = -1;
-
-
-
-
+        self.previousPinkyCounterValue = -1
+        self.previousBlinkyCounterValue = -1
+        self.previousInkyCounterValue = -1
+        self.previousClydeCounterValue = -1
         self.previousPinkyX = -1
         self.previousPinkyY = -1
         self.previousBlinkyX = -1
@@ -57,7 +50,6 @@ class Ghost:
         self.previousInkyY = -1
         self.previousClydeX = -1
         self.previousClydeY = -1
-
         self.pinkyCounter = 0
         self.blinkyCounter = 0
         self.inkyCounter = 0
@@ -68,7 +60,6 @@ class Ghost:
         self.blinkyPossibleMoves = []
         self.inkyPossibleMoves = []
         self.clydePossibleMoves = []
-
         if (grid[self.pinkyCurrentY - 1][self.pinkyCurrentX]) == 0:
             self.pinkyPossibleMoves.append(
                 (self.pinkyCurrentX, self.pinkyCurrentY - 1, "UP")
@@ -85,8 +76,6 @@ class Ghost:
             self.pinkyPossibleMoves.append(
                 (self.pinkyCurrentX - 1, self.pinkyCurrentY, "LEFT")
             )
-
-
         if (grid[self.blinkyCurrentY - 1][self.blinkyCurrentX]) == 0:
             self.blinkyPossibleMoves.append(
                 (self.blinkyCurrentX, self.blinkyCurrentY - 1, "UP")
@@ -103,8 +92,6 @@ class Ghost:
             self.blinkyPossibleMoves.append(
                 (self.blinkyCurrentX - 1, self.blinkyCurrentY, "LEFT")
             )
-
-
         if (grid[self.inkyCurrentY - 1][self.inkyCurrentX]) == 0:
             self.inkyPossibleMoves.append(
                 (self.inkyCurrentX, self.inkyCurrentY - 1, "UP")
@@ -121,8 +108,6 @@ class Ghost:
             self.inkyPossibleMoves.append(
                 (self.inkyCurrentX - 1, self.inkyCurrentY, "LEFT")
             )
-
-
         if (grid[self.clydeCurrentY - 1][self.clydeCurrentX]) == 0:
             self.clydePossibleMoves.append(
                 (self.clydeCurrentX, self.clydeCurrentY - 1, "UP")
@@ -158,8 +143,6 @@ class Ghost:
             self.pinkyCounter = self.previousPinkyCounterValue
             self.currentPinkyMode = self.previousPinkyMode
             self.initialize_ghosts("pinky")
-
-
         self.blinkyCounter += 1
         if self.blinkyCounter == 116 and self.currentBlinkyMode == "SCATTER":
             self.blinkyCounter = 0
@@ -170,14 +153,14 @@ class Ghost:
             self.currentBlinkyMode = "SCATTER"
             self.initialize_ghosts("blinky")
         elif self.blinkyCounter == 116 and self.currentBlinkyMode == "FRIGHTENED":
-            self.blinkyCounter = self.previousBlinkyCounterValue
+            self.blinkyCounter = \
+                self.previousBlinkyCounterValue
             self.currentBlinkyMode = self.previousBlinkyMode
             self.initialize_ghosts("blinky")
         elif self.blinkyCounter == 83 and self.currentBlinkyMode == "EATEN":
             self.blinkyCounter = self.previousBlinkyCounterValue
             self.currentBlinkyMode = self.previousBlinkyMode
             self.initialize_ghosts("blinky")
-
         self.inkyCounter += 1
         if self.inkyCounter == 116 and self.currentInkyMode == "SCATTER":
             self.inkyCounter = 0
@@ -195,7 +178,6 @@ class Ghost:
             self.inkyCounter = self.previousInkyCounterValue
             self.currentInkyMode = self.previousInkyMode
             self.initialize_ghosts("inky")
-
         self.clydeCounter += 1
         if self.clydeCounter == 116 and self.currentClydeMode == "SCATTER":
             self.clydeCounter = 0
@@ -214,7 +196,7 @@ class Ghost:
             self.currentClydeMode = self.previousClydeMode
             self.initialize_ghosts("clyde")
 
-    def initialize_ghosts(self, ghost:str):
+    def initialize_ghosts(self, ghost: str):
         if ghost == "pinky":
             self.previousPinkyX = -1
             self.previousPinkyY = -1
@@ -340,7 +322,6 @@ class Ghost:
             self.currentBlinkyMode = "FRIGHTENED"
             self.blinkyCounter = 0
             self.initialize_ghosts("blinky")
-
         if self.currentInkyMode != "EATEN":
             if self.currentInkyMode != "FRIGHTENED":
                 self.previousInkyCounterValue = self.inkyCounter
@@ -348,7 +329,6 @@ class Ghost:
             self.currentInkyMode = "FRIGHTENED"
             self.inkyCounter = 0
             self.initialize_ghosts("inky")
-
         if self.currentClydeMode != "EATEN":
             if self.currentClydeMode != "FRIGHTENED":
                 self.previousClydeCounterValue = self.clydeCounter

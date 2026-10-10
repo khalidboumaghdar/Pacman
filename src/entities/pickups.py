@@ -1,8 +1,16 @@
 from typing import Any
 import random
 
+
 class Pickups:
-    def __init__(self, player: Any,  numberOfPacgum: int, width: int, height: int, map: list[list[int]], ghost: Any) -> None:
+    def __init__(
+        self,
+        player: Any,
+        numberOfPacgum: int,
+        width: int, height: int,
+        map: list[list[int]],
+        ghost: Any
+    ) -> None:
         self.width = width
         self.height = height
         self.map = map
@@ -24,12 +32,12 @@ class Pickups:
                 elif x == self.ghost.clydeEntity.entityOriginalX and y == self.ghost.clydeEntity.entityOriginalY:
                     pacgums[y][x] = 50
                 elif self.map[y][x] == 0:
-                    if self.numberOfPacgum == None:
+                    if self.numberOfPacgum is None:
                         pacgums[y][x] = 10
-        if self.numberOfPacgum != None:
+        if self.numberOfPacgum is not None:
             while self.numberOfPacgum > 0:
                 y = 0
-                random_rows = [] 
+                random_rows = []
                 while y < self.height:
                     random_rows.append(y)
                     y += 1
