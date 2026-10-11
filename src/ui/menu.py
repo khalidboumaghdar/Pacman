@@ -1,6 +1,5 @@
 from src.ui.renderer import Renderer
 import pygame
-import time
 import sys
 
 
@@ -169,8 +168,9 @@ class Resume_game:
 
 
 class GameOver:
-    def __init__(self, renderer: Renderer) -> None:
+    def __init__(self, renderer: Renderer, score_fn: int) -> None:
         self.renderer: Renderer = renderer
+        self.score_fn: int = score_fn
 
     def draw(self) -> None:
         width = 600
@@ -222,6 +222,11 @@ class GameOver:
             x + 130,
             y + 50
         )
+        self.renderer.draw_text(
+            "Final Scor : "+str(self.score_fn),
+            x + 130,
+            y + 100
+        )
 
     def show(self) -> str:
         name = ""
@@ -232,7 +237,7 @@ class GameOver:
             self.renderer.draw_text(
                 "Enter your name: " + name,
                 300,
-                400
+                450
             )
             self.renderer.draw_text(
                 "GAME OVER",

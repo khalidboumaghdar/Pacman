@@ -12,6 +12,7 @@ import pygame
 import time
 from src.ui.menu import Resume_game, GameOver
 from src.ui.renderer import Renderer
+import json
 
 
 class RunGame:
@@ -21,6 +22,7 @@ class RunGame:
         self.config = self.parser.parse(sys.argv[1])
         self.levels = len(self.config["levels"])
         self.specialData = SpecialData(self.config["lives"])
+        self.highscores = []
 
     def runGame(self):
         for i in range(self.levels):
@@ -84,9 +86,16 @@ class RunGame:
                     game.isRunning = True
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
-                        g = GameOver(self.renderer)
+                        g = GameOver(self.renderer, self.specialData.score)
                         name = g.show()
-                        print(name)
+                        self.highscores.append({
+                            "name": name,
+                            "score": self.specialData.score
+                        })
+                        print(self.highscores)
+                        with open(self.config["highscore_filename"], "w") as f:
+                            json.dump(self.highscores, f, indent=4)
+                        # print(name)
                         return
                     game.miniIntialize()
                 game.detectKeyboardInput()
@@ -110,6 +119,9 @@ class RunGame:
                     game.isRunning = True
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
+                        g = GameOver(self.renderer, self.specialData.score)
+                        name = g.show()
+                        print(name)
                         return
                     game.miniIntialize()
                 ghost.prepareGhostsPossibleMoves(game.map)
