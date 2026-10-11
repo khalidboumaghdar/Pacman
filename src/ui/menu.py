@@ -1,4 +1,7 @@
 from src.ui.renderer import Renderer
+import pygame
+import time
+import sys
 
 
 class Menu:
@@ -166,5 +169,93 @@ class Resume_game:
 
 
 class GameOver:
-    def __int__(self):
-        pass
+    def __init__(self, renderer: Renderer) -> None:
+        self.renderer: Renderer = renderer
+
+    def draw(self) -> None:
+        width = 600
+        height = 350
+
+        x = 250
+        y = 300
+
+        self.renderer.draw_body(
+            x,
+            y,
+            width,
+            height
+        )
+
+        self.renderer.draw_line(
+            x,
+            y,
+            x + width,
+            y,
+            (255, 0, 255)
+        )
+
+        self.renderer.draw_line(
+            x,
+            y + height,
+            x + width,
+            y + height,
+            (255, 255, 255)
+        )
+
+        self.renderer.draw_line(
+            x,
+            y,
+            x,
+            y + height,
+            (255, 255, 255)
+        )
+
+        self.renderer.draw_line(
+            x + width,
+            y,
+            x + width,
+            y + height,
+            (255, 255, 255)
+        )
+        self.renderer.draw_text(
+            "GAME OVER",
+            x + 130,
+            y + 50
+        )
+
+    def show(self) -> str:
+        name = ""
+
+        while True:
+            self.draw()
+
+            self.renderer.draw_text(
+                "Enter your name: " + name,
+                300,
+                400
+            )
+            self.renderer.draw_text(
+                "GAME OVER",
+                130,
+                50
+            )
+
+            pygame.display.flip()
+
+            for ev in pygame.event.get():
+
+                if ev.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if ev.type == pygame.KEYDOWN:
+
+                    if ev.key == pygame.K_RETURN:
+                        if name:
+                            return name
+
+                    elif ev.key == pygame.K_BACKSPACE:
+                        name = name[:-1]
+
+                    elif ev.unicode.isalnum() and len(name) < 15:
+                        name += ev.unicode

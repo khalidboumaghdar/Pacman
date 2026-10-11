@@ -10,7 +10,7 @@ from src.entities.specialData import SpecialData
 import sys
 import pygame
 import time
-from src.ui.menu import Resume_game
+from src.ui.menu import Resume_game, GameOver
 from src.ui.renderer import Renderer
 
 
@@ -41,6 +41,7 @@ class RunGame:
             game = Game(clock, map_width, map_height, player, ghost, self.specialData)
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
+            print(self.config["levels"][i]["pacgum"])
             pickups = Pickups(
                 player, self.config["levels"][i].get("pacgum"), map_width, map_height, game.map, ghost
             )
@@ -83,6 +84,9 @@ class RunGame:
                     game.isRunning = True
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
+                        g = GameOver(self.renderer)
+                        name = g.show()
+                        print(name)
                         return
                     game.miniIntialize()
                 game.detectKeyboardInput()
