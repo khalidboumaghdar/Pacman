@@ -13,6 +13,7 @@ import time
 from src.ui.menu import Resume_game, GameOver
 from src.ui.renderer import Renderer
 import json
+from src.highscore.manager import HighscoreManager
 
 
 class RunGame:
@@ -93,9 +94,8 @@ class RunGame:
                             "score": self.specialData.score
                         })
                         print(self.highscores)
-                        with open(self.config["highscore_filename"], "w") as f:
-                            json.dump(self.highscores, f, indent=4)
-                        # print(name)
+                        h = HighscoreManager(self.config["highscore_filename"], self.highscores)
+                        print(h.scores)
                         return
                     game.miniIntialize()
                 game.detectKeyboardInput()
@@ -121,6 +121,13 @@ class RunGame:
                     if self.specialData.lives <= 0:
                         g = GameOver(self.renderer, self.specialData.score)
                         name = g.show()
+                        self.highscores.append({
+                            "name": name,
+                            "score": self.specialData.score
+                        })
+                        print(self.highscores)
+                        with open(self.config["highscore_filename"], "w") as f:
+                            json.dump(self.highscores, f, indent=4)
                         print(name)
                         return
                     game.miniIntialize()

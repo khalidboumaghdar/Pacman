@@ -100,11 +100,11 @@ class Resume_game:
 
     def draw(self) -> None:
 
-        width = 600
-        height = 350
+        width = 2000
+        height = 1500
 
-        x = 250
-        y = 300
+        x = 0
+        y = 0
 
         self.renderer.draw_body(
             x,
@@ -173,11 +173,11 @@ class GameOver:
         self.score_fn: int = score_fn
 
     def draw(self) -> None:
-        width = 600
-        height = 350
+        width = 2000
+        height = 1500
 
-        x = 250
-        y = 300
+        x = 0
+        y = 0
 
         self.renderer.draw_body(
             x,
@@ -237,12 +237,7 @@ class GameOver:
             self.renderer.draw_text(
                 "Enter your name: " + name,
                 300,
-                450
-            )
-            self.renderer.draw_text(
-                "GAME OVER",
-                130,
-                50
+                150
             )
 
             pygame.display.flip()
@@ -262,5 +257,5 @@ class GameOver:
                     elif ev.key == pygame.K_BACKSPACE:
                         name = name[:-1]
 
-                    elif ev.unicode.isalnum() and len(name) < 15:
+                    elif ev.unicode.isalnum() and len(name) < 10:
                         name += ev.unicode
