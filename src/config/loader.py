@@ -83,9 +83,20 @@ class Parser:
                               "levels ✅ =============\n")
                         value = value + default_value[:ms]
                     for i, level in enumerate(value):
-                        if level["pacgum"] > (level["width"] * level["height"] - 19):
+                        if level["width"] > 45:
+                            print("⛔ !warning width is to long ")
+                            value[i]["width"] = default_value[i]["width"]
+                            print("\n================ ! Using default width "
+                                  "data =============\n")
+                        if level["height"] > 25:
+                            print("⛔ !warning height is to long ")
+                            print("\n================ ! Using default height "
+                                  "data =============\n")
+                            value[i]["height"] = default_value[i]["height"]
+                        m_pucgam = level["width"] * level["height"] - 19
+                        if level["pacgum"] > m_pucgam:
                             print("⛔ !warning pacgum is to long ")
-                            print("\n================ ! Using default pacgame"
+                            print("\n================ ! Using default pacgame "
                                   "data =============\n")
                             value[i]["pacgum"] = default_value[i]["pacgum"]
                     result[key] = value

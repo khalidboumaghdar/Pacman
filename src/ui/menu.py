@@ -236,7 +236,7 @@ class GameOver:
 
             self.renderer.draw_text(
                 "Enter your name: " + name,
-                300,
+                100,
                 150
             )
 

@@ -11,8 +11,8 @@
   "level_max_time": 110,
   "levels": [
     {
-      "width": 45,
-      "height": 25,
+      "width": 8,
+      "height": 7,
       "pacgum": 1 
     },
     {
