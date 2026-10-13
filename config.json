@@ -1,6 +1,6 @@
 {
   "highscore_filename": "highscore.json",
-  "lives": 1,
+  "lives": 0,
   "width": 33,
   "height": 33,
   "pacgum": 1,
@@ -11,54 +11,9 @@
   "level_max_time": 110,
   "levels": [
     {
-      "width": 8,
-      "height": 7,
-      "pacgum": 1 
-    },
-    {
-      "width": 25,
-      "height": 15,
-      "pacgum": 5
-    },
-    {
-      "width": 11,
-      "height": 10,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
-    },
-    {
-      "width": 20,
-      "height": 20,
-      "pacgum": 5
+      "width": 15,
+      "height":25,
+      "pacgum": 11
     }
   ]
 }

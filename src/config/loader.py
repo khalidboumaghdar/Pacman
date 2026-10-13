@@ -70,6 +70,13 @@ class Parser:
                         f" -> using default: {default_value}"
                     )
                     continue
+            if key == "lives":
+                if value < 1:
+                    print(
+                        f"! must be lives than to  : {value}"
+                        f" -> using default: {default_value}"
+                    )
+                    continue
 
             if key == "levels":
                 try:

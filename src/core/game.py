@@ -4,10 +4,11 @@ import sys
 from src.core.cheats import Cheat
 import os
 import time
+from src.core.clock import Clock 
 
 
 class Game:
-    def __init__(self, clock: Any, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
+    def __init__(self, clock: Clock, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
         pygame.init()
         self.c = Cheat(False)
         self.mapWidth = mapWidth
@@ -90,7 +91,7 @@ class Game:
         try:
             os.environ['SDL_VIDEO_CENTERED'] = '1'
             pygame.init()
-            self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21), pygame.NOFRAME)
+            self.screen = pygame.display.set_mode((2000, 1500), pygame.NOFRAME)
         except Exception as e:
             print(e)
 
@@ -108,19 +109,35 @@ class Game:
                     else:
                         self.c.check = False
                         print("Desactivate cheat mode !")
-                        break
+                    break
+                if event.key == pygame.K_F6:
+                    if self.clock.pauseMenu == False and self.clock.pauseTimeCheateMode == False:
+                        self.clock.pauseTimeCheateMode = True
+                        self.clock.pauseTime = time.time()
+                        print("Activated Cheat mode!")
+                    elif self.clock.pauseMenu == False:
+                        self.clock.oldTime += time.time() - self.clock.pauseTime
+                        self.clock.pauseTimeCheateMode = False
+                        print("Desactivate cheat mode !")
+                    break
                 if event.key == pygame.K_DOWN:
                     self.player.nextDirection = "DOWN"
+                    break
                 if event.key == pygame.K_UP:
                     self.player.nextDirection = "UP"
                 if event.key == pygame.K_RIGHT:
                     self.player.nextDirection = "RIGHT"
+                    break
                 if event.key == pygame.K_LEFT:
                     self.player.nextDirection = "LEFT"
+                    break
                 if event.key == pygame.K_p:
                     # print("run menu")
                     if self.isPaused == False:
-                        self.clock.pauseTime = time.time()
+                        if self.clock.pauseMenu == False and self.clock.pauseTimeCheateMode == False:
+                            self.clock.pauseMenu = True
+                            self.clock.pauseTime = time.time()
+                            print("Activated pause menu!")
                     self.isPaused = True
                     break
 
@@ -235,7 +252,7 @@ class Game:
 
     def pygamePygameImagePut(self, window: Any, x: int, y: int, imagesToPutInWindow: str):
         image = pygame.image.load(imagesToPutInWindow)
-        window.blit(image, (x * 20, y * 20))
+        window.blit(image, ((x + ((95 - self.mapWidth) / 2)) * 20, (y + ((51 - self.mapHeight) / 2) ) * 20))
 
     def checkIsPacmanEatedGhost(self) -> bool:
         if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
@@ -254,7 +271,7 @@ class Game:
 
     def pygamePygameStringPut(self, window: Any, x: int, y: int, stringToPutInWindow):
         text = self.font.render(stringToPutInWindow, True, self.white)
-        window.blit(text, (x * 20, y * 20))
+        window.blit(text, ((x + ((95 - self.mapWidth) / 2)) * 20, (y + ((51 - self.mapHeight) / 2)) * 20))
 
 
     def moveGhosts(self):
@@ -371,4 +388,5 @@ class Game:
         self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.specialData.score}")
         self.pygamePygameStringPut(self.screen, 9, self.mapHeight, f" level: {self.specialData.currentLevel + 1}/{self.specialData.allLevels}")
         self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" lives: {self.specialData.lives}")
-        self.pygamePygameStringPut(self.screen, 20, self.mapHeight, f" Time: {self.clock.getRemainingTime()}")
+        if self.clock.pauseTimeCheateMode == False and self.clock.pauseMenu == False:
+            self.pygamePygameStringPut(self.screen, 20, self.mapHeight, f" Time: {self.clock.getRemainingTime()}")

@@ -147,7 +147,7 @@ class Resume_game:
 
         self.renderer.draw_text(
             "PAUSE MENU",
-            x + 130,
+            x + 50,
             y + 50
         )
 
@@ -160,7 +160,7 @@ class Resume_game:
 
             self.renderer.draw_text(
                 text,
-                x + 70,
+                x + 50,
                 y + 120 + i * 50
             )
 
@@ -219,12 +219,12 @@ class GameOver:
         )
         self.renderer.draw_text(
             "GAME OVER",
-            x + 130,
+            x + 50,
             y + 50
         )
         self.renderer.draw_text(
             "Final Scor : "+str(self.score_fn),
-            x + 130,
+            x + 50,
             y + 100
         )
 
@@ -259,3 +259,102 @@ class GameOver:
 
                     elif ev.unicode.isalnum() and len(name) < 10:
                         name += ev.unicode
+
+class VicotryWindow:
+    def __init__(self, renderer: Renderer, score_fn: int) -> None:
+        self.renderer: Renderer = renderer
+        self.score_fn: int = score_fn
+
+    def draw(self) -> None:
+        width = 2000
+        height = 1500
+
+        x = 0
+        y = 0
+
+        self.renderer.draw_body(
+            x,
+            y,
+            width,
+            height
+        )
+
+        self.renderer.draw_line(
+            x,
+            y,
+            x + width,
+            y,
+            (255, 0, 255)
+        )
+
+        self.renderer.draw_line(
+            x,
+            y + height,
+            x + width,
+            y + height,
+            (255, 255, 255)
+        )
+
+        self.renderer.draw_line(
+            x,
+            y,
+            x,
+            y + height,
+            (255, 255, 255)
+        )
+
+        self.renderer.draw_line(
+            x + width,
+            y,
+            x + width,
+            y + height,
+            (255, 255, 255)
+        )
+        self.renderer.draw_text(
+            "YOU DID IT!",
+            x + 50,
+            y + 50
+        )
+        self.renderer.draw_text(
+            "Amazing run! The maze is at peace thanks to you!",
+            x + 50,
+            y + 120
+        )
+        self.renderer.draw_text(
+            "Final Scor : "+str(self.score_fn),
+            x + 50,
+            y + 290
+        )
+
+    def show(self) -> str:
+        name = ""
+
+        while True:
+            self.draw()
+
+            self.renderer.draw_text(
+                "Enter your name: " + name,
+                50,
+                340
+            )
+
+            pygame.display.flip()
+
+            for ev in pygame.event.get():
+
+                if ev.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if ev.type == pygame.KEYDOWN:
+
+                    if ev.key == pygame.K_RETURN:
+                        if name:
+                            return name
+
+                    elif ev.key == pygame.K_BACKSPACE:
+                        name = name[:-1]
+
+                    elif ev.unicode.isalnum() and len(name) < 10:
+                        name += ev.unicode
+    

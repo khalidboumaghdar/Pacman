@@ -10,10 +10,11 @@ from src.entities.specialData import SpecialData
 import sys
 import pygame
 import time
-from src.ui.menu import Resume_game, GameOver
+from src.ui.menu import Resume_game, GameOver, VicotryWindow
 from src.ui.renderer import Renderer
 import json
 from src.highscore.manager import HighscoreManager
+import json
 
 
 class RunGame:
@@ -24,6 +25,7 @@ class RunGame:
         self.levels = len(self.config["levels"])
         self.specialData = SpecialData(self.config["lives"])
         self.highscores = []
+        self.vicotryWindow = None
 
     def runGame(self):
         for i in range(self.levels):
@@ -74,14 +76,17 @@ class RunGame:
                     p_menu.draw()
                     time.sleep(0.05)
                     if game.isPaused == False:
-                        clock.oldTime = clock.oldTime + (time.time() - clock.pauseTime)
+                        if clock.pauseTimeCheateMode == False:
+                            clock.oldTime = clock.oldTime + (time.time() - clock.pauseTime)
+                            clock.pauseMenu = False
                     continue
                 pygame.display.flip()
                 player.previousDirection = player.nextDirection
                 black = (0, 0, 0)
                 game.screen.fill(black)
                 if clock.getRemainingTime() <= 0:
-                    return
+                    if clock.pauseMenu == False and clock.pauseTimeCheateMode == False:
+                        return
                 if game.isRunning == False:
                     time.sleep(0.2)
                     game.isRunning = True
@@ -105,7 +110,8 @@ class RunGame:
                 if game.checkIsAGhostEatedPacman() == True and game.c.check == False:
                     game.isRunning = False
                 if clock.getRemainingTime() <= 0:
-                    return
+                    if clock.pauseMenu == False and clock.pauseTimeCheateMode == False:
+                        return
                 if game.isRunning == False:
                     try:
                         game.displayMap(pickups)
@@ -152,3 +158,14 @@ class RunGame:
             except Exception:
                 sys.exit()
             time.sleep(0.2)
+        time.sleep(1)
+        vicotryWindow = VicotryWindow(self.renderer, self.specialData.score)
+        name = vicotryWindow.show()
+        self.highscores.append({
+            "name": name,
+            "score": self.specialData.score
+        })
+        print(self.highscores)
+        with open(self.config["highscore_filename"], "w") as f:
+            json.dump(self.highscores, f, indent=4)
+        print(name)

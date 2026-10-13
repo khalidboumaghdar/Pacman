@@ -8,6 +8,8 @@ class Clock:
         if self.level_max_time == None:
             self.level_max_time = 90
         self.pauseTime = 0
+        self.pauseMenu = False
+        self.pauseTimeCheateMode = False
 
     def getRemainingTime(self):
         return (self.level_max_time - int(time.time() - self.oldTime))

@@ -6,10 +6,10 @@ install:
 	uv sync
 
 run:
-	uv run python pac-man.py $(CONFIG)
+	uv run python3 pac-man.py $(CONFIG)
 
 debug:
-	uv run python -m pdb pac-man.py $(CONFIG)
+	uv run python3 -m pdb pac-man.py $(CONFIG)
 
 clean:
 	rm -rf __pycache__ .mypy_cache .pytest_cache
