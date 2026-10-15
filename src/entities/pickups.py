@@ -1,15 +1,16 @@
-from typing import Any
 import random
+from src.entities.player import Player
+from src.entities.ghost import Ghost
 
 
 class Pickups:
     def __init__(
         self,
-        player: Any,
+        player: Player,
         numberOfPacgum: int,
         width: int, height: int,
         map: list[list[int]],
-        ghost: Any
+        ghost: Ghost
     ) -> None:
         self.width = width
         self.height = height
@@ -23,13 +24,25 @@ class Pickups:
         pacgums = [[0 for x in range(self.width)] for y in range(self.height)]
         for y in range(self.height):
             for x in range(self.width):
-                if x == self.ghost.pinkyEntity.entityOriginalX and y == self.ghost.pinkyEntity.entityOriginalY:
+                if (
+                    x == self.ghost.pinkyEntity.entityOriginalX
+                    and y == self.ghost.pinkyEntity.entityOriginalY
+                ):
                     pacgums[y][x] = 50
-                elif x == self.ghost.blinkyEntity.entityOriginalX and y == self.ghost.blinkyEntity.entityOriginalY:
+                elif (
+                    x == self.ghost.blinkyEntity.entityOriginalX
+                    and y == self.ghost.blinkyEntity.entityOriginalY
+                ):
                     pacgums[y][x] = 50
-                elif x == self.ghost.inkyEntity.entityOriginalX and y == self.ghost.inkyEntity.entityOriginalY:
+                elif (
+                    x == self.ghost.inkyEntity.entityOriginalX
+                    and y == self.ghost.inkyEntity.entityOriginalY
+                ):
                     pacgums[y][x] = 50
-                elif x == self.ghost.clydeEntity.entityOriginalX and y == self.ghost.clydeEntity.entityOriginalY:
+                elif (
+                    x == self.ghost.clydeEntity.entityOriginalX
+                    and y == self.ghost.clydeEntity.entityOriginalY
+                ):
                     pacgums[y][x] = 50
                 elif self.map[y][x] == 0:
                     if self.numberOfPacgum is None:
@@ -61,7 +74,7 @@ class Pickups:
                 self.numberOfPacgum -= 1
         return pacgums
 
-    def allPacgumsAreEaten(self):
+    def allPacgumsAreEaten(self) -> bool:
         for y in range(self.height):
             for x in range(self.width):
                 if self.pacgums[y][x] != 0:

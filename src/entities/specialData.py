@@ -1,5 +1,5 @@
 class SpecialData:
-    def __init__(self, lives):
+    def __init__(self, lives: int) -> None:
         self.score = 0
         self.currentLevel = 0
         self.lives = lives

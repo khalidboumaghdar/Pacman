@@ -14,7 +14,6 @@ from src.ui.menu import Resume_game, GameOver, VicotryWindow
 from src.ui.renderer import Renderer
 import json
 from src.highscore.manager import HighscoreManager
-import json
 
 
 class RunGame:
@@ -24,36 +23,55 @@ class RunGame:
         self.config = self.parser.parse(sys.argv[1])
         self.levels = len(self.config["levels"])
         self.specialData = SpecialData(self.config["lives"])
-        self.highscores = []
+        self.highscores: list = []
         self.vicotryWindow = None
 
-    def runGame(self):
+    def runGame(self) -> None:
         for i in range(self.levels):
             map_width = self.config["levels"][i]["width"]
             map_height = self.config["levels"][i]["height"]
-            maze_adapter = MazeAdapter(size=(map_width, map_height), seed=self.config["seed"], level=i)
+            maze_adapter = MazeAdapter(
+                size=(map_width, map_height),
+                seed=self.config["seed"],
+                level=i
+            )
             map_width = (map_width * 2) + 1
             map_height = (map_height * 2) + 1
             ghost = Ghost(
-                Entity(1, 1), 
+                Entity(1, 1),
                 Entity(map_width - 2, 1),
                 Entity(1, map_height - 2),
                 Entity(map_width - 2, map_height - 2)
             )
-            player_entity = Entity(int((map_width - 1) / 2), int((map_height - 1) / 2))
+            player_entity = Entity(
+                int((map_width - 1) / 2),
+                int((map_height - 1) / 2)
+            )
             player = Player(player_entity)
             clock = Clock(self.config["level_max_time"])
-            game = Game(clock, map_width, map_height, player, ghost, self.specialData)
+            game = Game(
+                clock,
+                map_width,
+                map_height,
+                player,
+                ghost,
+                self.specialData
+            )
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
             print(self.config["levels"][i]["pacgum"])
             pickups = Pickups(
-                player, self.config["levels"][i].get("pacgum"), map_width, map_height, game.map, ghost
+                player,
+                self.config["levels"][i].get("pacgum"),
+                map_width,
+                map_height,
+                game.map,
+                ghost
             )
             game.runGameWindow()
             p_menu = Resume_game(self.renderer)
             self.specialData.currentLevel = i
-            while pickups.allPacgumsAreEaten() == False:
+            while pickups.allPacgumsAreEaten() is False:
                 if game.isPaused:
                     for ev in pygame.event.get():
                         if ev.type == pygame.QUIT:
@@ -75,9 +93,9 @@ class RunGame:
 
                     p_menu.draw()
                     time.sleep(0.05)
-                    if game.isPaused == False:
-                        if clock.pauseTimeCheateMode == False:
-                            clock.oldTime = clock.oldTime + (time.time() - clock.pauseTime)
+                    if game.isPaused is False:
+                        if clock.pauseTimeCheateMode is False:
+                            clock.oldTime += time.time() - clock.pauseTime
                             clock.pauseMenu = False
                     continue
                 pygame.display.flip()
@@ -85,13 +103,14 @@ class RunGame:
                 black = (0, 0, 0)
                 game.screen.fill(black)
                 if clock.getRemainingTime() <= 0:
-                    if clock.pauseMenu == False and clock.pauseTimeCheateMode == False:
+                    if clock.pauseMenu is False \
+                       and clock.pauseTimeCheateMode is False:
                         return
-                if game.isRunning == False:
-                    time.sleep(0.2)
+                if game.isRunning is False:
                     game.isRunning = True
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
+                        time.sleep(0.4)
                         g = GameOver(self.renderer, self.specialData.score)
                         name = g.show()
                         self.highscores.append({
@@ -99,32 +118,36 @@ class RunGame:
                             "score": self.specialData.score
                         })
                         print(self.highscores)
-                        h = HighscoreManager(self.config["highscore_filename"], self.highscores)
+                        h = HighscoreManager(
+                            self.config["highscore_filename"],
+                            self.highscores
+                        )
                         print(h.scores)
                         return
                     game.miniIntialize()
                 game.detectKeyboardInput()
                 game.movePacman()
-                if game.checkIsPacmanEatedGhost() == True:
+                if game.checkIsPacmanEatedGhost() is True:
                     game.changeGhostModeToEaten()
-                if game.checkIsAGhostEatedPacman() == True and game.c.check == False:
+                if game.checkIsAGhostEatedPacman() is True \
+                   and game.c.check is False:
                     game.isRunning = False
                 if clock.getRemainingTime() <= 0:
-                    if clock.pauseMenu == False and clock.pauseTimeCheateMode == False:
+                    if clock.pauseMenu is False \
+                       and clock.pauseTimeCheateMode is False:
                         return
-                if game.isRunning == False:
+                if game.isRunning is False:
                     try:
                         game.displayMap(pickups)
-                        p_menu.draw()
                     except Exception:
                         sys.exit()
                     pygame.display.flip()
                     black = (0, 0, 0)
                     game.screen.fill(black)
-                    time.sleep(0.2)
                     game.isRunning = True
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
+                        time.sleep(0.4)
                         g = GameOver(self.renderer, self.specialData.score)
                         name = g.show()
                         self.highscores.append({
@@ -143,9 +166,10 @@ class RunGame:
                     game.displayMap(pickups)
                 except Exception:
                     sys.exit()
-                if game.checkIsPacmanEatedGhost() == True:
+                if game.checkIsPacmanEatedGhost() is True:
                     game.changeGhostModeToEaten()
-                if game.checkIsAGhostEatedPacman() == True and game.c.check == False:
+                if game.checkIsAGhostEatedPacman() is True \
+                   and game.c.check is False:
                     game.isRunning = False
                 time.sleep(0.06)
                 ghost.updateGhostModesIfNecessary()

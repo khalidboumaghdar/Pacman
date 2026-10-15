@@ -1,13 +1,13 @@
-from typing import Any
+from src.entities.entity import Entity
 
 
 class Ghost:
     def __init__(
         self,
-        pinkyEntity: Any,
-        blinkyEntity: Any,
-        inkyEntity: Any,
-        clydeEntity: Any
+        pinkyEntity: Entity,
+        blinkyEntity: Entity,
+        inkyEntity: Entity,
+        clydeEntity: Entity
     ) -> None:
         self.pinkyEntity = pinkyEntity
         self.blinkyEntity = blinkyEntity
@@ -25,10 +25,10 @@ class Ghost:
         self.inkyCurrentY = self.inkyEntity.entityOriginalY
         self.clydeCurrentX = self.clydeEntity.entityOriginalX
         self.clydeCurrentY = self.clydeEntity.entityOriginalY
-        self.pinkyPossibleMoves = []
-        self.blinkyPossibleMoves = []
-        self.inkyPossibleMoves = []
-        self.clydePossibleMoves = []
+        self.pinkyPossibleMoves: list = []
+        self.blinkyPossibleMoves: list = []
+        self.inkyPossibleMoves: list = []
+        self.clydePossibleMoves: list = []
         self.frightenedCounter = 0
         self.currentPinkyMode = "SCATTER"
         self.currentBlinkyMode = "SCATTER"
@@ -55,7 +55,7 @@ class Ghost:
         self.inkyCounter = 0
         self.clydeCounter = 0
 
-    def prepareGhostsPossibleMoves(self, grid):
+    def prepareGhostsPossibleMoves(self, grid: list) -> None:
         self.pinkyPossibleMoves = []
         self.blinkyPossibleMoves = []
         self.inkyPossibleMoves = []
@@ -125,7 +125,7 @@ class Ghost:
                 (self.clydeCurrentX - 1, self.clydeCurrentY, "LEFT")
             )
 
-    def updateGhostModesIfNecessary(self):
+    def updateGhostModesIfNecessary(self) -> None:
         self.pinkyCounter += 1
         if self.pinkyCounter == 116 and self.currentPinkyMode == "SCATTER":
             self.pinkyCounter = 0
@@ -135,7 +135,10 @@ class Ghost:
             self.pinkyCounter = 0
             self.currentPinkyMode = "SCATTER"
             self.initialize_ghosts("pinky")
-        elif self.pinkyCounter == 116 and self.currentPinkyMode == "FRIGHTENED":
+        elif (
+            self.pinkyCounter == 116
+            and self.currentPinkyMode == "FRIGHTENED"
+        ):
             self.pinkyCounter = self.previousPinkyCounterValue
             self.currentPinkyMode = self.previousPinkyMode
             self.initialize_ghosts("pinky")
@@ -152,7 +155,10 @@ class Ghost:
             self.blinkyCounter = 0
             self.currentBlinkyMode = "SCATTER"
             self.initialize_ghosts("blinky")
-        elif self.blinkyCounter == 116 and self.currentBlinkyMode == "FRIGHTENED":
+        elif (
+            self.blinkyCounter == 116
+            and self.currentBlinkyMode == "FRIGHTENED"
+        ):
             self.blinkyCounter = \
                 self.previousBlinkyCounterValue
             self.currentBlinkyMode = self.previousBlinkyMode
@@ -187,7 +193,10 @@ class Ghost:
             self.clydeCounter = 0
             self.currentClydeMode = "SCATTER"
             self.initialize_ghosts("clyde")
-        elif self.clydeCounter == 116 and self.currentClydeMode == "FRIGHTENED":
+        elif (
+            self.clydeCounter == 116
+            and self.currentClydeMode == "FRIGHTENED"
+        ):
             self.clydeCounter = self.previousClydeCounterValue
             self.currentClydeMode = self.previousClydeMode
             self.initialize_ghosts("clyde")
@@ -196,7 +205,7 @@ class Ghost:
             self.currentClydeMode = self.previousClydeMode
             self.initialize_ghosts("clyde")
 
-    def initialize_ghosts(self, ghost: str):
+    def initialize_ghosts(self, ghost: str) -> None:
         if ghost == "pinky":
             self.previousPinkyX = -1
             self.previousPinkyY = -1
@@ -210,7 +219,7 @@ class Ghost:
             self.previousClydeX = -1
             self.previousClydeY = -1
 
-    def runAwayFromPacman(self, ghost: str, goalX, goalY) -> str:
+    def runAwayFromPacman(self, ghost: str, goalX: int, goalY: int) -> None:
         if self.frightenedCounter % 2 == 0:
             return
         if ghost == "pinky":
@@ -306,7 +315,7 @@ class Ghost:
             elif clydeWinnerDirection == "DOWN":
                 self.clydeCurrentY += 1
 
-    def setFrightenedMode(self):
+    def setFrightenedMode(self) -> None:
         if self.currentPinkyMode != "EATEN":
             if self.currentPinkyMode != "FRIGHTENED":
                 self.previousPinkyCounterValue = self.pinkyCounter
@@ -337,7 +346,7 @@ class Ghost:
             self.clydeCounter = 0
             self.initialize_ghosts("clyde")
 
-    def MoveGhostToTarget(self, ghost: str, goalX, goalY) -> str:
+    def MoveGhostToTarget(self, ghost: str, goalX: int, goalY: int) -> None:
         if ghost == "pinky":
             pinkyNewPathCost = float("inf")
             pinkyWinnerDirection = "None"
