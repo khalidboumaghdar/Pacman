@@ -28,7 +28,7 @@ class Game:
         self.player = player
         self.ghost = ghost
         self.isRunning = True
-        self.white = (255, 255, 255)
+        self.white = (135, 206, 235)
         self.screen: Any = None
         self.font = pygame.font.Font(None, 20)
         self.map: list
@@ -247,6 +247,7 @@ class Game:
         return True
 
     def miniIntialize(self) -> None:
+        time.sleep(0.4)
         self.player.currentX = self.player.entity.entityOriginalX
         self.player.currentY = self.player.entity.entityOriginalY
         self.player.nextDirection = "None"
@@ -276,7 +277,6 @@ class Game:
 
         self.ghost.currentClydeMode = "SCATTER"
         self.ghost.clydeCounter = 0
-        time.sleep(0.4)
 
     def movePacman(self) -> None:
         if self.isDirectionOpen(self.player.ignoredDirection) is True:
@@ -350,11 +350,9 @@ class Game:
                     return True
         return False
 
-    def putString(self, window: Any, x: int, y: int, string: str) -> None:
+    def putString(self, window: Any, x: float, y: float, string: str) -> None:
         text = self.font.render(string, True, self.white)
-        x = int((x + ((95 - self.mapWidth) / 2)) * 20)
-        y = int((y + ((51 - self.mapHeight) / 2)) * 20)
-        window.blit(text, (x, y))
+        window.blit(text, (x * 20, y * 20))
 
     def moveGhosts(self) -> None:
         self.ghost.frightenedCounter += 1
@@ -568,30 +566,37 @@ class Game:
                     self.putImage(self.screen, x, y, "images/smallpickups.png")
                 elif pickups.pacgums[y][x] == 50:
                     self.putImage(self.screen, x, y, "images/bigpickups.png")
+        helperFloat = str(self.specialData.score)
+        length = len(helperFloat) - 2
+        if length < 0:
+            length = 0
+        specialFloat = 0.4 * length
+        if specialFloat > 36:
+            specialFloat = 0.5
         self.putString(
             self.screen,
+            37 - specialFloat,
             0,
-            self.mapHeight,
             f"                     score: {self.specialData.score}"
         )
         currentLevel = self.specialData.currentLevel + 1
         self.putString(
             self.screen,
-            9,
-            self.mapHeight,
+            44.6,
+            0,
             f" level: {currentLevel}/{self.specialData.allLevels}"
         )
         self.putString(
             self.screen,
-            15,
-            self.mapHeight,
+            48.5,
+            0,
             f" lives: {self.specialData.lives}"
         )
         if self.clock.pauseTimeCheateMode is False:
             if self.clock.pauseMenu is False:
                 self.putString(
                     self.screen,
-                    20,
-                    self.mapHeight,
+                    51.5,
+                    0,
                     f" Time: {self.clock.getRemainingTime()}"
                 )

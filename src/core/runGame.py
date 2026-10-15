@@ -59,7 +59,6 @@ class RunGame:
             )
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
-            print(self.config["levels"][i]["pacgum"])
             pickups = Pickups(
                 player,
                 self.config["levels"][i].get("pacgum"),
