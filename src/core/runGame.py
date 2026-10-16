@@ -13,7 +13,6 @@ import time
 from src.ui.menu import Resume_game, GameOver, VicotryWindow
 from src.ui.renderer import Renderer
 import json
-from src.highscore.manager import HighscoreManager
 
 
 class RunGame:
@@ -25,6 +24,30 @@ class RunGame:
         self.specialData = SpecialData(self.config["lives"])
         self.highscores: list = []
         self.vicotryWindow = None
+
+    def runGameOverWindow(self) -> None:
+        g = GameOver(self.renderer, self.specialData.score)
+        name = g.show()
+        self.highscores.append({
+            "name": name,
+            "score": self.specialData.score
+        })
+        print(self.highscores)
+        with open(self.config["highscore_filename"], "w") as f:
+            json.dump(self.highscores, f, indent=4)
+        print(name)
+
+    def runVicotryWindow(self) -> None:
+        vicotryWindow = VicotryWindow(self.renderer, self.specialData.score)
+        name = vicotryWindow.show()
+        self.highscores.append({
+            "name": name,
+            "score": self.specialData.score
+        })
+        print(self.highscores)
+        with open(self.config["highscore_filename"], "w") as f:
+            json.dump(self.highscores, f, indent=4)
+        print(name)
 
     def runGame(self) -> None:
         for i in range(self.levels):
@@ -104,24 +127,14 @@ class RunGame:
                 if clock.getRemainingTime() <= 0:
                     if clock.pauseMenu is False \
                        and clock.pauseTimeCheateMode is False:
+                        self.runGameOverWindow()
                         return
                 if game.isRunning is False:
                     game.isRunning = True
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
                         time.sleep(0.4)
-                        g = GameOver(self.renderer, self.specialData.score)
-                        name = g.show()
-                        self.highscores.append({
-                            "name": name,
-                            "score": self.specialData.score
-                        })
-                        print(self.highscores)
-                        h = HighscoreManager(
-                            self.config["highscore_filename"],
-                            self.highscores
-                        )
-                        print(h.scores)
+                        self.runGameOverWindow()
                         return
                     game.miniIntialize()
                 game.detectKeyboardInput()
@@ -134,6 +147,7 @@ class RunGame:
                 if clock.getRemainingTime() <= 0:
                     if clock.pauseMenu is False \
                        and clock.pauseTimeCheateMode is False:
+                        self.runGameOverWindow()
                         return
                 if game.isRunning is False:
                     try:
@@ -147,16 +161,7 @@ class RunGame:
                     self.specialData.lives -= 1
                     if self.specialData.lives <= 0:
                         time.sleep(0.4)
-                        g = GameOver(self.renderer, self.specialData.score)
-                        name = g.show()
-                        self.highscores.append({
-                            "name": name,
-                            "score": self.specialData.score
-                        })
-                        print(self.highscores)
-                        with open(self.config["highscore_filename"], "w") as f:
-                            json.dump(self.highscores, f, indent=4)
-                        print(name)
+                        self.runGameOverWindow()
                         return
                     game.miniIntialize()
                 ghost.prepareGhostsPossibleMoves(game.map)
@@ -182,13 +187,4 @@ class RunGame:
                 sys.exit()
             time.sleep(0.2)
         time.sleep(1)
-        vicotryWindow = VicotryWindow(self.renderer, self.specialData.score)
-        name = vicotryWindow.show()
-        self.highscores.append({
-            "name": name,
-            "score": self.specialData.score
-        })
-        print(self.highscores)
-        with open(self.config["highscore_filename"], "w") as f:
-            json.dump(self.highscores, f, indent=4)
-        print(name)
+        self.runVicotryWindow()

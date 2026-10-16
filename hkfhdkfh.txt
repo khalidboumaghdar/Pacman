@@ -1,6 +1,6 @@
 [
     {
-        "name": "d",
-        "score": 0
+        "name": "sadf",
+        "score": 230
     }
 ]

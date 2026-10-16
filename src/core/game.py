@@ -28,7 +28,7 @@ class Game:
         self.player = player
         self.ghost = ghost
         self.isRunning = True
-        self.white = (135, 206, 235)
+        self.skyBlue = (135, 206, 235)
         self.screen: Any = None
         self.font = pygame.font.Font(None, 20)
         self.map: list
@@ -132,7 +132,7 @@ class Game:
         try:
             os.environ['SDL_VIDEO_CENTERED'] = '1'
             pygame.init()
-            self.screen = pygame.display.set_mode((2000, 1500), pygame.NOFRAME)
+            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         except Exception as e:
             print(e)
 
@@ -328,7 +328,7 @@ class Game:
     def putImage(self, window: Any, x: int, y: int, image: str) -> None:
         myImage = pygame.image.load(image)
         x = int((x + ((95 - self.mapWidth) / 2)) * 20)
-        y = int((y + ((51 - self.mapHeight) / 2)) * 20)
+        y = int((y + ((53 - self.mapHeight) / 2)) * 20)
         window.blit(myImage, (x, y))
 
     def checkIsPacmanEatedGhost(self) -> bool:
@@ -351,7 +351,7 @@ class Game:
         return False
 
     def putString(self, window: Any, x: float, y: float, string: str) -> None:
-        text = self.font.render(string, True, self.white)
+        text = self.font.render(string, True, self.skyBlue)
         window.blit(text, (x * 20, y * 20))
 
     def moveGhosts(self) -> None:
