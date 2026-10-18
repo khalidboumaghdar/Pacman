@@ -1,6 +1,6 @@
 {
-  "highscore_filename": "hkfhdkfh.txt",
-  "lives": 4,
+  "highscore_filename": "highscore.json",
+  "lives": 1,
   "width": 21,
   "height": 21,
   "pacgum": 42,
@@ -11,8 +11,8 @@
   "level_max_time": 90,
   "levels": [
     {
-      "width": 47,
-      "height": 26,
+      "width": 15,
+      "height": 15,
       "pacgum": 46
     },
     {

@@ -13,6 +13,7 @@ import time
 from src.ui.menu import Resume_game, GameOver, VicotryWindow
 from src.ui.renderer import Renderer
 import json
+from pathlib import Path
 
 
 class RunGame:
@@ -28,14 +29,24 @@ class RunGame:
     def runGameOverWindow(self) -> None:
         g = GameOver(self.renderer, self.specialData.score)
         name = g.show()
+        # self.highscores["name"] = name
+        # self.highscores["score"] = self.specialData.score
+        # print(self.highscores)
+        # with open(self.config["highscore_filename"], "a") as f:
+        #     json.dump(self.highscores, f, indent=4)
+        fl = Path(self.config["highscore_filename"])
+        if fl.exists():
+            with fl.open("r") as f:
+                self.highscores = json.load(f)
+        else:
+            self.highscores = []
+
         self.highscores.append({
             "name": name,
             "score": self.specialData.score
         })
-        print(self.highscores)
-        with open(self.config["highscore_filename"], "w") as f:
+        with fl.open("w") as f:
             json.dump(self.highscores, f, indent=4)
-        print(name)
 
     def runVicotryWindow(self) -> None:
         vicotryWindow = VicotryWindow(self.renderer, self.specialData.score)

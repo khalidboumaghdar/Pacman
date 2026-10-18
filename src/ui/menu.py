@@ -260,6 +260,7 @@ class GameOver:
                     elif ev.unicode.isalnum() and len(name) < 10:
                         name += ev.unicode
 
+
 class VicotryWindow:
     def __init__(self, renderer: Renderer, score_fn: int) -> None:
         self.renderer: Renderer = renderer
@@ -357,4 +358,3 @@ class VicotryWindow:
 
                     elif ev.unicode.isalnum() and len(name) < 10:
                         name += ev.unicode
-    
