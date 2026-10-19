@@ -1,24 +1,45 @@
 from typing import Any
 import pygame
 import sys
+from src.core.cheats import Cheat
+import time
+from src.core.clock import Clock
+from src.entities.player import Player
+from src.entities.pickups import Pickups
+from src.entities.ghost import Ghost
+from src.entities.specialData import SpecialData
 
 
 class Game:
-    def __init__(self, mapWidth: int, mapHeight: int, player: Any, ghost: Any, specialData) -> None:
+    def __init__(
+        self,
+        clock: Clock,
+        mapWidth: int,
+        mapHeight: int,
+        player: Player,
+        ghost: Ghost,
+        screen: Any,
+        specialData: SpecialData
+    ) -> None:
+        self.c = Cheat(False)
         self.mapWidth = mapWidth
         self.mapHeight = mapHeight
         self.player = player
         self.ghost = ghost
         self.isRunning = True
-        self.white = (255, 255, 255)
-        self.black = (0, 0, 0)
-        self.screen = None
-        self.map = None
-        self.wall42 = []
+        self.skyBlue = (175, 206, 235)
+        self.screen = screen
+        self.font = pygame.font.Font(None, 20)
+        self.map: list
+        self.clock = clock
+        self.wall42: list = []
         self.specialData = specialData
+        self.isPaused = False
 
-    def buildGameMap(self, generated_maze) -> None:
-        self.map = [[0 for x in range(self.mapWidth)] for y in range(self.mapHeight)]
+    def buildGameMap(self, generated_maze: list[list]) -> None:
+        self.map = [
+            [0 for x in range(self.mapWidth)] for y in range(self.mapHeight)
+        ]
         for clums in range(len(generated_maze)):
             for rwo in range(len(generated_maze[0])):
                 self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) - 1] = 1
@@ -28,42 +49,69 @@ class Game:
                 if generated_maze[clums][rwo]["N"] == 1:
                     self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1)] = 1
                 if generated_maze[clums][rwo]["E"] == 1:
-                    self.map[(clums * 2 + 1) ][(rwo * 2 + 1) + 1] = 1
+                    self.map[(clums * 2 + 1)][(rwo * 2 + 1) + 1] = 1
                 if generated_maze[clums][rwo]["S"] == 1:
                     self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1)] = 1
                 if generated_maze[clums][rwo]["W"] == 1:
-                    self.map[(clums * 2 + 1) ][(rwo * 2 + 1) - 1] = 1
+                    self.map[(clums * 2 + 1)][(rwo * 2 + 1) - 1] = 1
                 if generated_maze[clums][rwo]["N"] == 1:
                     if generated_maze[clums][rwo]["E"] == 1:
                         if generated_maze[clums][rwo]["S"] == 1:
                             if generated_maze[clums][rwo]["W"] == 1:
-                                self.map[(clums * 2 + 1) ][(rwo * 2 + 1)] = 1
+                                self.map[(clums * 2 + 1)][(rwo * 2 + 1)] = 1
                                 self.wall42.append(
-                                    (str(clums * 2 + 1) + "y", str(rwo * 2 + 1) + "x")
+                                    (
+                                        str(clums * 2 + 1) + "y",
+                                        str(rwo * 2 + 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1 - 1) + "y", str(rwo * 2 + 1) + "x")
+                                    (
+                                        str(clums * 2 + 1 - 1) + "y",
+                                        str(rwo * 2 + 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1) + "y", str(rwo * 2 + 1 + 1) + "x")
+                                    (
+                                        str(clums * 2 + 1) + "y",
+                                        str(rwo * 2 + 1 + 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1 + 1) + "y", str(rwo * 2 + 1) + "x")
+                                    (
+                                        str(clums * 2 + 1 + 1) + "y",
+                                        str(rwo * 2 + 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1) + "y", str(rwo * 2 + 1 - 1) + "x")
+                                    (
+                                        str(clums * 2 + 1) + "y",
+                                        str(rwo * 2 + 1 - 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1 - 1) + "y", str(rwo * 2 + 1 + 1) + "x")
+                                    (
+                                        str(clums * 2 + 1 - 1) + "y",
+                                        str(rwo * 2 + 1 + 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1 + 1) + "y", str(rwo * 2 + 1 + 1) + "x")
+                                    (
+                                        str(clums * 2 + 1 + 1) + "y",
+                                        str(rwo * 2 + 1 + 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1 + 1) + "y", str(rwo * 2 + 1 - 1) + "x")
+                                    (
+                                        str(clums * 2 + 1 + 1) + "y",
+                                        str(rwo * 2 + 1 - 1) + "x"
+                                    )
                                 )
                                 self.wall42.append(
-                                    (str(clums * 2 + 1 - 1) + "y", str(rwo * 2 + 1 - 1) + "x")
+                                    (
+                                        str(clums * 2 + 1 - 1) + "y",
+                                        str(rwo * 2 + 1 - 1) + "x"
+                                    )
                                 )
         if self.map[self.player.currentY][self.player.currentX] == 1:
             if self.map[self.player.currentY][self.player.currentX - 1] == 0:
@@ -79,64 +127,355 @@ class Game:
                 self.player.currentY -= 1
                 self.player.entity.entityOriginalY -= 1
 
-    def runGameWindow(self):
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.mapWidth * 21, self.mapHeight * 21), pygame.NOFRAME)
+    def runGameWindow(self) -> None:
+        try:
+            if self.screen == None:
+                pygame.init()
+                self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        except Exception as e:
+            print(e)
+            sys.exit()
 
-    def detectKeyboardInput(self):
+    def detectKeyboardInput(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            if self.isPaused is True:
+                self.isPaused = False
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F5:
+                    if self.c.check is False:
+                        self.c.check = True
+                        print("Activated Cheat mode!")
+                    else:
+                        self.c.check = False
+                        print("Desactivate cheat mode !")
+                    break
+                if event.key == pygame.K_F6:
+                    if (
+                        self.clock.pauseMenu is False
+                        and self.clock.pauseTimeCheateMode is False
+                    ):
+                        self.clock.pauseTimeCheateMode = True
+                        self.clock.pauseTime = time.time()
+                        print("Activated Cheat mode!")
+                    elif self.clock.pauseMenu is False:
+                        missingTime = time.time() - self.clock.pauseTime
+                        self.clock.oldTime += missingTime
+                        self.clock.pauseTimeCheateMode = False
+                        print("Desactivate cheat mode !")
+                    break
                 if event.key == pygame.K_DOWN:
                     self.player.nextDirection = "DOWN"
+                    break
                 if event.key == pygame.K_UP:
                     self.player.nextDirection = "UP"
                 if event.key == pygame.K_RIGHT:
                     self.player.nextDirection = "RIGHT"
+                    break
                 if event.key == pygame.K_LEFT:
                     self.player.nextDirection = "LEFT"
+                    break
+                if event.key == pygame.K_p:
+                    # print("run menu")
+                    if self.isPaused is False:
+                        if self.clock.pauseMenu is False:
+                            if self.clock.pauseTimeCheateMode is False:
+                                self.clock.pauseMenu = True
+                                self.clock.pauseTime = time.time()
+                                print("Activated pause menu!")
+                    self.isPaused = True
+                    break
 
-    def changeGhostModeToEaten(self):
-        if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
+    def runAwayFromPacman(self, pickups: Pickups, ghost: str, goalX: int, goalY: int) -> None:
+        GHOST = self.ghost
+        if GHOST.frightenedCounter % 2 == 0:
+            return
+        if ghost == "pinky":
+            pinkyNewPathCost = float("-inf")
+            pinkyWinnerDirection = "None"
+            for i in range(len(GHOST.pinkyPossibleMoves)):
+                value = (GHOST.pinkyPossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.pinkyPossibleMoves[i][1] - goalY) ** 2
+                if GHOST.previousPinkyX == GHOST.pinkyPossibleMoves[i][0]:
+                    if GHOST.previousPinkyY == GHOST.pinkyPossibleMoves[i][1]:
+                        if (value > 4):
+                            continue
+                if pinkyNewPathCost < value:
+                    pinkyNewPathCost = value
+                    pinkyWinnerDirection = GHOST.pinkyPossibleMoves[i][2]
+            GHOST.previousPinkyX = GHOST.pinkyCurrentX
+            GHOST.previousPinkyY = GHOST.pinkyCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousPinkyX,
+                GHOST.previousPinkyY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousPinkyY]
+                [GHOST.previousPinkyX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousPinkyX,
+                    GHOST.previousPinkyY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousPinkyY]
+                [GHOST.previousPinkyX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousPinkyX,
+                    GHOST.previousPinkyY,
+                    "images/bigpickups.png"
+                )
+            if pinkyWinnerDirection == "UP":
+                GHOST.pinkyCurrentY -= 1
+            elif pinkyWinnerDirection == "RIGHT":
+                GHOST.pinkyCurrentX += 1
+            elif pinkyWinnerDirection == "LEFT":
+                GHOST.pinkyCurrentX -= 1
+            elif pinkyWinnerDirection == "DOWN":
+                GHOST.pinkyCurrentY += 1
+        elif ghost == "blinky":
+            blinkyNewPathCost = float("-inf")
+            blinkyWinnerDirection = "None"
+            for i in range(len(GHOST.blinkyPossibleMoves)):
+                value = (GHOST.blinkyPossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.blinkyPossibleMoves[i][1] - goalY) ** 2
+                if GHOST.previousBlinkyX == GHOST.blinkyPossibleMoves[i][0]:
+                    if GHOST.previousBlinkyY == GHOST.blinkyPossibleMoves[i][1]:
+                        if (value > 4):
+                            continue
+                if blinkyNewPathCost < value:
+                    blinkyNewPathCost = value
+                    blinkyWinnerDirection = GHOST.blinkyPossibleMoves[i][2]
+            GHOST.previousBlinkyX = GHOST.blinkyCurrentX
+            GHOST.previousBlinkyY = GHOST.blinkyCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousBlinkyX,
+                GHOST.previousBlinkyY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousBlinkyY]
+                [GHOST.previousBlinkyX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousBlinkyX,
+                    GHOST.previousBlinkyY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousBlinkyY]
+                [GHOST.previousBlinkyX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousBlinkyX,
+                    GHOST.previousBlinkyY,
+                    "images/bigpickups.png"
+                )
+            if blinkyWinnerDirection == "UP":
+                GHOST.blinkyCurrentY -= 1
+            elif blinkyWinnerDirection == "RIGHT":
+                GHOST.blinkyCurrentX += 1
+            elif blinkyWinnerDirection == "LEFT":
+                GHOST.blinkyCurrentX -= 1
+            elif blinkyWinnerDirection == "DOWN":
+                GHOST.blinkyCurrentY += 1
+        elif ghost == "inky":
+            inkyNewPathCost = float("-inf")
+            inkyWinnerDirection = "None"
+            for i in range(len(GHOST.inkyPossibleMoves)):
+                value = (GHOST.inkyPossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.inkyPossibleMoves[i][1] - goalY) ** 2
+                if GHOST.previousInkyX == GHOST.inkyPossibleMoves[i][0]:
+                    if GHOST.previousInkyY == GHOST.inkyPossibleMoves[i][1]:
+                        if (value > 4):
+                            continue
+                if inkyNewPathCost < value:
+                    inkyNewPathCost = value
+                    inkyWinnerDirection = GHOST.inkyPossibleMoves[i][2]
+            GHOST.previousInkyX = GHOST.inkyCurrentX
+            GHOST.previousInkyY = GHOST.inkyCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousInkyX,
+                GHOST.previousInkyY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousInkyY]
+                [GHOST.previousInkyX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousInkyX,
+                    GHOST.previousInkyY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousInkyY]
+                [GHOST.previousInkyX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousInkyX,
+                    GHOST.previousInkyY,
+                    "images/bigpickups.png"
+                )
+            if inkyWinnerDirection == "UP":
+                GHOST.inkyCurrentY -= 1
+            elif inkyWinnerDirection == "RIGHT":
+                GHOST.inkyCurrentX += 1
+            elif inkyWinnerDirection == "LEFT":
+                GHOST.inkyCurrentX -= 1
+            elif inkyWinnerDirection == "DOWN":
+                GHOST.inkyCurrentY += 1
+        elif ghost == "clyde":
+            clydeNewPathCost = float("-inf")
+            clydeWinnerDirection = "None"
+            for i in range(len(GHOST.clydePossibleMoves)):
+                value = (GHOST.clydePossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.clydePossibleMoves[i][1] - goalY) ** 2
+                if GHOST.previousClydeX == GHOST.clydePossibleMoves[i][0]:
+                    if GHOST.previousClydeY == GHOST.clydePossibleMoves[i][1]:
+                        if (value > 4):
+                            continue
+                if clydeNewPathCost < value:
+                    clydeNewPathCost = value
+                    clydeWinnerDirection = GHOST.clydePossibleMoves[i][2]
+            GHOST.previousClydeX = GHOST.clydeCurrentX
+            GHOST.previousClydeY = GHOST.clydeCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousClydeX,
+                GHOST.previousClydeY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousClydeY]
+                [GHOST.previousClydeX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousClydeX,
+                    GHOST.previousClydeY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousClydeY]
+                [GHOST.previousClydeX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousClydeX,
+                    GHOST.previousClydeY,
+                    "images/bigpickups.png"
+                )
+            if clydeWinnerDirection == "UP":
+                GHOST.clydeCurrentY -= 1
+            elif clydeWinnerDirection == "RIGHT":
+                GHOST.clydeCurrentX += 1
+            elif clydeWinnerDirection == "LEFT":
+                GHOST.clydeCurrentX -= 1
+            elif clydeWinnerDirection == "DOWN":
+                GHOST.clydeCurrentY += 1
+
+    def changeGhostModeToEaten(self) -> None:
+        if self.player.currentX == self.ghost.pinkyCurrentX:
+            if self.player.currentY == self.ghost.pinkyCurrentY:
                 self.ghost.currentPinkyMode = "EATEN"
                 self.ghost.pinkyCounter = 0
-                self.ghost.pinkyCurrentX = self.ghost.pinkyEntity.entityOriginalX
-                self.ghost.pinkyCurrentY = self.ghost.pinkyEntity.entityOriginalY
-        if self.player.currentX == self.ghost.blinkyCurrentX and self.player.currentY == self.ghost.blinkyCurrentY:
+                original_x = self.ghost.pinkyEntity.entityOriginalX
+                self.ghost.pinkyCurrentX = original_x
+                original_y = self.ghost.pinkyEntity.entityOriginalY
+                self.ghost.pinkyCurrentY = original_y
+        if self.player.currentX == self.ghost.blinkyCurrentX:
+            if self.player.currentY == self.ghost.blinkyCurrentY:
                 self.ghost.currentBlinkyMode = "EATEN"
                 self.ghost.blinkyCounter = 0
-                self.ghost.blinkyCurrentX = self.ghost.blinkyEntity.entityOriginalX
-                self.ghost.blinkyCurrentY = self.ghost.blinkyEntity.entityOriginalY
-        if self.player.currentX == self.ghost.inkyCurrentX and self.player.currentY == self.ghost.inkyCurrentY:
+                original_x = self.ghost.blinkyEntity.entityOriginalX
+                self.ghost.blinkyCurrentX = original_x
+                original_y = self.ghost.blinkyEntity.entityOriginalY
+                self.ghost.blinkyCurrentY = original_y
+        if self.player.currentX == self.ghost.inkyCurrentX:
+            if self.player.currentY == self.ghost.inkyCurrentY:
                 self.ghost.currentInkyMode = "EATEN"
                 self.ghost.inkyCounter = 0
-                self.ghost.inkyCurrentX = self.ghost.inkyEntity.entityOriginalX
-                self.ghost.inkyCurrentY = self.ghost.inkyEntity.entityOriginalY
-        if self.player.currentX == self.ghost.clydeCurrentX and self.player.currentY == self.ghost.clydeCurrentY:
+                original_x = self.ghost.inkyEntity.entityOriginalX
+                self.ghost.inkyCurrentX = original_x
+                original_y = self.ghost.inkyEntity.entityOriginalY
+                self.ghost.inkyCurrentY = original_y
+        if self.player.currentX == self.ghost.clydeCurrentX:
+            if self.player.currentY == self.ghost.clydeCurrentY:
                 self.ghost.currentClydeMode = "EATEN"
                 self.ghost.clydeCounter = 0
-                self.ghost.clydeCurrentX = self.ghost.clydeEntity.entityOriginalX
-                self.ghost.clydeCurrentY = self.ghost.clydeEntity.entityOriginalY
+                original_x = self.ghost.clydeEntity.entityOriginalX
+                self.ghost.clydeCurrentX = original_x
+                original_y = self.ghost.clydeEntity.entityOriginalY
+                self.ghost.clydeCurrentY = original_y
 
-    def isDirectionOpen(self, direction) -> bool:
+    def isDirectionOpen(self, direction: str) -> bool:
         if direction == "UP":
-            if (self.map[int(self.player.currentY - 1)][int(self.player.currentX)] == 1):
+            y = int(self.player.currentY - 1)
+            x = int(self.player.currentX)
+            if (self.map[y][x] == 1):
                 return False
         elif direction == "RIGHT":
-            if (self.map[int(self.player.currentY)][int(self.player.currentX + 1)] == 1):
+            y = int(self.player.currentY)
+            x = int(self.player.currentX + 1)
+            if (self.map[y][x] == 1):
                 return False
         elif direction == "LEFT":
-            if (self.map[int(self.player.currentY)][int(self.player.currentX - 1)] == 1):
+            y = int(self.player.currentY)
+            x = int(self.player.currentX - 1)
+            if (self.map[y][x] == 1):
                 return False
         elif direction == "DOWN":
-            if (self.map[int(self.player.currentY + 1)][int(self.player.currentX)] == 1):
+            y = int(self.player.currentY + 1)
+            x = int(self.player.currentX)
+            if (self.map[y][x] == 1):
                 return False
         if direction == "None":
             return False
         return True
 
-    def miniIntialize(self):
+    def removeGhostsFromMap(self):
+        self.putImage(
+            self.screen,
+            self.ghost.pinkyCurrentX,
+            self.ghost.pinkyCurrentY,
+            "images/black.png"
+        )
+        self.putImage(
+            self.screen,
+            self.ghost.blinkyCurrentX,
+            self.ghost.blinkyCurrentY,
+            "images/black.png"
+        )
+        self.putImage(
+            self.screen,
+            self.ghost.inkyCurrentX,
+            self.ghost.inkyCurrentY,
+            "images/black.png"
+        )
+        self.putImage(
+            self.screen,
+            self.ghost.clydeCurrentX,
+            self.ghost.clydeCurrentY,
+            "images/black.png"
+        )
+
+    def miniIntialize(self) -> None:
+        time.sleep(0.4)
+        self.removeGhostsFromMap()
         self.player.currentX = self.player.entity.entityOriginalX
         self.player.currentY = self.player.entity.entityOriginalY
         self.player.nextDirection = "None"
@@ -167,12 +506,20 @@ class Game:
         self.ghost.currentClydeMode = "SCATTER"
         self.ghost.clydeCounter = 0
 
-    def movePacman(self):
-        if self.isDirectionOpen(self.player.ignoredDirection) == True:
+    def movePacman(self) -> None:
+        if self.isDirectionOpen(self.player.ignoredDirection) is True:
             self.player.nextDirection = self.player.ignoredDirection
             self.player.ignoredDirection = "None"
+        self.putImage(
+            self.screen,
+            self.player.currentX,
+            self.player.currentY,
+            "images/black.png"
+        )
         if self.player.nextDirection == "UP":
-            if (self.map[int(self.player.currentY - 1)][int(self.player.currentX)] == 1):
+            y = int(self.player.currentY - 1)
+            x = int(self.player.currentX)
+            if (self.map[y][x] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -180,7 +527,9 @@ class Game:
                 return
             self.player.currentY -= 1
         elif self.player.nextDirection == "RIGHT":
-            if (self.map[int(self.player.currentY)][int(self.player.currentX + 1)] == 1):
+            y = int(self.player.currentY)
+            x = int(self.player.currentX + 1)
+            if (self.map[y][x] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -188,7 +537,9 @@ class Game:
                 return
             self.player.currentX += 1
         elif self.player.nextDirection == "LEFT":
-            if (self.map[int(self.player.currentY)][int(self.player.currentX - 1)] == 1):
+            y = int(self.player.currentY)
+            x = int(self.player.currentX - 1)
+            if (self.map[y][x] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -196,7 +547,9 @@ class Game:
                 return
             self.player.currentX -= 1
         elif self.player.nextDirection == "DOWN":
-            if (self.map[int(self.player.currentY + 1)][int(self.player.currentX)] == 1):
+            y = int(self.player.currentY + 1)
+            x = int(self.player.currentX)
+            if (self.map[y][x] == 1):
                 if self.player.nextDirection != self.player.previousDirection:
                     self.player.ignoredDirection = self.player.nextDirection
                     self.player.nextDirection = self.player.previousDirection
@@ -206,143 +559,502 @@ class Game:
         if self.player.nextDirection != self.player.previousDirection:
             self.player.ignoredDirection = "None"
 
-    def pygamePygameStringPutd(self, window: Any, x: int, y: int, imagesToPutInWindow: str):
-        image = pygame.image.load(imagesToPutInWindow)
-        window.blit(image, (x * 20, y * 20))
+    def putImage(self, window: Any, x: int, y: int, image: str) -> None:
+        myImage = pygame.image.load(image)
+        x = int((x + ((95 - self.mapWidth) / 2)) * 20)
+        y = int((y + ((53 - self.mapHeight) / 2)) * 20)
+        window.blit(myImage, (x, y))
 
     def checkIsPacmanEatedGhost(self) -> bool:
-        if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
-            if self.ghost.currentPinkyMode == "FRIGHTENED":
-                return True
-        if self.player.currentX == self.ghost.blinkyCurrentX and self.player.currentY == self.ghost.blinkyCurrentY:
-            if self.ghost.currentBlinkyMode == "FRIGHTENED":
-                return True
-        if self.player.currentX == self.ghost.inkyCurrentX and self.player.currentY == self.ghost.inkyCurrentY:
-            if self.ghost.currentInkyMode == "FRIGHTENED":
-                return True
-        if self.player.currentX == self.ghost.clydeCurrentX and self.player.currentY == self.ghost.clydeCurrentY:
-            if self.ghost.currentClydeMode == "FRIGHTENED":
-                return True
+        if self.player.currentX == self.ghost.pinkyCurrentX:
+            if self.player.currentY == self.ghost.pinkyCurrentY:
+                if self.ghost.currentPinkyMode == "FRIGHTENED":
+                    return True
+        if self.player.currentX == self.ghost.blinkyCurrentX:
+            if self.player.currentY == self.ghost.blinkyCurrentY:
+                if self.ghost.currentBlinkyMode == "FRIGHTENED":
+                    return True
+        if self.player.currentX == self.ghost.inkyCurrentX:
+            if self.player.currentY == self.ghost.inkyCurrentY:
+                if self.ghost.currentInkyMode == "FRIGHTENED":
+                    return True
+        if self.player.currentX == self.ghost.clydeCurrentX:
+            if self.player.currentY == self.ghost.clydeCurrentY:
+                if self.ghost.currentClydeMode == "FRIGHTENED":
+                    return True
         return False
 
-    def pygamePygameStringPut(self, window: Any, x: int, y: int, stringToPutInWindow):
-        dddd = pygame.font.Font('freesansbold.ttf', 20)
-        text = dddd.render(stringToPutInWindow, True, self.white, self.black)
-        text_rect = text.get_rect()
-        text_rect.center = (x * 20, y * 20)
-        window.blit(text, text_rect)
+    def displayMapInfastructor(self, pickups: Pickups) -> None:
+        for y in range(self.mapHeight):
+            for x in range(self.mapWidth):
+                if self.map[y][x] == 1:
+                    if ((str(y) + "y", str(x) + "x")) in self.wall42:
+                        self.putImage(self.screen, x, y, "images/wall42.png")
+                    else:
+                        if (x > 0 and self.map[y][x - 1] == 1):
+                            self.putImage(self.screen, x, y, "images/wall.png")
+                        elif x < self.mapWidth - 1 and self.map[y][x + 1] == 1:
+                            self.putImage(
+                                self.screen,
+                                x,
+                                y,
+                                "images/wall.png"
+                            )
+                        else:
+                            self.putImage(self.screen, x, y, "images/wall.png")
+                elif pickups.pacgums[y][x] == 10:
+                    self.putImage(self.screen, x, y, "images/smallpickups.png")
+                elif pickups.pacgums[y][x] == 50:
+                    self.putImage(self.screen, x, y, "images/bigpickups.png")
 
+    def putString(self, window: Any, x: float, y: float, string: str) -> None:
+        text = self.font.render(string, True, self.skyBlue)
+        window.blit(text, (x * 20, y * 20))
 
-    def moveGhosts(self):
+    def MoveGhostToTarget(self, pickups: Pickups, ghost: str, goalX: int, goalY: int) -> None:
+        GHOST = self.ghost
+        if GHOST.chaseCounter % 3 == 0:
+            return
+        if ghost == "pinky":
+            pinkyNewPathCost = float("inf")
+            pinkyWinnerDirection = "None"
+            for i in range(len(GHOST.pinkyPossibleMoves)):
+                if GHOST.previousPinkyX == GHOST.pinkyPossibleMoves[i][0]:
+                    if GHOST.previousPinkyY == GHOST.pinkyPossibleMoves[i][1]:
+                        continue
+                value = (GHOST.pinkyPossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.pinkyPossibleMoves[i][1] - goalY) ** 2
+                if pinkyNewPathCost > value:
+                    pinkyNewPathCost = value
+                    pinkyWinnerDirection = GHOST.pinkyPossibleMoves[i][2]
+            GHOST.previousPinkyX = GHOST.pinkyCurrentX
+            GHOST.previousPinkyY = GHOST.pinkyCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousPinkyX,
+                GHOST.previousPinkyY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousPinkyY]
+                [GHOST.previousPinkyX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousPinkyX,
+                    GHOST.previousPinkyY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousPinkyY]
+                [GHOST.previousPinkyX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousPinkyX,
+                    GHOST.previousPinkyY,
+                    "images/bigpickups.png"
+                )
+            if pinkyWinnerDirection == "UP":
+                GHOST.pinkyCurrentY -= 1
+            elif pinkyWinnerDirection == "RIGHT":
+                GHOST.pinkyCurrentX += 1
+            elif pinkyWinnerDirection == "LEFT":
+                GHOST.pinkyCurrentX -= 1
+            elif pinkyWinnerDirection == "DOWN":
+                GHOST.pinkyCurrentY += 1
+        elif ghost == "blinky":
+            blinkyNewPathCost = float("inf")
+            blinkyWinnerDirection = "None"
+            for i in range(len(GHOST.blinkyPossibleMoves)):
+                if GHOST.previousBlinkyX == GHOST.blinkyPossibleMoves[i][0]:
+                    if GHOST.previousBlinkyY == GHOST.blinkyPossibleMoves[i][1]:
+                        continue
+                value = (GHOST.blinkyPossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.blinkyPossibleMoves[i][1] - goalY) ** 2
+                if blinkyNewPathCost > value:
+                    blinkyNewPathCost = value
+                    blinkyWinnerDirection = GHOST.blinkyPossibleMoves[i][2]
+            GHOST.previousBlinkyX = GHOST.blinkyCurrentX
+            GHOST.previousBlinkyY = GHOST.blinkyCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousBlinkyX,
+                GHOST.previousBlinkyY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousBlinkyY]
+                [GHOST.previousBlinkyX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousBlinkyX,
+                    GHOST.previousBlinkyY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousBlinkyY]
+                [GHOST.previousBlinkyX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousBlinkyX,
+                    GHOST.previousBlinkyY,
+                    "images/bigpickups.png"
+                )
+            if blinkyWinnerDirection == "UP":
+                GHOST.blinkyCurrentY -= 1
+            elif blinkyWinnerDirection == "RIGHT":
+                GHOST.blinkyCurrentX += 1
+            elif blinkyWinnerDirection == "LEFT":
+                GHOST.blinkyCurrentX -= 1
+            elif blinkyWinnerDirection == "DOWN":
+                GHOST.blinkyCurrentY += 1
+        elif ghost == "inky":
+            inkyNewPathCost = float("inf")
+            inkyWinnerDirection = "None"
+            for i in range(len(GHOST.inkyPossibleMoves)):
+                if GHOST.previousInkyX == GHOST.inkyPossibleMoves[i][0]:
+                    if GHOST.previousInkyY == GHOST.inkyPossibleMoves[i][1]:
+                        continue
+                value = (GHOST.inkyPossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.inkyPossibleMoves[i][1] - goalY) ** 2
+                if inkyNewPathCost > value:
+                    inkyNewPathCost = value
+                    inkyWinnerDirection = GHOST.inkyPossibleMoves[i][2]
+            GHOST.previousInkyX = GHOST.inkyCurrentX
+            GHOST.previousInkyY = GHOST.inkyCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousInkyX,
+                GHOST.previousInkyY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousInkyY]
+                [GHOST.previousInkyX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousInkyX,
+                    GHOST.previousInkyY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousInkyY]
+                [GHOST.previousInkyX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousInkyX,
+                    GHOST.previousInkyY,
+                    "images/bigpickups.png"
+                )
+            if inkyWinnerDirection == "UP":
+                GHOST.inkyCurrentY -= 1
+            elif inkyWinnerDirection == "RIGHT":
+                GHOST.inkyCurrentX += 1
+            elif inkyWinnerDirection == "LEFT":
+                GHOST.inkyCurrentX -= 1
+            elif inkyWinnerDirection == "DOWN":
+                GHOST.inkyCurrentY += 1
+        elif ghost == "clyde":
+            clydeNewPathCost = float("inf")
+            clydeWinnerDirection = "None"
+            for i in range(len(GHOST.clydePossibleMoves)):
+                if GHOST.previousClydeX == GHOST.clydePossibleMoves[i][0]:
+                    if GHOST.previousClydeY == GHOST.clydePossibleMoves[i][1]:
+                        continue
+                value = (GHOST.clydePossibleMoves[i][0] - goalX) ** 2
+                value += (GHOST.clydePossibleMoves[i][1] - goalY) ** 2
+                if clydeNewPathCost > value:
+                    clydeNewPathCost = value
+                    clydeWinnerDirection = GHOST.clydePossibleMoves[i][2]
+            GHOST.previousClydeX = GHOST.clydeCurrentX
+            GHOST.previousClydeY = GHOST.clydeCurrentY
+            self.putImage(
+                self.screen,
+                GHOST.previousClydeX,
+                GHOST.previousClydeY,
+                "images/black.png"
+            )
+            if (
+                pickups.pacgums[GHOST.previousClydeY]
+                [GHOST.previousClydeX] == 10
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousClydeX,
+                    GHOST.previousClydeY,
+                    "images/smallpickups.png"
+                )
+            elif (
+                pickups.pacgums[GHOST.previousClydeY]
+                [GHOST.previousClydeX] == 50
+            ):
+                self.putImage(
+                    self.screen,
+                    GHOST.previousClydeX,
+                    GHOST.previousClydeY,
+                    "images/bigpickups.png"
+                )
+            if clydeWinnerDirection == "UP":
+                GHOST.clydeCurrentY -= 1
+            elif clydeWinnerDirection == "RIGHT":
+                GHOST.clydeCurrentX += 1
+            elif clydeWinnerDirection == "LEFT":
+                GHOST.clydeCurrentX -= 1
+            elif clydeWinnerDirection == "DOWN":
+                GHOST.clydeCurrentY += 1
+
+    def moveGhosts(self, pickups: Pickups) -> None:
         self.ghost.frightenedCounter += 1
+        self.ghost.chaseCounter += 1
         if self.ghost.currentPinkyMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("pinky", 0, 0)
+            self.MoveGhostToTarget(pickups, "pinky", 0, 0)
         elif self.ghost.currentPinkyMode == "CHASE":
-            self.ghost.MoveGhostToTarget("pinky", self.player.currentX, self.player.currentY)
+            self.MoveGhostToTarget(
+                pickups,
+                "pinky",
+                self.player.currentX,
+                self.player.currentY
+            )
         elif self.ghost.currentPinkyMode == "FRIGHTENED":
-            self.ghost.runAwayFromPacman("pinky", self.player.currentX, self.player.currentY)
-
+            self.runAwayFromPacman(
+                pickups,
+                "pinky",
+                self.player.currentX,
+                self.player.currentY
+            )
         if self.ghost.currentBlinkyMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("blinky", self.mapWidth - 1, 0)
+            self.MoveGhostToTarget(
+                pickups,
+                "blinky",
+                self.mapWidth - 1,
+                0
+            )
         elif self.ghost.currentBlinkyMode == "CHASE":
-            self.ghost.MoveGhostToTarget("blinky", self.player.currentX, self.player.currentY)
+            self.MoveGhostToTarget(
+                pickups,
+                "blinky",
+                self.player.currentX,
+                self.player.currentY
+            )
         elif self.ghost.currentBlinkyMode == "FRIGHTENED":
-            self.ghost.runAwayFromPacman("blinky", self.player.currentX, self.player.currentY)
-
+            self.runAwayFromPacman(
+                pickups,
+                "blinky",
+                self.player.currentX,
+                self.player.currentY
+            )
         if self.ghost.currentInkyMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("inky", 0, self.mapHeight - 1)
+            self.MoveGhostToTarget(
+                pickups,
+                "inky",
+                0,
+                self.mapHeight - 1
+            )
         elif self.ghost.currentInkyMode == "CHASE":
-            self.ghost.MoveGhostToTarget("inky", self.player.currentX, self.player.currentY)
+            self.MoveGhostToTarget(
+                pickups,
+                "inky",
+                self.player.currentX,
+                self.player.currentY
+            )
         elif self.ghost.currentInkyMode == "FRIGHTENED":
-            self.ghost.runAwayFromPacman("inky", self.player.currentX, self.player.currentY)
-
+            self.runAwayFromPacman(
+                pickups,
+                "inky",
+                self.player.currentX,
+                self.player.currentY
+            )
         if self.ghost.currentClydeMode == "SCATTER":
-            self.ghost.MoveGhostToTarget("clyde", self.mapWidth - 1, self.mapHeight - 1)
+            self.MoveGhostToTarget(
+                pickups,
+                "clyde",
+                self.mapWidth - 1,
+                self.mapHeight - 1
+            )
         elif self.ghost.currentClydeMode == "CHASE":
-            self.ghost.MoveGhostToTarget("clyde", self.player.currentX, self.player.currentY)
+            self.MoveGhostToTarget(
+                pickups,
+                "clyde",
+                self.player.currentX,
+                self.player.currentY
+            )
         elif self.ghost.currentClydeMode == "FRIGHTENED":
-            self.ghost.runAwayFromPacman("clyde", self.player.currentX, self.player.currentY)
+            self.runAwayFromPacman(
+                pickups,
+                "clyde",
+                self.player.currentX,
+                self.player.currentY
+            )
 
-    def checkIsAGhostEatedPacman(self) -> bool:
-        if self.player.currentX == self.ghost.pinkyCurrentX and self.player.currentY == self.ghost.pinkyCurrentY:
+    def checkIsAGhostEatedPacman(self, pickups: Pickups) -> bool:
+        player = self.player
+        if (
+            pickups.pacgums[player.currentY]
+            [player.currentX] == 50
+        ):
+            return False  
+        ghost = self.ghost
+        if (
+            player.currentX == ghost.pinkyCurrentX
+            and player.currentY == ghost.pinkyCurrentY
+        ):
             if self.ghost.currentPinkyMode != "FRIGHTENED":
                 if self.ghost.currentPinkyMode != "EATEN":
                     return True
-        elif self.player.currentX == self.ghost.blinkyCurrentX and self.player.currentY == self.ghost.blinkyCurrentY:
+        elif (
+              self.player.currentX == self.ghost.blinkyCurrentX
+              and self.player.currentY == self.ghost.blinkyCurrentY
+        ):
             if self.ghost.currentBlinkyMode != "FRIGHTENED":
                 if self.ghost.currentBlinkyMode != "EATEN":
                     return True
-        elif self.player.currentX == self.ghost.inkyCurrentX and self.player.currentY == self.ghost.inkyCurrentY:
+        elif (
+              self.player.currentX == self.ghost.inkyCurrentX
+              and self.player.currentY == self.ghost.inkyCurrentY
+        ):
             if self.ghost.currentInkyMode != "FRIGHTENED":
                 if self.ghost.currentInkyMode != "EATEN":
                     return True
-        elif self.player.currentX == self.ghost.clydeCurrentX and self.player.currentY == self.ghost.clydeCurrentY:
+        elif (
+              self.player.currentX == self.ghost.clydeCurrentX
+              and self.player.currentY == self.ghost.clydeCurrentY
+        ):
             if self.ghost.currentClydeMode != "FRIGHTENED":
                 if self.ghost.currentClydeMode != "EATEN":
                     return True
         return False
 
-    def displayMap(self, pickups) -> None:
+    def clearSpecialData(self):
+        self.screen.fill((0, 0, 0), ((0, 0), (2000, 12)))
+
+    def displayMap(self, pickups: Pickups) -> None:
+        ghost = self.ghost
         for y in range(self.mapHeight):
             for x in range(self.mapWidth):
-                if self.map[y][x] == 1:
-                    if ((str(y) + "y", str(x) + "x")) in self.wall42:
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/wall42.png")
-                    else:
-                        if (x > 0 and self.map[y][x - 1] == 1):
-                            self.pygamePygameStringPutd(self.screen, x, y, "images/wall.png")
-                        elif (x < self.mapWidth - 1 and self.map[y][x + 1] == 1):
-                            self.pygamePygameStringPutd(self.screen, x, y, "images/wall.png")
-                        else:
-                            self.pygamePygameStringPutd(self.screen, x, y, "images/wall.png")
-                elif x == self.ghost.pinkyCurrentX and y == self.ghost.pinkyCurrentY:
-                    if self.ghost.currentPinkyMode == "EATEN":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/eaten.png")
-                    elif self.ghost.currentPinkyMode == "FRIGHTENED":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/Frightened.png")
-                    else:
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/pinky.png")
-                elif x == self.ghost.blinkyCurrentX and y == self.ghost.blinkyCurrentY:
-                    if self.ghost.currentBlinkyMode == "EATEN":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/eaten.png")
-                    elif self.ghost.currentBlinkyMode == "FRIGHTENED":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/Frightened.png")
-                    else:
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/blinky.png")
-                elif x == self.ghost.inkyCurrentX and y == self.ghost.inkyCurrentY:
-                    if self.ghost.currentInkyMode == "EATEN":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/eaten.png")
-                    elif self.ghost.currentInkyMode == "FRIGHTENED":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/Frightened.png")
-                    else:
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/inky.png")
-                elif x == self.ghost.clydeCurrentX and y == self.ghost.clydeCurrentY:
-                    if self.ghost.currentClydeMode == "EATEN":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/eaten.png")
-                    elif self.ghost.currentClydeMode == "FRIGHTENED":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/Frightened.png")
-                    else:
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/clyde.png")
-                elif self.player.currentX == x and self.player.currentY == y:
-                    if self.player.nextDirection == "UP":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/pacmantop.png")
-                    elif self.player.nextDirection == "RIGHT":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/pacmanright.png")
-                    elif self.player.nextDirection == "LEFT":
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/pacmanleft.png")
-                    else:
-                        self.pygamePygameStringPutd(self.screen, x, y, "images/pacmanbottom.png")
+                if self.player.currentX == x and self.player.currentY == y:
                     if pickups.pacgums[y][x] == 10:
                         self.specialData.score += 10
                         pickups.pacgums[y][x] = 0
                     elif pickups.pacgums[y][x] == 50:
+                        self.putImage(self.screen, x, y, "images/black.png")
                         self.specialData.score += 50
                         pickups.pacgums[y][x] = 0
-                        self.ghost.setFrightenedMode()
-                elif pickups.pacgums[y][x] == 10:
-                    self.pygamePygameStringPutd(self.screen, x, y, "images/smallpickups.png")
-                elif pickups.pacgums[y][x] == 50:
-                    self.pygamePygameStringPutd(self.screen, x, y, "images/bigpickups.png")
-        self.pygamePygameStringPut(self.screen, 0, self.mapHeight, f"                     score: {self.specialData.score}")
-        self.pygamePygameStringPut(self.screen, 9, self.mapHeight, f" level: {self.specialData.currentLevel + 1}/{self.specialData.allLevels}")
-        self.pygamePygameStringPut(self.screen, 15, self.mapHeight, f" lives: {self.specialData.lives}")
+                        ghost.setFrightenedMode()
+                if x == ghost.pinkyCurrentX and y == ghost.pinkyCurrentY:
+                    if ghost.currentPinkyMode == "EATEN":
+                        self.putImage(self.screen, x, y, "images/eaten.png")
+                    elif ghost.currentPinkyMode == "FRIGHTENED":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/Frightened.png"
+                        )
+                    else:
+                        self.putImage(self.screen, x, y, "images/pinky.png")
+                elif x == ghost.blinkyCurrentX and y == ghost.blinkyCurrentY:
+                    if ghost.currentBlinkyMode == "EATEN":
+                        self.putImage(self.screen, x, y, "images/eaten.png")
+                    elif ghost.currentBlinkyMode == "FRIGHTENED":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/Frightened.png"
+                        )
+                    else:
+                        self.putImage(self.screen, x, y, "images/blinky.png")
+                elif x == ghost.inkyCurrentX and y == ghost.inkyCurrentY:
+                    if ghost.currentInkyMode == "EATEN":
+                        self.putImage(self.screen, x, y, "images/eaten.png")
+                    elif ghost.currentInkyMode == "FRIGHTENED":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/Frightened.png"
+                        )
+                    else:
+                        self.putImage(self.screen, x, y, "images/inky.png")
+                elif x == ghost.clydeCurrentX and y == ghost.clydeCurrentY:
+                    if ghost.currentClydeMode == "EATEN":
+                        self.putImage(self.screen, x, y, "images/eaten.png")
+                    elif ghost.currentClydeMode == "FRIGHTENED":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/Frightened.png"
+                        )
+                    else:
+                        self.putImage(self.screen, x, y, "images/clyde.png")
+                elif self.player.currentX == x and self.player.currentY == y:
+                    if self.player.nextDirection == "UP":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/pacmantop.png"
+                        )
+                    elif self.player.nextDirection == "RIGHT":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/pacmanright.png"
+                        )
+                    elif self.player.nextDirection == "LEFT":
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/pacmanleft.png"
+                        )
+                    else:
+                        self.putImage(
+                            self.screen,
+                            x,
+                            y,
+                            "images/pacmanbottom.png"
+                        )
+        self.clearSpecialData()
+        helperFloat = str(self.specialData.score)
+        length = len(helperFloat) - 2
+        if length < 0:
+            length = 0
+        specialFloat = 0.4 * length
+        if specialFloat > 36:
+            specialFloat = 0.5
+        self.putString(
+            self.screen,
+            37 - specialFloat,
+            0,
+            f"                     score: {self.specialData.score}"
+        )
+        currentLevel = self.specialData.currentLevel + 1
+        self.putString(
+            self.screen,
+            44.6,
+            0,
+            f" level: {currentLevel}/{self.specialData.allLevels}"
+        )
+        self.putString(
+            self.screen,
+            48.5,
+            0,
+            f" lives: {self.specialData.lives}"
+        )
+        if self.clock.pauseTimeCheateMode is False:
+            if self.clock.pauseMenu is False:
+                self.putString(
+                    self.screen,
+                    51.5,
+                    0,
+                    f" Time: {self.clock.getRemainingTime()}"
+                )
+        pygame.display.flip()

@@ -1,8 +1,8 @@
-from typing import Any
+from src.entities.entity import Entity
 
 
 class Player:
-    def __init__(self, entity: Any):
+    def __init__(self, entity: Entity):
         self.entity = entity
         self.currentX = self.entity.entityOriginalX
         self.currentY = self.entity.entityOriginalY

@@ -13,7 +13,7 @@ DEFAULT_CONFIG = {
     "points_per_ghost": 200,
     "seed": 42,
     "level_max_time": 90,
-    "levels": [{"width": 21,  "height": 21, "pacgum":12} for _ in range(10)],
+    "levels": [{"width": 21,  "height": 21, "pacgum": 12} for _ in range(10)],
 }
 
 
@@ -70,36 +70,51 @@ class Parser:
                         f" -> using default: {default_value}"
                     )
                     continue
-                
-            
+
             if key == "levels":
                 try:
                     Config(levels=value)
                     if len(value) < 10:
-                        ms  = 10 - len(value)
-                        print("\n =============== Error ⛔ ==========================\n")
+                        ms = 10 - len(value)
+                        print("\n =============== Error ⛔ ========"
+                              "==================\n")
                         print(f"! Warning: you have {len(value)} levels")
-                        print(f"\n================ ! Adding {ms} default levels ✅ =============\n")
+                        print(f"\n================ ! Adding {ms} default"
+                              "levels ✅ =============\n")
                         value = value + default_value[:ms]
-                    for i,level in enumerate(value):
-                        if level["pacgum"] > (level["width"] * level["height"] - 19):
+                    for i, level in enumerate(value):
+                        if level["width"] > 47:
+                            print("⛔ !warning width is to long ")
+                            value[i]["width"] = default_value[i]["width"]
+                            print("\n================ ! Using default width "
+                                  "data =============\n")
+                        if level["height"] > 26:
+                            print("⛔ !warning height is to long ")
+                            print("\n================ ! Using default height "
+                                  "data =============\n")
+                            value[i]["height"] = default_value[i]["height"]
+                        m_pucgam = level["width"] * level["height"] - 19
+                        if level["pacgum"] > m_pucgam:
                             print("⛔ !warning pacgum is to long ")
-                            print("\n================ ! Using default pacgame data =============\n")
+                            print("\n================ ! Using default pacgame "
+                                  "data =============\n")
                             value[i]["pacgum"] = default_value[i]["pacgum"]
                     result[key] = value
                     continue
                 except Exception as e:
-                     print("! Invalid levels")
-                     erorrs = []
-                     for err in e.errors():
-                         erorrs.append(err["msg"])
-                    
-                     print("\n =============== Error ⛔ ==========================\n")
-                     for er in erorrs:
-                         print(f"  Error: {er}")
-                     print("\n================ Using Default Data ✅ =============\n")
-                     print(f"-> using default: {default_value}")
-                     continue
+                    print("! Invalid levels")
+                    erorrs = []
+                    for err in e.errors():
+                        erorrs.append(err["msg"])
+
+                    print("\n =============== Error ⛔ =========="
+                          "================\n")
+                    for er in erorrs:
+                        print(f"  Error: {er}")
+                    print("\n================ Using Default Data ✅ ===="
+                          "=========\n")
+                    print(f"-> using default: {default_value}")
+                    continue
 
             if not isinstance(value, type(default_value)):
                 print(f"! invalide data in : {key}"

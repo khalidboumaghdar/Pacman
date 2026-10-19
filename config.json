@@ -1,8 +1,8 @@
 {
-  "highscore_filename": "hkfhdkfh.txt",
-  "lives": 30,
-  "width": 33,
-  "height": 33,
+  "highscore_filename": "highscore.json",
+  "lives": 1,
+  "width": 21,
+  "height": 21,
   "pacgum": 42,
   "points_per_pacgum": 10,
   "points_per_super_pacgum": 50,
@@ -11,49 +11,50 @@
   "level_max_time": 90,
   "levels": [
     {
-      "width": 25,
-      "height": 25,
-      "pacgum": 15
-    },
-    {
-      "width": 25,
-      "height": 15,
-      "pacgum": 46
-    },
-    {
       "width": 9,
       "height": 7,
-      "pacgum": 45
+      "pacgum": 1
+    },
+
+    {
+      "width":47,
+      "height": 26,
+      "pacgum": 60
     },
     {
       "width": 20,
       "height": 20,
-      "pacgum": 15
+      "pacgum": 1
     },
     {
       "width": 20,
       "height": 20,
-      "pacgum": 15
+      "pacgum": 1
     },
     {
       "width": 20,
       "height": 20,
-      "pacgum": 15
+      "pacgum": 1
     },
     {
       "width": 20,
       "height": 20,
-      "pacgum": 15
+      "pacgum": 1
     },
     {
       "width": 20,
       "height": 20,
-      "pacgum": 15
+      "pacgum": 1
     },
     {
       "width": 20,
       "height": 20,
-      "pacgum": 15
+      "pacgum": 1
+    },
+    {
+      "width": 20,
+      "height": 20,
+      "pacgum": 1
     }
   ]
 }
