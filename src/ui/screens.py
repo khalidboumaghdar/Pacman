@@ -1,4 +1,6 @@
 from src.ui.renderer import Renderer
+from pathlib import Path
+import json
 
 
 class Score:
@@ -25,11 +27,34 @@ class Score:
             180,
             100
         )
+        fl = Path("highscore.json")
+        if fl.exists():
+            with fl.open("r") as f:
+                f = json.load(f)
+
+        # print(f)
+        f = sorted(f, key=lambda x: x["score"], reverse=True)[:10]
+
+        i = 0
+        for p in f:
+            self.renderer.draw_text(
+                p["name"],
+                100,
+                150 + i
+            )
+            print(p["score"])
+            self.renderer.draw_text(
+                p["score"],
+                300,
+                150 + i
+            )
+            i += 50
+        # exit(0)
 
         self.renderer.draw_text(
             "Press ENTER to go back",
             100,
-            300
+            800
         )
 
         self.renderer.display()

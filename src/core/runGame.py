@@ -55,10 +55,19 @@ class RunGame:
             "name": name,
             "score": self.specialData.score
         })
-        print(self.highscores)
-        with open(self.config["highscore_filename"], "w") as f:
+        fl = Path(self.config["highscore_filename"])
+        if fl.exists():
+            with fl.open("r") as f:
+                self.highscores = json.load(f)
+        else:
+            self.highscores = []
+
+        self.highscores.append({
+            "name": name,
+            "score": self.specialData.score
+        })
+        with fl.open("w") as f:
             json.dump(self.highscores, f, indent=4)
-        print(name)
 
     def runGame(self) -> None:
         for i in range(self.levels):

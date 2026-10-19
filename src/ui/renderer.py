@@ -42,7 +42,7 @@ class Renderer:
         self.screen.fill((255, 255, 0))
 
     def draw_text(self, text: str, x: int, y: int) -> None:
-        image = self.font.render(text, True, (0, 0, 0))
+        image = self.font.render(str(text), True, (0, 0, 0))
         self.screen.blit(image, (x, y))
 
     def display(self) -> None:
