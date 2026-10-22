@@ -3,7 +3,7 @@
 <br>
 
 ### Description
-In this project, we should create a complete and playable Pac-Man game in Python, using object-oriented programming, a simple graphical library (MLX or similar), and a modular, reusable architecture, this is a funny project, it helped us to learn many new concepts in game Development.
+In this project, we should create a complete and playable Pac-Man game in Python, using object-oriented programming, a simple graphical library (MLX or similar), and a modular, reusable architecture, this is a funny project, it helped us to learn many new concepts in game Development, With this project, you create one of the famous ethical games, with the use of your maximum python and programming architecutre skills.
 
 
 ### Instructions
