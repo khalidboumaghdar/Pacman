@@ -1,5 +1,4 @@
 from src.entities.entity import Entity
-from typing import Any
 
 
 class Ghost:
@@ -251,4 +250,3 @@ class Ghost:
         elif ghost == "clyde":
             self.previousClydeX = -1
             self.previousClydeY = -1
-

@@ -129,9 +129,12 @@ class Game:
 
     def runGameWindow(self) -> None:
         try:
-            if self.screen == None:
+            if self.screen is None:
                 pygame.init()
-                self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+                self.screen = pygame.display.set_mode(
+                    (0, 0),
+                    pygame.FULLSCREEN
+                )
         except Exception as e:
             print(e)
             sys.exit()
@@ -187,7 +190,13 @@ class Game:
                     self.isPaused = True
                     break
 
-    def runAwayFromPacman(self, pickups: Pickups, ghost: str, goalX: int, goalY: int) -> None:
+    def runAwayFromPacman(
+            self,
+            pickups: Pickups,
+            ghost: str,
+            goalX: int,
+            goalY: int
+    ) -> None:
         GHOST = self.ghost
         if GHOST.frightenedCounter % 2 == 0:
             return
@@ -247,7 +256,10 @@ class Game:
                 value = (GHOST.blinkyPossibleMoves[i][0] - goalX) ** 2
                 value += (GHOST.blinkyPossibleMoves[i][1] - goalY) ** 2
                 if GHOST.previousBlinkyX == GHOST.blinkyPossibleMoves[i][0]:
-                    if GHOST.previousBlinkyY == GHOST.blinkyPossibleMoves[i][1]:
+                    if (
+                        GHOST.previousBlinkyY
+                        == GHOST.blinkyPossibleMoves[i][1]
+                    ):
                         if (value > 4):
                             continue
                 if blinkyNewPathCost < value:
@@ -447,7 +459,7 @@ class Game:
             return False
         return True
 
-    def removeGhostsFromMap(self):
+    def removeGhostsFromMap(self) -> None:
         self.putImage(
             self.screen,
             self.ghost.pinkyCurrentX,
@@ -611,7 +623,13 @@ class Game:
         text = self.font.render(string, True, self.skyBlue)
         window.blit(text, (x * 20, y * 20))
 
-    def MoveGhostToTarget(self, pickups: Pickups, ghost: str, goalX: int, goalY: int) -> None:
+    def MoveGhostToTarget(
+            self,
+            pickups: Pickups,
+            ghost: str,
+            goalX: int,
+            goalY: int
+    ) -> None:
         GHOST = self.ghost
         if GHOST.chaseCounter % 3 == 0:
             return
@@ -668,7 +686,10 @@ class Game:
             blinkyWinnerDirection = "None"
             for i in range(len(GHOST.blinkyPossibleMoves)):
                 if GHOST.previousBlinkyX == GHOST.blinkyPossibleMoves[i][0]:
-                    if GHOST.previousBlinkyY == GHOST.blinkyPossibleMoves[i][1]:
+                    if (
+                        GHOST.previousBlinkyY
+                        == GHOST.blinkyPossibleMoves[i][1]
+                    ):
                         continue
                 value = (GHOST.blinkyPossibleMoves[i][0] - goalX) ** 2
                 value += (GHOST.blinkyPossibleMoves[i][1] - goalY) ** 2
@@ -897,7 +918,7 @@ class Game:
             pickups.pacgums[player.currentY]
             [player.currentX] == 50
         ):
-            return False  
+            return False
         ghost = self.ghost
         if (
             player.currentX == ghost.pinkyCurrentX
@@ -929,7 +950,7 @@ class Game:
                     return True
         return False
 
-    def clearSpecialData(self):
+    def clearSpecialData(self) -> None:
         self.screen.fill((0, 0, 0), ((0, 0), (2000, 12)))
 
     def displayMap(self, pickups: Pickups) -> None:
