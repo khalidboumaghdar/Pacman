@@ -35,7 +35,6 @@ class Game:
         self.wall42: list = []
         self.specialData = specialData
         self.isPaused = False
-        self.pacmanCounter = 0
 
     def buildGameMap(self, generated_maze: list[list]) -> None:
         self.map = [
