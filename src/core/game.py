@@ -405,34 +405,18 @@ class Game:
             if self.player.currentY == self.ghost.pinkyCurrentY:
                 self.ghost.currentPinkyMode = "EATEN"
                 self.ghost.pinkyCounter = 0
-                original_x = self.ghost.pinkyEntity.entityOriginalX
-                self.ghost.pinkyCurrentX = original_x
-                original_y = self.ghost.pinkyEntity.entityOriginalY
-                self.ghost.pinkyCurrentY = original_y
         if self.player.currentX == self.ghost.blinkyCurrentX:
             if self.player.currentY == self.ghost.blinkyCurrentY:
                 self.ghost.currentBlinkyMode = "EATEN"
                 self.ghost.blinkyCounter = 0
-                original_x = self.ghost.blinkyEntity.entityOriginalX
-                self.ghost.blinkyCurrentX = original_x
-                original_y = self.ghost.blinkyEntity.entityOriginalY
-                self.ghost.blinkyCurrentY = original_y
         if self.player.currentX == self.ghost.inkyCurrentX:
             if self.player.currentY == self.ghost.inkyCurrentY:
                 self.ghost.currentInkyMode = "EATEN"
                 self.ghost.inkyCounter = 0
-                original_x = self.ghost.inkyEntity.entityOriginalX
-                self.ghost.inkyCurrentX = original_x
-                original_y = self.ghost.inkyEntity.entityOriginalY
-                self.ghost.inkyCurrentY = original_y
         if self.player.currentX == self.ghost.clydeCurrentX:
             if self.player.currentY == self.ghost.clydeCurrentY:
                 self.ghost.currentClydeMode = "EATEN"
                 self.ghost.clydeCounter = 0
-                original_x = self.ghost.clydeEntity.entityOriginalX
-                self.ghost.clydeCurrentX = original_x
-                original_y = self.ghost.clydeEntity.entityOriginalY
-                self.ghost.clydeCurrentY = original_y
 
     def isDirectionOpen(self, direction: str) -> bool:
         if direction == "UP":
@@ -1079,3 +1063,126 @@ class Game:
                     f" Time: {self.clock.getRemainingTime()}"
                 )
         pygame.display.flip()
+
+    def updateGhostModesIfNecessary(self) -> None:
+        GHOST = self.ghost
+        GHOST.pinkyCounter += 1
+        if GHOST.pinkyCounter == 116 and GHOST.currentPinkyMode == "SCATTER":
+            GHOST.pinkyCounter = 0
+            GHOST.currentPinkyMode = "CHASE"
+            GHOST.initialize_ghosts("pinky")
+        elif GHOST.pinkyCounter == 333 and GHOST.currentPinkyMode == "CHASE":
+            GHOST.pinkyCounter = 0
+            GHOST.currentPinkyMode = "SCATTER"
+            GHOST.initialize_ghosts("pinky")
+        elif (
+            GHOST.pinkyCounter == 149
+            and GHOST.currentPinkyMode == "FRIGHTENED"
+        ):
+            GHOST.pinkyCounter = GHOST.previousPinkyCounterValue
+            GHOST.currentPinkyMode = GHOST.previousPinkyMode
+            GHOST.initialize_ghosts("pinky")
+        elif GHOST.pinkyCounter == 83 and GHOST.currentPinkyMode == "EATEN":
+            self.putImage(
+                self.screen,
+                GHOST.pinkyCurrentX,
+                GHOST.pinkyCurrentY,
+                "images/black.png"
+            )
+            original_x = GHOST.pinkyEntity.entityOriginalX
+            GHOST.pinkyCurrentX = original_x
+            original_y = GHOST.pinkyEntity.entityOriginalY
+            GHOST.pinkyCurrentY = original_y
+            GHOST.pinkyCounter = GHOST.previousPinkyCounterValue
+            GHOST.currentPinkyMode = GHOST.previousPinkyMode
+            GHOST.initialize_ghosts("pinky")
+        GHOST.blinkyCounter += 1
+        if GHOST.blinkyCounter == 116 and GHOST.currentBlinkyMode == "SCATTER":
+            GHOST.blinkyCounter = 0
+            GHOST.currentBlinkyMode = "CHASE"
+            GHOST.initialize_ghosts("blinky")
+        elif GHOST.blinkyCounter == 333 and GHOST.currentBlinkyMode == "CHASE":
+            GHOST.blinkyCounter = 0
+            GHOST.currentBlinkyMode = "SCATTER"
+            GHOST.initialize_ghosts("blinky")
+        elif (
+            GHOST.blinkyCounter == 149
+            and GHOST.currentBlinkyMode == "FRIGHTENED"
+        ):
+            GHOST.blinkyCounter = \
+                GHOST.previousBlinkyCounterValue
+            GHOST.currentBlinkyMode = GHOST.previousBlinkyMode
+            GHOST.initialize_ghosts("blinky")
+        elif GHOST.blinkyCounter == 83 and GHOST.currentBlinkyMode == "EATEN":
+            self.putImage(
+                self.screen,
+                GHOST.blinkyCurrentX,
+                GHOST.blinkyCurrentY,
+                "images/black.png"
+            )
+            original_x = GHOST.blinkyEntity.entityOriginalX
+            GHOST.blinkyCurrentX = original_x
+            original_y = GHOST.blinkyEntity.entityOriginalY
+            GHOST.blinkyCurrentY = original_y
+            GHOST.blinkyCounter = GHOST.previousBlinkyCounterValue
+            GHOST.currentBlinkyMode = GHOST.previousBlinkyMode
+            GHOST.initialize_ghosts("blinky")
+        GHOST.inkyCounter += 1
+        if GHOST.inkyCounter == 116 and GHOST.currentInkyMode == "SCATTER":
+            GHOST.inkyCounter = 0
+            GHOST.currentInkyMode = "CHASE"
+            GHOST.initialize_ghosts("inky")
+        elif GHOST.inkyCounter == 333 and GHOST.currentInkyMode == "CHASE":
+            GHOST.inkyCounter = 0
+            GHOST.currentInkyMode = "SCATTER"
+            GHOST.initialize_ghosts("inky")
+        elif (
+            GHOST.inkyCounter == 149 and GHOST.currentInkyMode == "FRIGHTENED"
+        ):
+            GHOST.inkyCounter = GHOST.previousInkyCounterValue
+            GHOST.currentInkyMode = GHOST.previousInkyMode
+            GHOST.initialize_ghosts("inky")
+        elif GHOST.inkyCounter == 83 and GHOST.currentInkyMode == "EATEN":
+            self.putImage(
+                self.screen,
+                GHOST.inkyCurrentX,
+                GHOST.inkyCurrentY,
+                "images/black.png"
+            )
+            original_x = GHOST.inkyEntity.entityOriginalX
+            GHOST.inkyCurrentX = original_x
+            original_y = GHOST.inkyEntity.entityOriginalY
+            GHOST.inkyCurrentY = original_y
+            GHOST.inkyCounter = GHOST.previousInkyCounterValue
+            GHOST.currentInkyMode = GHOST.previousInkyMode
+            GHOST.initialize_ghosts("inky")
+        GHOST.clydeCounter += 1
+        if GHOST.clydeCounter == 116 and GHOST.currentClydeMode == "SCATTER":
+            GHOST.clydeCounter = 0
+            GHOST.currentClydeMode = "CHASE"
+            GHOST.initialize_ghosts("clyde")
+        elif GHOST.clydeCounter == 333 and GHOST.currentClydeMode == "CHASE":
+            GHOST.clydeCounter = 0
+            GHOST.currentClydeMode = "SCATTER"
+            GHOST.initialize_ghosts("clyde")
+        elif (
+            GHOST.clydeCounter == 149
+            and GHOST.currentClydeMode == "FRIGHTENED"
+        ):
+            GHOST.clydeCounter = GHOST.previousClydeCounterValue
+            GHOST.currentClydeMode = GHOST.previousClydeMode
+            GHOST.initialize_ghosts("clyde")
+        elif GHOST.clydeCounter == 83 and GHOST.currentClydeMode == "EATEN":
+            self.putImage(
+                self.screen,
+                GHOST.clydeCurrentX,
+                GHOST.clydeCurrentY,
+                "images/black.png"
+            )
+            original_x = GHOST.clydeEntity.entityOriginalX
+            GHOST.clydeCurrentX = original_x
+            original_y = GHOST.clydeEntity.entityOriginalY
+            GHOST.clydeCurrentY = original_y
+            GHOST.clydeCounter = GHOST.previousClydeCounterValue
+            GHOST.currentClydeMode = GHOST.previousClydeMode
+            GHOST.initialize_ghosts("clyde")

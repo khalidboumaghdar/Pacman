@@ -188,7 +188,7 @@ class RunGame:
                 if game.checkIsAGhostEatedPacman(pickups) is True \
                    and game.c.check is False:
                     game.isRunning = False
-                ghost.updateGhostModesIfNecessary()
+                game.updateGhostModesIfNecessary()
             screen = game.screen
             screen.fill((0, 0, 0))
             time.sleep(0.4)
