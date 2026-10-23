@@ -144,6 +144,7 @@ class RunGame:
                             clock.oldTime += time.time() - clock.pauseTime
                             clock.pauseMenu = False
                     continue
+                game.pacmanCounter += 1
                 time.sleep(0.06)
                 player.previousDirection = player.nextDirection
                 game.displayMap(pickups)
@@ -160,8 +161,10 @@ class RunGame:
                         self.runGameOverWindow()
                         return
                     game.miniIntialize()
-                game.detectKeyboardInput()
-                game.movePacman()
+                if game.pacmanCounter % 3 != 0:
+                    game.detectKeyboardInput()
+                if game.pacmanCounter % 3 != 0:
+                    game.movePacman()
                 if game.checkIsPacmanEatedGhost() is True:
                     game.changeGhostModeToEaten()
                 if game.checkIsAGhostEatedPacman(pickups) is True \
