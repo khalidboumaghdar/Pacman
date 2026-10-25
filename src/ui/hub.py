@@ -2,20 +2,20 @@ from src.ui.renderer import Renderer
 from src.ui.menu import Menu
 from src.ui.screens import Score, Insruction
 from src.core.runGame import RunGame
-# import sys
+from typing import Optional, Any
 
 
 class Hub:
-    def __init__(self):
+    def __init__(self) -> None:
         self.renderer = Renderer(2000, 1500, "Pac-Man")
         self.menu = Menu(self.renderer)
         self.score = Score(self.renderer, "heighscors.json")
         self.instruction = Insruction(self.renderer)
         self.screen = "MENU"
         self.run = True
-        self.runGame = None
+        self.runGame: Optional[Any] = None
 
-    def runMenu(self):
+    def runMenu(self) -> None:
         while self.run:
             events = self.renderer.event()
             for event in events:

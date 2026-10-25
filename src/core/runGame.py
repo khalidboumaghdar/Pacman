@@ -20,9 +20,16 @@ class RunGame:
     def __init__(self, renderer: Renderer):
         self.renderer: Renderer = renderer
         self.parser = Parser()
-        self.config = self.parser.parse(sys.argv[1])
-        self.levels = len(self.config["levels"])
-        self.specialData = SpecialData(self.config["lives"])
+        if len(sys.argv) >= 2:
+            self.config = self.parser.parse(sys.argv[1])
+            if self.config:
+                self.levels = len(self.config["levels"])
+                self.specialData = SpecialData(self.config["lives"])
+        else:
+            self.config = self.parser.parse("fllll")
+            if self.config:
+                self.levels = len(self.config["levels"])
+                self.specialData = SpecialData(self.config["lives"])
         self.highscores: list = []
         self.vicotryWindow = None
 
@@ -34,7 +41,8 @@ class RunGame:
         # print(self.highscores)
         # with open(self.config["highscore_filename"], "a") as f:
         #     json.dump(self.highscores, f, indent=4)
-        fl = Path(self.config["highscore_filename"])
+        if self.config:
+            fl = Path(self.config["highscore_filename"])
         if fl.exists():
             with fl.open("r") as f:
                 self.highscores = json.load(f)
@@ -55,7 +63,8 @@ class RunGame:
             "name": name,
             "score": self.specialData.score
         })
-        fl = Path(self.config["highscore_filename"])
+        if self.config:
+            fl = Path(self.config["highscore_filename"])
         if fl.exists():
             with fl.open("r") as f:
                 self.highscores = json.load(f)
@@ -72,13 +81,14 @@ class RunGame:
     def runGame(self) -> None:
         screen = None
         for i in range(self.levels):
-            map_width = self.config["levels"][i]["width"]
-            map_height = self.config["levels"][i]["height"]
-            maze_adapter = MazeAdapter(
-                size=(map_width, map_height),
-                seed=self.config["seed"],
-                level=i
-            )
+            if self.config:
+                map_width = self.config["levels"][i]["width"]
+                map_height = self.config["levels"][i]["height"]
+                maze_adapter = MazeAdapter(
+                    size=(map_width, map_height),
+                    seed=self.config["seed"],
+                    level=i
+                )
             map_width = (map_width * 2) + 1
             map_height = (map_height * 2) + 1
             ghost = Ghost(
@@ -92,7 +102,8 @@ class RunGame:
                 int((map_height - 1) / 2)
             )
             player = Player(player_entity)
-            clock = Clock(self.config["level_max_time"])
+            if self.config:
+                clock = Clock(self.config["level_max_time"])
             game = Game(
                 clock,
                 map_width,
@@ -104,14 +115,15 @@ class RunGame:
             )
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
-            pickups = Pickups(
-                player,
-                self.config["levels"][i].get("pacgum"),
-                map_width,
-                map_height,
-                game.map,
-                ghost
-            )
+            if self.config:
+                pickups = Pickups(
+                    player,
+                    self.config["levels"][i].get("pacgum"),
+                    map_width,
+                    map_height,
+                    game.map,
+                    ghost
+                )
             game.runGameWindow()
             game.displayMapInfastructor(pickups)
             p_menu = Resume_game(self.renderer)
@@ -146,6 +158,7 @@ class RunGame:
                     continue
                 time.sleep(0.06)
                 player.previousDirection = player.nextDirection
+                game.displayMap(pickups)
                 if clock.getRemainingTime() <= 0:
                     if clock.pauseMenu is False \
                        and clock.pauseTimeCheateMode is False:
@@ -161,12 +174,12 @@ class RunGame:
                     game.miniIntialize()
                 game.detectKeyboardInput()
                 game.movePacman()
-                game.displayMap(pickups)
                 if game.checkIsPacmanEatedGhost() is True:
                     game.changeGhostModeToEaten()
                 if game.checkIsAGhostEatedPacman(pickups) is True \
                    and game.c.check is False:
                     game.isRunning = False
+                game.displayMap(pickups)
                 if clock.getRemainingTime() <= 0:
                     if clock.pauseMenu is False \
                        and clock.pauseTimeCheateMode is False:
@@ -182,7 +195,6 @@ class RunGame:
                     game.miniIntialize()
                 ghost.prepareGhostsPossibleMoves(game.map)
                 game.moveGhosts(pickups)
-                game.displayMap(pickups)
                 if game.checkIsPacmanEatedGhost() is True:
                     game.changeGhostModeToEaten()
                 if game.checkIsAGhostEatedPacman(pickups) is True \

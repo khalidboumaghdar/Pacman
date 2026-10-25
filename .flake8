@@ -1,0 +1,2 @@
+[flake8]
+exclude = mazegenerator-2.1.0-py3-none-any.whl, .venv, .mypy_cache

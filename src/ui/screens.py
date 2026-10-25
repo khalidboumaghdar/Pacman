@@ -1,6 +1,7 @@
 from src.ui.renderer import Renderer
 from pathlib import Path
 import json
+from typing import Any
 
 
 class Score:
@@ -8,7 +9,7 @@ class Score:
         self.renderer: Renderer = renderer
         self.heighscors: str = heighscors
 
-    def check_event(self, event: str):
+    def check_event(self, event: str) -> str | None:
 
         if event == "ENTER":
             return "MENU"
@@ -28,9 +29,10 @@ class Score:
             100
         )
         fl = Path("highscore.json")
+        f: list[dict[str, Any]] = []
         if fl.exists():
-            with fl.open("r") as f:
-                f = json.load(f)
+            with fl.open("r") as file:
+                f = json.load(file)
 
         # print(f)
         f = sorted(f, key=lambda x: x["score"], reverse=True)[:10]
@@ -42,7 +44,7 @@ class Score:
                 100,
                 150 + i
             )
-            print(p["score"])
+            # print(p["score"])
             self.renderer.draw_text(
                 p["score"],
                 300,
@@ -74,7 +76,7 @@ class Insruction:
 
         return None
 
-    def display_ins(self):
+    def display_ins(self) -> None:
         self.renderer.clear()
 
         self.renderer.draw_text(

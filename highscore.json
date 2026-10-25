@@ -482,5 +482,9 @@
     {
         "name": "d",
         "score": 900
+    },
+    {
+        "name": "test",
+        "score": 0
     }
 ]

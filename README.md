@@ -46,4 +46,4 @@ for this project, al 7amdo li Allah wa7daho, we followd very important principe 
 
 
 ### Project Management
-dyalk a si khalid, inchaAllah.
+dyalk a si eabjar, inchaAllah.

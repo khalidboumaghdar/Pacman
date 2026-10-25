@@ -65,7 +65,7 @@ class Menu:
 
 class Resume_game:
 
-    def __init__(self, renderer) -> None:
+    def __init__(self, renderer: Renderer) -> None:
 
         self.renderer = renderer
 

@@ -1,8 +1,10 @@
 from pathlib import Path
 import json
 from .shema import Config
+from typing import Any
+from pydantic import ValidationError
 
-DEFAULT_CONFIG = {
+DEFAULT_CONFIG: dict[str, Any] = {
     "highscore_filename": "highscore.json",
     "width": 21,
     "height": 21,
@@ -42,9 +44,13 @@ class Parser:
             print(f)
             return None
 
-    def read_data(self, raw: str) -> dict | None:
+    def read_data(self, raw: str) -> dict[Any, Any] | None:
         try:
-            return json.loads(raw)
+            dt = json.loads(raw)
+
+            if isinstance(dt, dict):
+                return dt
+            return None
         except json.JSONDecodeError as e:
             print("! json invalide ")
             print(e)
@@ -55,14 +61,15 @@ class Parser:
             print("! no valide config data")
             data = {}
 
-        result = dict(DEFAULT_CONFIG)
-
+        result: dict[str, Any] = dict(DEFAULT_CONFIG)
+        # value: dict[str, Any]
+        # print(DEFAULT_CONFIG)
+        # exit()
         for key, default_value in DEFAULT_CONFIG.items():
             if key not in data:
                 print(f"! missing key : {key}")
                 continue
-
-            value = data[key]
+            value: Any = data[key]
             if key == "highscore_filename":
                 if not isinstance(value, str) or not Path(value).suffix:
                     print(
@@ -73,7 +80,14 @@ class Parser:
 
             if key == "levels":
                 try:
-                    Config(levels=value)
+                    config = Config(levels=value)
+                    value = []
+                    for level in config.levels:
+                        value.append({
+                            "width": level.width,
+                            "height": level.height,
+                            "pacgum": level.pacgum
+                        })
                     if len(value) < 10:
                         ms = 10 - len(value)
                         print("\n =============== Error ⛔ ========"
@@ -81,8 +95,15 @@ class Parser:
                         print(f"! Warning: you have {len(value)} levels")
                         print(f"\n================ ! Adding {ms} default"
                               "levels ✅ =============\n")
-                        value = value + default_value[:ms]
+                        # print(type(value))
+                        # exit(0)
+                        # print(default_value[:ms])
+                        # value = value + default_value[:ms]
+                        value.extend(default_value[:ms])
+                        # print(value)
+                        # exit(0)
                     for i, level in enumerate(value):
+                        # print(f"index : {i}")
                         if level["width"] > 47:
                             print("⛔ !warning width is to long ")
                             value[i]["width"] = default_value[i]["width"]
@@ -101,15 +122,15 @@ class Parser:
                             value[i]["pacgum"] = default_value[i]["pacgum"]
                     result[key] = value
                     continue
-                except Exception as e:
+                except ValidationError as e:
                     print("! Invalid levels")
-                    erorrs = []
+                    eror = []
                     for err in e.errors():
-                        erorrs.append(err["msg"])
+                        eror.append(err["msg"])
 
                     print("\n =============== Error ⛔ =========="
                           "================\n")
-                    for er in erorrs:
+                    for er in eror:
                         print(f"  Error: {er}")
                     print("\n================ Using Default Data ✅ ===="
                           "=========\n")
@@ -134,10 +155,11 @@ class Parser:
 
         return result
 
-    def parse(self, path: str) -> dict:
+    def parse(self, path: str) -> dict[str, Any] | None:
         try:
             ch = self.check_data(path)
             data = self.read_data(ch) if ch is not None else None
             return self.add_default_data(data)
         except Exception as e:
             print(e)
+            return None
