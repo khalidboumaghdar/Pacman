@@ -82,31 +82,42 @@ class Insruction:
         self.renderer.draw_text(
             "INSTRUCTION",
             150,
-            50
+            100
         )
 
         self.renderer.draw_text(
             "ARROW KEYS: MOVE",
-            80,
-            150
+            150,
+            200
         )
 
         self.renderer.draw_text(
             "EAT ALL PAC-DOTS",
-            80,
-            210
+            150,
+            250
         )
 
         self.renderer.draw_text(
             "AVOID THE GHOSTS",
-            80,
-            270
+            150,
+            300
+        )
+        self.renderer.draw_text(
+            "F5 KEY CHEAT MODE",
+            150,
+            350
+        )
+
+        self.renderer.draw_text(
+            "F6 KEY DISACTIVATE TIMER COMPLITLY",
+            150,
+            400
         )
 
         self.renderer.draw_text(
             "ENTER: BACK TO MENU",
-            80,
-            350
+            150,
+            550
         )
 
         self.renderer.display()
