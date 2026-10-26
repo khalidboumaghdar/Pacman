@@ -46,4 +46,5 @@ for this project, al 7amdo li Allah wa7daho, we followd very important principe 
 
 
 ### Project Management
-dyalk a si eabjar, inchaAllah.
+so for the project management, we explained our project architecture, and important principles that we used.
+this helps us to imporove our project sharing strategie, and let any one easly understand our infastucture, inchaaAllah.
