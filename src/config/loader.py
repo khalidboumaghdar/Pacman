@@ -95,6 +95,7 @@ class Parser:
                         print(f"! Warning: you have {len(value)} levels")
                         print(f"\n================ ! Adding {ms} default"
                               "levels ✅ =============\n")
+                        # print(default_value)
                         # print(type(value))
                         # exit(0)
                         # print(default_value[:ms])
@@ -159,6 +160,7 @@ class Parser:
         try:
             ch = self.check_data(path)
             data = self.read_data(ch) if ch is not None else None
+            print(data)
             return self.add_default_data(data)
         except Exception as e:
             print(e)
