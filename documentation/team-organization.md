@@ -12,7 +12,8 @@ so we did tasks devision in this way al 7amdo li Allah:
 2. ui/ copmplet(renderer, menu, HUD screens)
 3. maze/ (adapter + integration A-Maze-ing)
 4. Packaging (Steam/itch.io)
-5. highscore/ (persistence, top10) (si khalid chkoun li yakhd task dyal cheat
+5. highscore/ (persistence, top10)
+6. Cheat mode (cheates/)
 
 so our devision was bulid on planning, dynamic changes, long vision al 7amdo li Allah wa7aho, this devision was a good devision it ensure a continues communication and good architecture saving, and there was no conflit in development process, execpt one conflit about the logic design of using A-Maze-ing package to generate mazes.
 
