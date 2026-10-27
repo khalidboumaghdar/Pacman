@@ -166,7 +166,7 @@ class Parser:
         try:
             ch = self.check_data(path)
             data = self.read_data(ch) if ch is not None else None
-            print(data)
+            # print(data)
             return self.add_default_data(data)
         except Exception as e:
             print(e)

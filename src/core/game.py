@@ -37,11 +37,13 @@ class Game:
         self.isPaused = False
 
     def buildGameMap(self, generated_maze: list[list]) -> None:
+        # print(generated_maze)
         self.map = [
             [0 for x in range(self.mapWidth)] for y in range(self.mapHeight)
         ]
         for clums in range(len(generated_maze)):
             for rwo in range(len(generated_maze[0])):
+                # 2 * 2= 4 + 1 = 5 - 1 = 4
                 self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) - 1] = 1
                 self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) + 1] = 1
                 self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1) + 1] = 1
