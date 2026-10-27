@@ -17,7 +17,10 @@ from pathlib import Path
 
 
 class RunGame:
+    """RanGame class that the define include
+    game whoe cycle"""
     def __init__(self, renderer: Renderer):
+        """constructor method"""
         self.renderer: Renderer = renderer
         self.parser = Parser()
         if len(sys.argv) >= 2:
@@ -34,6 +37,7 @@ class RunGame:
         self.vicotryWindow = None
 
     def runGameOverWindow(self) -> None:
+        """run GameOver window"""
         g = GameOver(self.renderer, self.specialData.score)
         name = g.show()
         # self.highscores["name"] = name
@@ -57,6 +61,7 @@ class RunGame:
             json.dump(self.highscores, f, indent=4)
 
     def runVicotryWindow(self) -> None:
+        """run GameVicotry window"""
         vicotryWindow = VicotryWindow(self.renderer, self.specialData.score)
         name = vicotryWindow.show()
         self.highscores.append({
@@ -79,6 +84,7 @@ class RunGame:
             json.dump(self.highscores, f, indent=4)
 
     def runGame(self) -> None:
+        """the most important method in the project, it start game"""
         screen = None
         for i in range(self.levels):
             if self.config:

@@ -2,6 +2,7 @@ from src.entities.entity import Entity
 
 
 class Ghost:
+    """the class that control the four ghosts properties"""
     def __init__(
         self,
         pinkyEntity: Entity,
@@ -9,6 +10,7 @@ class Ghost:
         inkyEntity: Entity,
         clydeEntity: Entity
     ) -> None:
+        """constructor method"""
         self.pinkyEntity = pinkyEntity
         self.blinkyEntity = blinkyEntity
         self.inkyEntity = inkyEntity
@@ -57,6 +59,7 @@ class Ghost:
         self.clydeCounter = 0
 
     def prepareGhostsPossibleMoves(self, grid: list) -> None:
+        """prepare right directions that ghosts may move to"""
         self.pinkyPossibleMoves = []
         self.blinkyPossibleMoves = []
         self.inkyPossibleMoves = []
@@ -127,6 +130,7 @@ class Ghost:
             )
 
     def setFrightenedMode(self) -> None:
+        """ set the frightend mode when pacman eat super-pacgums"""
         if self.currentPinkyMode != "EATEN":
             if self.currentPinkyMode != "FRIGHTENED":
                 self.previousPinkyCounterValue = self.pinkyCounter
@@ -158,6 +162,8 @@ class Ghost:
             self.initialize_ghosts("clyde")
 
     def initialize_ghosts(self, ghost: str) -> None:
+        """intialize or remove ghosts
+        previous moves in custom data-base"""
         if ghost == "pinky":
             self.previousPinkyX = -1
             self.previousPinkyY = -1
