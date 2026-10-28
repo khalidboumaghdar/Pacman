@@ -12,7 +12,7 @@ class Hub:
         self.renderer = Renderer(2000, 1500, "Pac-Man")
         self.menu = Menu(self.renderer)
         self.parser = Parser()
-        if len(sys.argv[1]):
+        if len(sys.argv) >= 2:
             self.config = self.parser.parse(sys.argv[1])
             if self.config:
                 self.heghscore = self.config["highscore_filename"]
