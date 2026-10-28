@@ -21,16 +21,21 @@ https://www.google.com/search?q=pacman&oq=pacman&gs_lcrp=EgZjaHJvbWUqBggAEEUYOzI
 https://www.pygame.org/docs/ref/display.html
 https://www.youtube.com/shorts/VI3O6-vI-5Q
 https://www.reddit.com/r/pygame/comments/12eklyg/maximized_window_in_pygame/
-kifach ssta3mlna AI-daka2 al 2isstina3i ya ssi khalid???????????
+using ai for more documentaion 
 <br>
 
 
 ### Configuration
-dyalk a si khalid, inchaaAllah.
-
+Parses config.json to load the highscore filename, lives, height, pacgum count, points per pacgum, points per super pacgum, points per ghost, random seed, maximum level time, and levels
 
 ### Highscore
-dyalk a si khalid, inchaAllah.
+The game stores highscores in highscores.json to keep scores between game sessions.
+
+Loads highscores when the game starts.
+
+Handles missing or invalid files.
+
+Saves the final score and displays highscores in the main menu.
 
 
 
