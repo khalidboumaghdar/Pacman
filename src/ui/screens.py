@@ -28,7 +28,7 @@ class Score:
             180,
             100
         )
-        fl = Path("highscore.json")
+        fl = Path(self.heighscors)
         f: list[dict[str, Any]] = []
         if fl.exists():
             with fl.open("r") as file:
