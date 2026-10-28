@@ -5,11 +5,13 @@ from typing import Any
 
 
 class Score:
+    """This class to display highscore list"""
     def __init__(self, renderer: Renderer, heighscors: str) -> None:
         self.renderer: Renderer = renderer
         self.heighscors: str = heighscors
 
     def check_event(self, event: str) -> str | None:
+        """This method use to check event"""
 
         if event == "ENTER":
             return "MENU"
@@ -20,6 +22,7 @@ class Score:
         return None
 
     def draw_scors(self) -> None:
+        """This method use to draw highscore list"""
 
         self.renderer.clear()
 

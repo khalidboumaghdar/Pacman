@@ -8,6 +8,7 @@ import sys
 
 
 class Hub:
+    """This class use to menu principal"""
     def __init__(self) -> None:
         self.renderer = Renderer(2000, 1500, "Pac-Man")
         self.menu = Menu(self.renderer)
@@ -30,6 +31,7 @@ class Hub:
         self.runGame: Optional[Any] = None
 
     def runMenu(self) -> None:
+        """This method use to run all menu"""
         while self.run:
             events = self.renderer.event()
             for event in events:

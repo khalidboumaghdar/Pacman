@@ -2,6 +2,7 @@ import pygame
 
 
 class Renderer:
+    """This class to renderer pygame interface"""
     def __init__(self, width: int, height: int, title: str) -> None:
         pygame.init()
 
@@ -15,6 +16,7 @@ class Renderer:
         self.font = pygame.font.Font(None, 50)
 
     def event(self) -> list[str]:
+        """This method to check all event up and dowen ect..."""
         events: list[str] = []
 
         for ev in pygame.event.get():
@@ -39,13 +41,16 @@ class Renderer:
         return events
 
     def clear(self) -> None:
+        """This method use to clear screen"""
         self.screen.fill((255, 255, 0))
 
     def draw_text(self, text: str, x: int, y: int) -> None:
+        """This method use to draw all text"""
         image = self.font.render(str(text), True, (0, 0, 0))
         self.screen.blit(image, (x, y))
 
     def display(self) -> None:
+        """This method to display all image in object surface"""
         pygame.display.flip()
 
     def draw_body(
@@ -55,6 +60,7 @@ class Renderer:
         width: int,
         height: int
     ) -> None:
+        """This method display body of rect"""
 
         yellow = (255, 255, 0)
 
@@ -76,7 +82,7 @@ class Renderer:
         y2: int,
         color: tuple[int, int, int]
     ) -> None:
-
+        """This method draw pixel bay pixel"""
         pygame.draw.line(
             self.screen,
             color,
@@ -86,4 +92,5 @@ class Renderer:
         )
 
     def close(self) -> None:
+        """This method use to close game"""
         pygame.quit()

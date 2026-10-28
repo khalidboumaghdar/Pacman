@@ -11,14 +11,14 @@ class Menu:
         self.options = [
             "START",
             "SCORES",
-            "INSTARUCTION",
+            "INSTRUCTION",
             "QUIT"
         ]
 
         self.selected = 0
 
     def check_event(self, event: str) -> str | None:
-        """This function use to check events"""
+        """This method use to check events"""
 
         if event == "UP":
             self.selected -= 1
@@ -41,7 +41,7 @@ class Menu:
         return None
 
     def draw(self) -> None:
-        """This function use to draw text in menu"""
+        """This method use to draw text in menu"""
         self.renderer.clear()
 
         self.renderer.draw_text(
@@ -81,7 +81,7 @@ class Resume_game:
         self.selected = 0
 
     def check_event(self, event: str) -> str | None:
-        """This function use to check events"""
+        """This method use to check events"""
         if event == "UP":
             self.selected -= 1
 
@@ -103,7 +103,7 @@ class Resume_game:
         return None
 
     def draw(self) -> None:
-        """This function use to draw text in resum menu"""
+        """This method use to draw text in resum menu"""
         width = 2000
         height = 1500
 
@@ -178,7 +178,7 @@ class GameOver:
         self.score_fn: int = score_fn
 
     def draw(self) -> None:
-        """This function use to draw text in GameOver menu"""
+        """This method use to draw text in GameOver menu"""
         width = 2000
         height = 1500
 
@@ -235,7 +235,7 @@ class GameOver:
         )
 
     def show(self) -> str:
-        """This function use to enter name of user"""
+        """This method use to enter name of user"""
         name = ""
 
         while True:

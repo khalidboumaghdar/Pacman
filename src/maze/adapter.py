@@ -17,7 +17,7 @@ class MazeAdapter(MazeGenerator):
         super().__init__(size=size, perfect=perfect, seed=seed)
 
     def get_maze(self) -> List[List[dict[str, int]]]:
-        """This function retrieves the maze, determines directions,and checks
+        """This method retrieves the maze, determines directions,and checks
         whether a cell is a wall"""
         directions = {
             'N': 1,

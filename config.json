@@ -1,5 +1,5 @@
 {
-  "highscore_filename": "hi.json",
+  "highscore_filename": "highscore.json",
   "lives": 2,
   "width": 21,
   "height": 21,
@@ -13,7 +13,7 @@
     {
       "width": 15,
       "height": 15,
-      "pacgum": 1
+      "pacgum": 15
     },
 
     {

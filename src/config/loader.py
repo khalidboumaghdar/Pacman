@@ -22,7 +22,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
 class Parser:
 
     def check_data(self, path: str) -> str | None:
-        """This function checks the path suffix, validates the JSON file,
+        """This method checks the path suffix, validates the JSON file,
         skips comments, and checks if the config is empty"""
         try:
             if Path(path).suffix != ".json":
@@ -47,7 +47,7 @@ class Parser:
             return None
 
     def read_data(self, raw: str) -> dict[Any, Any] | None:
-        """This function reads the JSON file and returns the data"""
+        """This method reads the JSON file and returns the data"""
         try:
             dt = json.loads(raw)
 
@@ -60,7 +60,7 @@ class Parser:
             return None
 
     def add_default_data(self, data: dict | None) -> dict:
-        """This function adds defaults for any missing keys or values"""
+        """This method adds defaults for any missing keys or values"""
         if data is None:
             print("! no valide config data")
             data = {}
@@ -161,7 +161,7 @@ class Parser:
         return result
 
     def parse(self, path: str) -> dict[str, Any] | None:
-        """This function of execute paring check and read and if
+        """This method of execute paring check and read and if
         missing value add that"""
         try:
             ch = self.check_data(path)
