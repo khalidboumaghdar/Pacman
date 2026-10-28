@@ -4,6 +4,7 @@ import sys
 
 
 class Menu:
+    """This class use to menu principal"""
     def __init__(self, renderer: Renderer) -> None:
         self.renderer = renderer
 
@@ -17,6 +18,7 @@ class Menu:
         self.selected = 0
 
     def check_event(self, event: str) -> str | None:
+        """This function use to check events"""
 
         if event == "UP":
             self.selected -= 1
@@ -39,6 +41,7 @@ class Menu:
         return None
 
     def draw(self) -> None:
+        """This function use to draw text in menu"""
         self.renderer.clear()
 
         self.renderer.draw_text(
@@ -64,6 +67,7 @@ class Menu:
 
 
 class Resume_game:
+    """This class use to resum menu"""
 
     def __init__(self, renderer: Renderer) -> None:
 
@@ -77,7 +81,7 @@ class Resume_game:
         self.selected = 0
 
     def check_event(self, event: str) -> str | None:
-
+        """This function use to check events"""
         if event == "UP":
             self.selected -= 1
 
@@ -99,7 +103,7 @@ class Resume_game:
         return None
 
     def draw(self) -> None:
-
+        """This function use to draw text in resum menu"""
         width = 2000
         height = 1500
 
@@ -168,11 +172,13 @@ class Resume_game:
 
 
 class GameOver:
+    """This class use to GameOver menu"""
     def __init__(self, renderer: Renderer, score_fn: int) -> None:
         self.renderer: Renderer = renderer
         self.score_fn: int = score_fn
 
     def draw(self) -> None:
+        """This function use to draw text in GameOver menu"""
         width = 2000
         height = 1500
 
@@ -229,6 +235,7 @@ class GameOver:
         )
 
     def show(self) -> str:
+        """This function use to enter name of user"""
         name = ""
 
         while True:
