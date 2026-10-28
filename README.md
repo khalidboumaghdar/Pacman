@@ -21,7 +21,7 @@ https://www.google.com/search?q=pacman&oq=pacman&gs_lcrp=EgZjaHJvbWUqBggAEEUYOzI
 https://www.pygame.org/docs/ref/display.html
 https://www.youtube.com/shorts/VI3O6-vI-5Q
 https://www.reddit.com/r/pygame/comments/12eklyg/maximized_window_in_pygame/
-using ai for more documentaion 
+using ai for thoery helper tool
 <br>
 
 
@@ -30,11 +30,8 @@ Parses config.json to load the highscore filename, lives, height, pacgum count, 
 
 ### Highscore
 The game stores highscores in highscores.json to keep scores between game sessions.
-
 Loads highscores when the game starts.
-
 Handles missing or invalid files.
-
 Saves the final score and displays highscores in the main menu.
 
 

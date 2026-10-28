@@ -11,6 +11,8 @@ from src.entities.specialData import SpecialData
 
 
 class Game:
+    """Game class that define beviors and choose and
+    define and implement the whole game."""
     def __init__(
         self,
         clock: Clock,
@@ -21,6 +23,7 @@ class Game:
         screen: Any,
         specialData: SpecialData
     ) -> None:
+        """constructor method"""
         self.c = Cheat(False)
         self.mapWidth = mapWidth
         self.mapHeight = mapHeight
@@ -37,13 +40,12 @@ class Game:
         self.isPaused = False
 
     def buildGameMap(self, generated_maze: list[list]) -> None:
-        # print(generated_maze)
+        """build the game map """
         self.map = [
             [0 for x in range(self.mapWidth)] for y in range(self.mapHeight)
         ]
         for clums in range(len(generated_maze)):
             for rwo in range(len(generated_maze[0])):
-                # 2 * 2= 4 + 1 = 5 - 1 = 4
                 self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) - 1] = 1
                 self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) + 1] = 1
                 self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1) + 1] = 1
@@ -130,6 +132,7 @@ class Game:
                 self.player.entity.entityOriginalY -= 1
 
     def runGameWindow(self) -> None:
+        """run the game window"""
         try:
             if self.screen is None:
                 pygame.init()
@@ -142,6 +145,7 @@ class Game:
             sys.exit()
 
     def detectKeyboardInput(self) -> None:
+        """detect the keyboard input"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -199,6 +203,7 @@ class Game:
             goalX: int,
             goalY: int
     ) -> None:
+        """run away from pacman"""
         GHOST = self.ghost
         if GHOST.frightenedCounter % 2 == 0:
             return
@@ -403,6 +408,7 @@ class Game:
                 GHOST.clydeCurrentY += 1
 
     def changeGhostModeToEaten(self) -> None:
+        """change ghost mode to eaten mode"""
         if self.player.currentX == self.ghost.pinkyCurrentX:
             if self.player.currentY == self.ghost.pinkyCurrentY:
                 self.ghost.currentPinkyMode = "EATEN"
@@ -421,6 +427,7 @@ class Game:
                 self.ghost.clydeCounter = 0
 
     def isDirectionOpen(self, direction: str) -> bool:
+        """is direction open or close"""
         if direction == "UP":
             y = int(self.player.currentY - 1)
             x = int(self.player.currentX)
@@ -446,6 +453,7 @@ class Game:
         return True
 
     def removeGhostsFromMap(self) -> None:
+        """remove ghosts from map to reset the characters"""
         self.putImage(
             self.screen,
             self.ghost.pinkyCurrentX,
@@ -472,6 +480,7 @@ class Game:
         )
 
     def miniIntialize(self) -> None:
+        """reset and initialzie the characters"""
         time.sleep(0.4)
         self.removeGhostsFromMap()
         self.player.currentX = self.player.entity.entityOriginalX
@@ -505,6 +514,7 @@ class Game:
         self.ghost.clydeCounter = 0
 
     def movePacman(self) -> None:
+        """move pacman in map"""
         if self.isDirectionOpen(self.player.ignoredDirection) is True:
             self.player.nextDirection = self.player.ignoredDirection
             self.player.ignoredDirection = "None"
@@ -558,12 +568,14 @@ class Game:
             self.player.ignoredDirection = "None"
 
     def putImage(self, window: Any, x: int, y: int, image: str) -> None:
+        """put the image in the map"""
         myImage = pygame.image.load(image)
         x = int((x + ((95 - self.mapWidth) / 2)) * 20)
         y = int((y + ((53 - self.mapHeight) / 2)) * 20)
         window.blit(myImage, (x, y))
 
     def checkIsPacmanEatedGhost(self) -> bool:
+        """check is pacman eated ghost"""
         if self.player.currentX == self.ghost.pinkyCurrentX:
             if self.player.currentY == self.ghost.pinkyCurrentY:
                 if self.ghost.currentPinkyMode == "FRIGHTENED":
@@ -583,6 +595,7 @@ class Game:
         return False
 
     def displayMapInfastructor(self, pickups: Pickups) -> None:
+        """display map infastructor including the walls"""
         for y in range(self.mapHeight):
             for x in range(self.mapWidth):
                 if self.map[y][x] == 1:
@@ -606,6 +619,7 @@ class Game:
                     self.putImage(self.screen, x, y, "images/bigpickups.png")
 
     def putString(self, window: Any, x: float, y: float, string: str) -> None:
+        """put the string in the game interface window"""
         text = self.font.render(string, True, self.skyBlue)
         window.blit(text, (x * 20, y * 20))
 
@@ -616,6 +630,7 @@ class Game:
             goalX: int,
             goalY: int
     ) -> None:
+        """ move ghosts to the target"""
         GHOST = self.ghost
         if GHOST.chaseCounter % 3 == 0:
             return
@@ -816,6 +831,7 @@ class Game:
                 GHOST.clydeCurrentY += 1
 
     def moveGhosts(self, pickups: Pickups) -> None:
+        """move ghosts depending on thier modes"""
         self.ghost.frightenedCounter += 1
         self.ghost.chaseCounter += 1
         if self.ghost.currentPinkyMode == "SCATTER":
@@ -899,6 +915,7 @@ class Game:
             )
 
     def checkIsAGhostEatedPacman(self, pickups: Pickups) -> bool:
+        """check is a ghost eated pacman"""
         player = self.player
         if (
             pickups.pacgums[player.currentY]
@@ -937,9 +954,11 @@ class Game:
         return False
 
     def clearSpecialData(self) -> None:
+        """clear special data including available lives etc..."""
         self.screen.fill((0, 0, 0), ((0, 0), (2000, 12)))
 
     def displayMap(self, pickups: Pickups) -> None:
+        """display the map in the game interface window"""
         ghost = self.ghost
         for y in range(self.mapHeight):
             for x in range(self.mapWidth):
@@ -1067,6 +1086,7 @@ class Game:
         pygame.display.flip()
 
     def updateGhostModesIfNecessary(self) -> None:
+        """update ghost modes if necessary etc..."""
         GHOST = self.ghost
         GHOST.pinkyCounter += 1
         if GHOST.pinkyCounter == 116 and GHOST.currentPinkyMode == "SCATTER":

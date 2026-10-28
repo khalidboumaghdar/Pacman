@@ -4,6 +4,7 @@ from src.entities.ghost import Ghost
 
 
 class Pickups:
+    """the class that control the pacgums and super ones"""
     def __init__(
         self,
         player: Player,
@@ -12,6 +13,7 @@ class Pickups:
         map: list[list[int]],
         ghost: Ghost
     ) -> None:
+        """ constructor method"""
         self.width = width
         self.height = height
         self.map = map
@@ -21,6 +23,7 @@ class Pickups:
         self.pacgums = self.build_pacgums()
 
     def build_pacgums(self) -> list[list[int]]:
+        """build the pacgums and display their infastructor"""
         pacgums = [[0 for x in range(self.width)] for y in range(self.height)]
         for y in range(self.height):
             for x in range(self.width):
@@ -75,6 +78,8 @@ class Pickups:
         return pacgums
 
     def allPacgumsAreEaten(self) -> bool:
+        """ check is all pacgums including supers ones, are
+        removed all from current map"""
         for y in range(self.height):
             for x in range(self.width):
                 if self.pacgums[y][x] != 0:
