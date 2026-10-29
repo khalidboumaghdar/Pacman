@@ -11,8 +11,8 @@ from src.entities.specialData import SpecialData
 
 
 class Game:
-    """Game class that define beviors and choose and
-    define and implement the whole game."""
+    """Game class that define behaviors
+    and implement the whole game."""
     def __init__(
         self,
         clock: Clock,
