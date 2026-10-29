@@ -162,7 +162,7 @@ class Ghost:
             self.initialize_ghosts("clyde")
 
     def initialize_ghosts(self, ghost: str) -> None:
-        """intialize or remove ghosts
+        """intialize and remove ghosts
         previous moves in custom data-base"""
         if ghost == "pinky":
             self.previousPinkyX = -1
