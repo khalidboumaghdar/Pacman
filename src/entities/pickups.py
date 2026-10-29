@@ -23,7 +23,7 @@ class Pickups:
         self.pacgums = self.build_pacgums()
 
     def build_pacgums(self) -> list[list[int]]:
-        """build the pacgums and display their infastructor"""
+        """build the pacgums"""
         pacgums = [[0 for x in range(self.width)] for y in range(self.height)]
         for y in range(self.height):
             for x in range(self.width):
