@@ -17,8 +17,8 @@ from pathlib import Path
 
 
 class RunGame:
-    """RanGame class that the define include
-    game whoe cycle"""
+    """RanGame class that implement
+    game whole cycle"""
     def __init__(self, renderer: Renderer):
         """constructor method"""
         self.renderer: Renderer = renderer
@@ -84,7 +84,8 @@ class RunGame:
             json.dump(self.highscores, f, indent=4)
 
     def runGame(self) -> None:
-        """the most important method in the project, it start game"""
+        """the most important method in the project,
+        it run and start the game"""
         screen = None
         for i in range(self.levels):
             if self.config:
