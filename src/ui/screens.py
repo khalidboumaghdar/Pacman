@@ -66,10 +66,12 @@ class Score:
 
 
 class Insruction:
+    """This class use to renderer instruction menu"""
     def __init__(self, renderer: Renderer) -> None:
         self.renderer: Renderer = renderer
 
     def check_event(self, event: str) -> str | None:
+        """This method use to check event"""
 
         if event == "ENTER":
             return "MENU"
@@ -80,6 +82,7 @@ class Insruction:
         return None
 
     def display_ins(self) -> None:
+        """This method use to renderer text in instruction menu"""
         self.renderer.clear()
 
         self.renderer.draw_text(

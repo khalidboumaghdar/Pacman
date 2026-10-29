@@ -269,11 +269,13 @@ class GameOver:
 
 
 class VicotryWindow:
+    """This class use to renderer vicotry menu"""
     def __init__(self, renderer: Renderer, score_fn: int) -> None:
         self.renderer: Renderer = renderer
         self.score_fn: int = score_fn
 
     def draw(self) -> None:
+        """This method use to draw menu pixel by pixel """
         width = 2000
         height = 1500
 
@@ -335,6 +337,7 @@ class VicotryWindow:
         )
 
     def show(self) -> str:
+        """This method use to enter name of user"""
         name = ""
 
         while True:

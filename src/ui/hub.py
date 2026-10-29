@@ -48,9 +48,9 @@ class Hub:
                     elif result == "SCORES":
                         print("open scores...")
                         self.screen = "SCORES"
-                    elif result == "INSTARUCTION":
+                    elif result == "INSTRUCTION":
                         print("open instaruction ...")
-                        self.screen = "INSTARUCTION"
+                        self.screen = "INSTRUCTION"
                     elif result == "QUIT":
                         self.run = False
                 elif self.screen == "SCORES":
@@ -59,7 +59,7 @@ class Hub:
                         self.screen = "MENU"
                     elif result == "QUIT":
                         self.run = False
-                elif self.screen == "INSTARUCTION":
+                elif self.screen == "INSTRUCTION":
                     result = self.instruction.check_event(event)
                     if result == "MENU":
                         self.screen = "MENU"
@@ -69,6 +69,6 @@ class Hub:
                 self.menu.draw()
             elif self.screen == "SCORES":
                 self.score.draw_scors()
-            elif self.screen == "INSTARUCTION":
+            elif self.screen == "INSTRUCTION":
                 self.instruction.display_ins()
         self.renderer.close()
