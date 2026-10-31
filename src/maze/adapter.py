@@ -9,9 +9,9 @@ class MazeAdapter(MazeGenerator):
         size: tuple[int, int] = (15, 15),
         perfect: bool = False,
         seed: int = 0,
-        level: int = 1
+        level: int = 1,
     ) -> None:
-        if level != 1:
+        if level != 0:
             seed = 0
 
         super().__init__(size=size, perfect=perfect, seed=seed)

@@ -96,6 +96,9 @@ class RunGame:
                     seed=self.config["seed"],
                     level=i
                 )
+                # print(c)
+                # print(maze_adapter._seed)
+                # exit(0)
             map_width = (map_width * 2) + 1
             map_height = (map_height * 2) + 1
             ghost = Ghost(

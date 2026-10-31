@@ -81,6 +81,18 @@ class Parser:
                         f" -> using default: {default_value}"
                     )
                     continue
+            if key == "width":
+                if value < 9:
+                    print(
+                        f"! Invalid width: {value}"
+                        f" -> using default: {default_value}"
+                    )
+            if key == "height":
+                if value < 7:
+                    print(
+                        f"! Invalid width: {value}"
+                        f" -> using default: {default_value}"
+                    )
 
             if key == "levels":
                 try:
