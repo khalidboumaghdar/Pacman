@@ -156,7 +156,7 @@ class Game:
     def detectKeyboardInput(self) -> None:
         """detect the keyboard input"""
         if self.countOpenDirections() > 2:
-            time.sleep(0.01)
+            time.sleep(0.03)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
