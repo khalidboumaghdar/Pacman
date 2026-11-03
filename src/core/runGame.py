@@ -168,7 +168,6 @@ class RunGame:
                     continue
                 time.sleep(0.06)
                 player.previousDirection = player.nextDirection
-                game.displayMap(pickups)
                 if clock.getRemainingTime() <= 0:
                     if clock.pauseMenu is False \
                        and clock.pauseTimeCheateMode is False:
@@ -211,6 +210,7 @@ class RunGame:
                    and game.c.check is False:
                     game.isRunning = False
                 game.updateGhostModesIfNecessary()
+                game.displayMap(pickups)
             screen = game.screen
             screen.fill((0, 0, 0))
             time.sleep(0.4)

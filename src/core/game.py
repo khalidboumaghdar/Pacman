@@ -39,84 +39,93 @@ class Game:
         self.specialData = specialData
         self.isPaused = False
 
+    def isThisA15CloseCell(
+        self,
+        generated_maze: list[list],
+        column: int,
+        row: int
+    ) -> bool:
+        if generated_maze[column][row]["N"] == 1:
+            if generated_maze[column][row]["E"] == 1:
+                if generated_maze[column][row]["S"] == 1:
+                    if generated_maze[column][row]["W"] == 1:
+                        return True
+        return False
+
     def buildGameMap(self, generated_maze: list[list]) -> None:
         """build the game map """
         self.map = [
-            [0 for x in range(self.mapWidth)] for y in range(self.mapHeight)
+            [1 for x in range(self.mapWidth)] for y in range(self.mapHeight)
         ]
         for clums in range(len(generated_maze)):
             for rwo in range(len(generated_maze[0])):
-                self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) - 1] = 1
-                self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1) + 1] = 1
-                self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1) + 1] = 1
-                self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1) - 1] = 1
-                if generated_maze[clums][rwo]["N"] == 1:
-                    self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1)] = 1
-                if generated_maze[clums][rwo]["E"] == 1:
-                    self.map[(clums * 2 + 1)][(rwo * 2 + 1) + 1] = 1
-                if generated_maze[clums][rwo]["S"] == 1:
-                    self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1)] = 1
-                if generated_maze[clums][rwo]["W"] == 1:
-                    self.map[(clums * 2 + 1)][(rwo * 2 + 1) - 1] = 1
-                if generated_maze[clums][rwo]["N"] == 1:
-                    if generated_maze[clums][rwo]["E"] == 1:
-                        if generated_maze[clums][rwo]["S"] == 1:
-                            if generated_maze[clums][rwo]["W"] == 1:
-                                self.map[(clums * 2 + 1)][(rwo * 2 + 1)] = 1
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1) + "y",
-                                        str(rwo * 2 + 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1 - 1) + "y",
-                                        str(rwo * 2 + 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1) + "y",
-                                        str(rwo * 2 + 1 + 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1 + 1) + "y",
-                                        str(rwo * 2 + 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1) + "y",
-                                        str(rwo * 2 + 1 - 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1 - 1) + "y",
-                                        str(rwo * 2 + 1 + 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1 + 1) + "y",
-                                        str(rwo * 2 + 1 + 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1 + 1) + "y",
-                                        str(rwo * 2 + 1 - 1) + "x"
-                                    )
-                                )
-                                self.wall42.append(
-                                    (
-                                        str(clums * 2 + 1 - 1) + "y",
-                                        str(rwo * 2 + 1 - 1) + "x"
-                                    )
-                                )
+                if generated_maze[clums][rwo]["N"] == 0:
+                    self.map[(clums * 2 + 1) - 1][(rwo * 2 + 1)] = 0
+                if generated_maze[clums][rwo]["E"] == 0:
+                    self.map[(clums * 2 + 1)][(rwo * 2 + 1) + 1] = 0
+                if generated_maze[clums][rwo]["S"] == 0:
+                    self.map[(clums * 2 + 1) + 1][(rwo * 2 + 1)] = 0
+                if generated_maze[clums][rwo]["W"] == 0:
+                    self.map[(clums * 2 + 1)][(rwo * 2 + 1) - 1] = 0
+                if (
+                    self.isThisA15CloseCell(generated_maze, clums, rwo) == 1
+                ):
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1) + "y",
+                            str(rwo * 2 + 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1 - 1) + "y",
+                            str(rwo * 2 + 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1) + "y",
+                            str(rwo * 2 + 1 + 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1 + 1) + "y",
+                            str(rwo * 2 + 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1) + "y",
+                            str(rwo * 2 + 1 - 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1 - 1) + "y",
+                            str(rwo * 2 + 1 + 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1 + 1) + "y",
+                            str(rwo * 2 + 1 + 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1 + 1) + "y",
+                            str(rwo * 2 + 1 - 1) + "x"
+                        )
+                    )
+                    self.wall42.append(
+                        (
+                            str(clums * 2 + 1 - 1) + "y",
+                            str(rwo * 2 + 1 - 1) + "x"
+                        )
+                    )
+                else:
+                    self.map[(clums * 2 + 1)][(rwo * 2 + 1)] = 0
         if self.map[self.player.currentY][self.player.currentX] == 1:
             if self.map[self.player.currentY][self.player.currentX - 1] == 0:
                 self.player.currentX -= 1
@@ -146,6 +155,8 @@ class Game:
 
     def detectKeyboardInput(self) -> None:
         """detect the keyboard input"""
+        if self.countOpenDirections() > 2:
+            time.sleep(0.01)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -426,6 +437,26 @@ class Game:
                 self.ghost.currentClydeMode = "EATEN"
                 self.ghost.clydeCounter = 0
 
+    def countOpenDirections(self) -> int:
+        count = 0
+        y = int(self.player.currentY - 1)
+        x = int(self.player.currentX)
+        if (self.map[y][x] == 0):
+            count += 1
+        y = int(self.player.currentY)
+        x = int(self.player.currentX + 1)
+        if (self.map[y][x] == 0):
+            count += 1
+        y = int(self.player.currentY + 1)
+        x = int(self.player.currentX)
+        if (self.map[y][x] == 0):
+            count += 1
+        y = int(self.player.currentY)
+        x = int(self.player.currentX - 1)
+        if (self.map[y][x] == 0):
+            count += 1
+        return count
+
     def isDirectionOpen(self, direction: str) -> bool:
         """is direction open or close"""
         if direction == "UP":
@@ -481,7 +512,7 @@ class Game:
 
     def miniIntialize(self) -> None:
         """reset and initialzie the characters"""
-        time.sleep(0.4)
+        time.sleep(0.7)
         self.removeGhostsFromMap()
         self.player.currentX = self.player.entity.entityOriginalX
         self.player.currentY = self.player.entity.entityOriginalY
@@ -917,6 +948,63 @@ class Game:
     def checkIsAGhostEatedPacman(self, pickups: Pickups) -> bool:
         """check is a ghost eated pacman"""
         player = self.player
+        ghost = self.ghost
+        if self.ghost.currentPinkyMode == "EATEN":
+            if (
+                ghost.pinkyEntity.entityOriginalX == player.currentX
+                and
+                ghost.pinkyEntity.entityOriginalY == player.currentY
+            ):
+                if ghost.pinkyCounter >= 76:
+                    self.putImage(
+                        self.screen,
+                        player.currentX,
+                        player.currentY,
+                        "images/pinky.png"
+                    )
+                    return True
+        if self.ghost.currentBlinkyMode == "EATEN":
+            if (
+                ghost.blinkyEntity.entityOriginalX == player.currentX
+                and
+                ghost.blinkyEntity.entityOriginalY == player.currentY
+            ):
+                if ghost.blinkyCounter >= 76:
+                    self.putImage(
+                        self.screen,
+                        player.currentX,
+                        player.currentY,
+                        "images/blinky.png"
+                    )
+                    return True
+        if self.ghost.currentInkyMode == "EATEN":
+            if (
+                ghost.inkyEntity.entityOriginalX == player.currentX
+                and
+                ghost.inkyEntity.entityOriginalY == player.currentY
+            ):
+                if ghost.inkyCounter >= 76:
+                    self.putImage(
+                        self.screen,
+                        player.currentX,
+                        player.currentY,
+                        "images/inky.png"
+                    )
+                    return True
+        if self.ghost.currentClydeMode == "EATEN":
+            if (
+                ghost.clydeEntity.entityOriginalX == player.currentX
+                and
+                ghost.clydeEntity.entityOriginalY == player.currentY
+            ):
+                if ghost.clydeCounter >= 76:
+                    self.putImage(
+                        self.screen,
+                        player.currentX,
+                        player.currentY,
+                        "images/clyde.png"
+                    )
+                    return True
         if (
             pickups.pacgums[player.currentY]
             [player.currentX] == 50
@@ -1118,6 +1206,16 @@ class Game:
             GHOST.pinkyCounter = GHOST.previousPinkyCounterValue
             GHOST.currentPinkyMode = GHOST.previousPinkyMode
             GHOST.initialize_ghosts("pinky")
+        elif (
+            GHOST.pinkyCounter == 76
+            and GHOST.currentPinkyMode == "EATEN"
+        ):
+            self.putImage(
+                self.screen,
+                GHOST.pinkyEntity.entityOriginalX,
+                GHOST.pinkyEntity.entityOriginalY,
+                "images/pinky.png"
+            )
         GHOST.blinkyCounter += 1
         if GHOST.blinkyCounter == 116 and GHOST.currentBlinkyMode == "SCATTER":
             GHOST.blinkyCounter = 0
@@ -1149,6 +1247,16 @@ class Game:
             GHOST.blinkyCounter = GHOST.previousBlinkyCounterValue
             GHOST.currentBlinkyMode = GHOST.previousBlinkyMode
             GHOST.initialize_ghosts("blinky")
+        elif (
+            GHOST.blinkyCounter == 76
+            and GHOST.currentBlinkyMode == "EATEN"
+        ):
+            self.putImage(
+                self.screen,
+                GHOST.blinkyEntity.entityOriginalX,
+                GHOST.blinkyEntity.entityOriginalY,
+                "images/blinky.png"
+            )
         GHOST.inkyCounter += 1
         if GHOST.inkyCounter == 116 and GHOST.currentInkyMode == "SCATTER":
             GHOST.inkyCounter = 0
@@ -1178,6 +1286,16 @@ class Game:
             GHOST.inkyCounter = GHOST.previousInkyCounterValue
             GHOST.currentInkyMode = GHOST.previousInkyMode
             GHOST.initialize_ghosts("inky")
+        elif (
+            GHOST.inkyCounter == 76
+            and GHOST.currentInkyMode == "EATEN"
+        ):
+            self.putImage(
+                self.screen,
+                GHOST.inkyEntity.entityOriginalX,
+                GHOST.inkyEntity.entityOriginalY,
+                "images/inky.png"
+            )
         GHOST.clydeCounter += 1
         if GHOST.clydeCounter == 116 and GHOST.currentClydeMode == "SCATTER":
             GHOST.clydeCounter = 0
@@ -1208,3 +1326,13 @@ class Game:
             GHOST.clydeCounter = GHOST.previousClydeCounterValue
             GHOST.currentClydeMode = GHOST.previousClydeMode
             GHOST.initialize_ghosts("clyde")
+        elif (
+            GHOST.clydeCounter == 76
+            and GHOST.currentClydeMode == "EATEN"
+        ):
+            self.putImage(
+                self.screen,
+                GHOST.clydeEntity.entityOriginalX,
+                GHOST.clydeEntity.entityOriginalY,
+                "images/clyde.png"
+            )
