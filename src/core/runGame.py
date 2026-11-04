@@ -29,7 +29,7 @@ class RunGame:
                 self.levels = len(self.config["levels"])
                 self.specialData = SpecialData(self.config["lives"])
         else:
-            self.config = self.parser.parse("fllll")
+            self.config = self.parser.parse("")
             if self.config:
                 self.levels = len(self.config["levels"])
                 self.specialData = SpecialData(self.config["lives"])
