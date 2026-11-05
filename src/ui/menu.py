@@ -260,11 +260,11 @@ class GameOver:
                     if ev.key == pygame.K_RETURN:
                         if name:
                             return name
-
                     elif ev.key == pygame.K_BACKSPACE:
                         name = name[:-1]
 
-                    elif ev.unicode.isalnum() and len(name) < 10:
+                    elif (ev.unicode.isalnum() or
+                          ev.unicode.isspace() and len(name) < 10):
                         name += ev.unicode
 
 

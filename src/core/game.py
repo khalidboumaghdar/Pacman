@@ -610,18 +610,22 @@ class Game:
         if self.player.currentX == self.ghost.pinkyCurrentX:
             if self.player.currentY == self.ghost.pinkyCurrentY:
                 if self.ghost.currentPinkyMode == "FRIGHTENED":
+                    self.specialData.score += 200
                     return True
         if self.player.currentX == self.ghost.blinkyCurrentX:
             if self.player.currentY == self.ghost.blinkyCurrentY:
                 if self.ghost.currentBlinkyMode == "FRIGHTENED":
+                    self.specialData.score += 200
                     return True
         if self.player.currentX == self.ghost.inkyCurrentX:
             if self.player.currentY == self.ghost.inkyCurrentY:
                 if self.ghost.currentInkyMode == "FRIGHTENED":
+                    self.specialData.score += 200
                     return True
         if self.player.currentX == self.ghost.clydeCurrentX:
             if self.player.currentY == self.ghost.clydeCurrentY:
                 if self.ghost.currentClydeMode == "FRIGHTENED":
+                    self.specialData.score += 200
                     return True
         return False
 

@@ -39,18 +39,20 @@ class Score:
 
         # print(f)
         f = sorted(f, key=lambda x: x["score"], reverse=True)[:10]
+        # print(f)
+        # exit(0)
 
         i = 0
         for p in f:
             self.renderer.draw_text(
-                p["name"],
+                p["name"][:10],
                 100,
                 150 + i
             )
             # print(p["score"])
             self.renderer.draw_text(
                 p["score"],
-                300,
+                400,
                 150 + i
             )
             i += 50
