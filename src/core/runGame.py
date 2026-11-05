@@ -19,7 +19,7 @@ from pathlib import Path
 class RunGame:
     """RanGame class that implement
     game whole cycle"""
-    def __init__(self, renderer: Renderer):
+    def __init__(self, renderer: Renderer) -> None:
         """constructor method"""
         self.renderer: Renderer = renderer
         self.parser = Parser()
