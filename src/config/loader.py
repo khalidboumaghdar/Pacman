@@ -81,18 +81,35 @@ class Parser:
                         f" -> using default: {default_value}"
                     )
                     continue
+            if key == "lives":
+                # print(value)
+                # exit(0)
+                if value < 3:
+                    print(
+                        f"! Invalid lives: {value}"
+                        f" -> using default: {default_value}"
+                    )
+                else:
+                    result[key] = value
+                continue
             if key == "width":
                 if value < 9:
                     print(
                         f"! Invalid width: {value}"
                         f" -> using default: {default_value}"
                     )
+                else:
+                    result[key] = value
+                continue
             if key == "height":
                 if value < 7:
                     print(
                         f"! Invalid width: {value}"
                         f" -> using default: {default_value}"
                     )
+                else:
+                    result[key] = value
+                continue
 
             if key == "levels":
                 try:
@@ -163,13 +180,16 @@ class Parser:
                 print(f"Negative number in key :{key}"
                       f"-> using default: {default_value}")
                 continue
-
+            # print(key)
             result[key] = value
+            # print(result)
+            # exit(0)
 
         unknown_key = set(data) - set(DEFAULT_CONFIG)
         if unknown_key:
             print(f"! Ignoring unknown keys: {'- '.join(unknown_key)}")
 
+        print(key)
         return result
 
     def parse(self, path: str) -> dict[str, Any] | None:
