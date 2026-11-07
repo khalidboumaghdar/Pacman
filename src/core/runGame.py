@@ -23,13 +23,8 @@ class RunGame:
         """constructor method"""
         self.renderer: Renderer = renderer
         self.parser = Parser()
-        if len(sys.argv) >= 2:
+        if len(sys.argv) == 2:
             self.config = self.parser.parse(sys.argv[1])
-            if self.config:
-                self.levels = len(self.config["levels"])
-                self.specialData = SpecialData(self.config["lives"])
-        else:
-            self.config = self.parser.parse("")
             if self.config:
                 self.levels = len(self.config["levels"])
                 self.specialData = SpecialData(self.config["lives"])

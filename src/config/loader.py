@@ -3,6 +3,7 @@ import json
 from .shema import Config
 from typing import Any
 from pydantic import ValidationError
+import sys
 
 DEFAULT_CONFIG: dict[str, Any] = {
     "highscore_filename": "highscore.json",
@@ -25,9 +26,12 @@ class Parser:
         """This method checks the path suffix, validates the JSON file,
         skips comments, and checks if the config is empty"""
         try:
+            if len(sys.argv) != 2:
+                print("must be just config file")
+                sys.exit(0)
             if Path(path).suffix != ".json":
-                print("! Warning suffix shold be .json")
-                return None
+                print("! Eroor: suffix shold be .json")
+                sys.exit(0)
 
             with open(path, "r") as p:
                 data = []
@@ -44,7 +48,7 @@ class Parser:
                 return "".join(data)
         except FileNotFoundError as f:
             print(f)
-            return None
+            sys.exit(0)
 
     def read_data(self, raw: str) -> dict[Any, Any] | None:
         """This method reads the JSON file and returns the data"""

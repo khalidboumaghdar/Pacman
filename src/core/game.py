@@ -1152,21 +1152,22 @@ class Game:
             self.screen,
             37 - specialFloat,
             0,
-            f"                     score: {self.specialData.score}"
+            f"                     Score: {self.specialData.score}"
         )
         currentLevel = self.specialData.currentLevel + 1
         self.putString(
             self.screen,
             44.6,
             0,
-            f" level: {currentLevel}/{self.specialData.allLevels}"
+            f" Level: {currentLevel}/{self.specialData.allLevels}"
         )
-        self.putString(
-            self.screen,
-            48.5,
-            0,
-            f" lives: {self.specialData.lives}"
-        )
+        if self.c.check is False:
+            self.putString(
+                self.screen,
+                48.5,
+                0,
+                f" Lives: {self.specialData.lives}"
+            )
         if self.clock.pauseTimeCheateMode is False:
             if self.clock.pauseMenu is False:
                 self.putString(
