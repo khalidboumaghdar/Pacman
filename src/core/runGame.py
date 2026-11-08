@@ -109,15 +109,19 @@ class RunGame:
             player = Player(player_entity)
             if self.config:
                 clock = Clock(self.config["level_max_time"])
-            game = Game(
-                clock,
-                map_width,
-                map_height,
-                player,
-                ghost,
-                screen,
-                self.specialData
-            )
+            if self.config:
+                game = Game(
+                    clock,
+                    map_width,
+                    map_height,
+                    player,
+                    ghost,
+                    screen,
+                    self.specialData,
+                    self.config["points_per_ghost"],
+                    self.config["points_per_pacgum"],
+                    self.config["points_per_super_pacgum"]
+                )
             game.buildGameMap(maze_adapter.get_maze())
             self.specialData.allLevels = self.levels
             if self.config:

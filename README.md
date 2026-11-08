@@ -50,3 +50,4 @@ for this project, al 7amdo li Allah wa7daho, we followd very important principe 
 ### Project Management
 so for the project management, we explained our project architecture, and important principles that we used.
 this helps us to imporove our project sharing strategie, and let any one easly understand our infastucture, inchaaAllah.
+so the files of documentation are in the documentation folder and this documentation folder is simply in the root directory.

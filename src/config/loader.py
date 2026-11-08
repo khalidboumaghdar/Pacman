@@ -196,7 +196,6 @@ class Parser:
         if unknown_key:
             print(f"! Ignoring unknown keys: {'- '.join(unknown_key)}")
 
-        print(key)
         return result
 
     def parse(self, path: str) -> dict[str, Any] | None:

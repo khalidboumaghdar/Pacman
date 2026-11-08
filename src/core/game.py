@@ -21,7 +21,10 @@ class Game:
         player: Player,
         ghost: Ghost,
         screen: Any,
-        specialData: SpecialData
+        specialData: SpecialData,
+        points_per_ghost: int,
+        points_per_pacgum: int,
+        points_per_super_pacgum: int
     ) -> None:
         """constructor method"""
         self.c = Cheat(False)
@@ -38,6 +41,9 @@ class Game:
         self.wall42: list = []
         self.specialData = specialData
         self.isPaused = False
+        self.points_per_ghost = points_per_ghost
+        self.points_per_pacgum = points_per_pacgum
+        self.points_per_super_pacgum = points_per_super_pacgum
 
     def isThisA15CloseCell(
         self,
@@ -610,22 +616,22 @@ class Game:
         if self.player.currentX == self.ghost.pinkyCurrentX:
             if self.player.currentY == self.ghost.pinkyCurrentY:
                 if self.ghost.currentPinkyMode == "FRIGHTENED":
-                    self.specialData.score += 200
+                    self.specialData.score += self.points_per_ghost
                     return True
         if self.player.currentX == self.ghost.blinkyCurrentX:
             if self.player.currentY == self.ghost.blinkyCurrentY:
                 if self.ghost.currentBlinkyMode == "FRIGHTENED":
-                    self.specialData.score += 200
+                    self.specialData.score += self.points_per_ghost
                     return True
         if self.player.currentX == self.ghost.inkyCurrentX:
             if self.player.currentY == self.ghost.inkyCurrentY:
                 if self.ghost.currentInkyMode == "FRIGHTENED":
-                    self.specialData.score += 200
+                    self.specialData.score += self.points_per_ghost
                     return True
         if self.player.currentX == self.ghost.clydeCurrentX:
             if self.player.currentY == self.ghost.clydeCurrentY:
                 if self.ghost.currentClydeMode == "FRIGHTENED":
-                    self.specialData.score += 200
+                    self.specialData.score += self.points_per_ghost
                     return True
         return False
 
@@ -1056,11 +1062,11 @@ class Game:
             for x in range(self.mapWidth):
                 if self.player.currentX == x and self.player.currentY == y:
                     if pickups.pacgums[y][x] == 10:
-                        self.specialData.score += 10
+                        self.specialData.score += self.points_per_pacgum
                         pickups.pacgums[y][x] = 0
                     elif pickups.pacgums[y][x] == 50:
                         self.putImage(self.screen, x, y, "images/black.png")
-                        self.specialData.score += 50
+                        self.specialData.score += self.points_per_super_pacgum
                         pickups.pacgums[y][x] = 0
                         ghost.setFrightenedMode()
                 if x == ghost.pinkyCurrentX and y == ghost.pinkyCurrentY:
