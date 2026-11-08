@@ -27,7 +27,10 @@ class Parser:
         skips comments, and checks if the config is empty"""
         try:
             if len(sys.argv) != 2:
-                print("must be just config file")
+                print(
+                    "must be just one config file",
+                    "at least specified in the command that run game."
+                )
                 sys.exit(0)
             if Path(path).suffix != ".json":
                 print("! Eroor: suffix shold be .json")
@@ -127,11 +130,11 @@ class Parser:
                         })
                     if len(value) < 10:
                         ms = 10 - len(value)
-                        print("\n =============== Error ⛔ ========"
+                        print("\n =============== Error  ========"
                               "==================\n")
                         print(f"! Warning: you have {len(value)} levels")
                         print(f"\n================ ! Adding {ms} default"
-                              "levels ✅ =============\n")
+                              "levels  =============\n")
                         # print(default_value)
                         # print(type(value))
                         # exit(0)
@@ -143,18 +146,18 @@ class Parser:
                     for i, level in enumerate(value):
                         # print(f"index : {i}")
                         if level["width"] > 47:
-                            print("⛔ !warning width is to long ")
+                            print(" !warning width is to long ")
                             value[i]["width"] = default_value[i]["width"]
                             print("\n================ ! Using default width "
                                   "data =============\n")
                         if level["height"] > 26:
-                            print("⛔ !warning height is to long ")
+                            print(" !warning height is to long ")
                             print("\n================ ! Using default height "
                                   "data =============\n")
                             value[i]["height"] = default_value[i]["height"]
                         m_pucgam = level["width"] * level["height"] - 19
                         if level["pacgum"] > m_pucgam:
-                            print("⛔ !warning pacgum is to long ")
+                            print(" !warning pacgum is to long ")
                             print("\n================ ! Using default pacgame "
                                   "data =============\n")
                             value[i]["pacgum"] = default_value[i]["pacgum"]
@@ -166,11 +169,11 @@ class Parser:
                     for err in e.errors():
                         eror.append(err["msg"])
 
-                    print("\n =============== Error ⛔ =========="
+                    print("\n =============== Error  =========="
                           "================\n")
                     for er in eror:
                         print(f"  Error: {er}")
-                    print("\n================ Using Default Data ✅ ===="
+                    print("\n================ Using Default Data  ===="
                           "=========\n")
                     print(f"-> using default: {default_value}")
                     continue
