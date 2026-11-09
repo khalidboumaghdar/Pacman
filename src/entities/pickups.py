@@ -11,7 +11,9 @@ class Pickups:
         numberOfPacgum: int,
         width: int, height: int,
         map: list[list[int]],
-        ghost: Ghost
+        ghost: Ghost,
+        points_per_pacgum: int,
+        points_per_super_pacgum: int
     ) -> None:
         """ constructor method"""
         self.width = width
@@ -20,10 +22,13 @@ class Pickups:
         self.ghost = ghost
         self.numberOfPacgum = numberOfPacgum
         self.player = player
+        self.points_per_pacgum = points_per_pacgum
+        self.points_per_super_pacgum = points_per_super_pacgum
         self.pacgums = self.build_pacgums()
 
     def build_pacgums(self) -> list[list[int]]:
         """build the pacgums"""
+        mapsOpenCorridorsNumber = 0
         pacgums = [[0 for x in range(self.width)] for y in range(self.height)]
         for y in range(self.height):
             for x in range(self.width):
@@ -31,25 +36,61 @@ class Pickups:
                     x == self.ghost.pinkyEntity.entityOriginalX
                     and y == self.ghost.pinkyEntity.entityOriginalY
                 ):
-                    pacgums[y][x] = 50
+                    pacgums[y][x] = self.points_per_super_pacgum
                 elif (
                     x == self.ghost.blinkyEntity.entityOriginalX
                     and y == self.ghost.blinkyEntity.entityOriginalY
                 ):
-                    pacgums[y][x] = 50
+                    pacgums[y][x] = self.points_per_super_pacgum
                 elif (
                     x == self.ghost.inkyEntity.entityOriginalX
                     and y == self.ghost.inkyEntity.entityOriginalY
                 ):
-                    pacgums[y][x] = 50
+                    pacgums[y][x] = self.points_per_super_pacgum
                 elif (
                     x == self.ghost.clydeEntity.entityOriginalX
                     and y == self.ghost.clydeEntity.entityOriginalY
                 ):
-                    pacgums[y][x] = 50
+                    pacgums[y][x] = self.points_per_super_pacgum
                 elif self.map[y][x] == 0:
-                    if self.numberOfPacgum is None:
-                        pacgums[y][x] = 10
+                    if (
+                        y == self.player.currentY and x == self.player.currentX
+                    ):
+                        pass
+                    else:
+                        mapsOpenCorridorsNumber += 1
+        if self.numberOfPacgum > mapsOpenCorridorsNumber:
+            for y in range(self.height):
+                for x in range(self.width):
+                    if (
+                        x == self.ghost.pinkyEntity.entityOriginalX
+                        and y == self.ghost.pinkyEntity.entityOriginalY
+                    ):
+                        continue
+                    elif (
+                        x == self.ghost.blinkyEntity.entityOriginalX
+                        and y == self.ghost.blinkyEntity.entityOriginalY
+                    ):
+                        continue
+                    elif (
+                        x == self.ghost.inkyEntity.entityOriginalX
+                        and y == self.ghost.inkyEntity.entityOriginalY
+                    ):
+                        continue
+                    elif (
+                        x == self.ghost.clydeEntity.entityOriginalX
+                        and y == self.ghost.clydeEntity.entityOriginalY
+                    ):
+                        continue
+                    elif self.map[y][x] == 0:
+                        if (
+                            y == self.player.currentY
+                            and x == self.player.currentX
+                        ):
+                            continue
+                        else:
+                            pacgums[y][x] = self.points_per_pacgum
+            return pacgums
         if self.numberOfPacgum is not None:
             while self.numberOfPacgum > 0:
                 y = 0
@@ -69,11 +110,17 @@ class Pickups:
                         continue
                 if self.map[winner_row][winner_column] == 1:
                     continue
-                if pacgums[winner_row][winner_column] == 50:
+                if (
+                    pacgums[winner_row][winner_column] ==
+                    self.points_per_super_pacgum
+                ):
                     continue
-                if pacgums[winner_row][winner_column] == 10:
+                if (
+                    pacgums[winner_row][winner_column] ==
+                    self.points_per_pacgum
+                ):
                     continue
-                pacgums[winner_row][winner_column] = 10
+                pacgums[winner_row][winner_column] = self.points_per_pacgum
                 self.numberOfPacgum -= 1
         return pacgums
 

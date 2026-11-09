@@ -247,7 +247,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousPinkyY]
-                [GHOST.previousPinkyX] == 10
+                [GHOST.previousPinkyX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -257,7 +257,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousPinkyY]
-                [GHOST.previousPinkyX] == 50
+                [GHOST.previousPinkyX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -299,7 +299,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousBlinkyY]
-                [GHOST.previousBlinkyX] == 10
+                [GHOST.previousBlinkyX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -309,7 +309,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousBlinkyY]
-                [GHOST.previousBlinkyX] == 50
+                [GHOST.previousBlinkyX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -348,7 +348,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousInkyY]
-                [GHOST.previousInkyX] == 10
+                [GHOST.previousInkyX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -358,7 +358,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousInkyY]
-                [GHOST.previousInkyX] == 50
+                [GHOST.previousInkyX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -397,7 +397,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousClydeY]
-                [GHOST.previousClydeX] == 10
+                [GHOST.previousClydeX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -407,7 +407,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousClydeY]
-                [GHOST.previousClydeX] == 50
+                [GHOST.previousClydeX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -654,9 +654,9 @@ class Game:
                             )
                         else:
                             self.putImage(self.screen, x, y, "images/wall.png")
-                elif pickups.pacgums[y][x] == 10:
+                elif pickups.pacgums[y][x] == self.points_per_pacgum:
                     self.putImage(self.screen, x, y, "images/smallpickups.png")
-                elif pickups.pacgums[y][x] == 50:
+                elif pickups.pacgums[y][x] == self.points_per_super_pacgum:
                     self.putImage(self.screen, x, y, "images/bigpickups.png")
 
     def putString(self, window: Any, x: float, y: float, string: str) -> None:
@@ -697,7 +697,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousPinkyY]
-                [GHOST.previousPinkyX] == 10
+                [GHOST.previousPinkyX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -707,7 +707,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousPinkyY]
-                [GHOST.previousPinkyX] == 50
+                [GHOST.previousPinkyX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -748,7 +748,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousBlinkyY]
-                [GHOST.previousBlinkyX] == 10
+                [GHOST.previousBlinkyX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -758,7 +758,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousBlinkyY]
-                [GHOST.previousBlinkyX] == 50
+                [GHOST.previousBlinkyX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -796,7 +796,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousInkyY]
-                [GHOST.previousInkyX] == 10
+                [GHOST.previousInkyX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -806,7 +806,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousInkyY]
-                [GHOST.previousInkyX] == 50
+                [GHOST.previousInkyX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -844,7 +844,7 @@ class Game:
             )
             if (
                 pickups.pacgums[GHOST.previousClydeY]
-                [GHOST.previousClydeX] == 10
+                [GHOST.previousClydeX] == self.points_per_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -854,7 +854,7 @@ class Game:
                 )
             elif (
                 pickups.pacgums[GHOST.previousClydeY]
-                [GHOST.previousClydeX] == 50
+                [GHOST.previousClydeX] == self.points_per_super_pacgum
             ):
                 self.putImage(
                     self.screen,
@@ -1017,7 +1017,7 @@ class Game:
                     return True
         if (
             pickups.pacgums[player.currentY]
-            [player.currentX] == 50
+            [player.currentX] == self.points_per_pacgum
         ):
             return False
         ghost = self.ghost
@@ -1061,10 +1061,10 @@ class Game:
         for y in range(self.mapHeight):
             for x in range(self.mapWidth):
                 if self.player.currentX == x and self.player.currentY == y:
-                    if pickups.pacgums[y][x] == 10:
+                    if pickups.pacgums[y][x] == self.points_per_pacgum:
                         self.specialData.score += self.points_per_pacgum
                         pickups.pacgums[y][x] = 0
-                    elif pickups.pacgums[y][x] == 50:
+                    elif pickups.pacgums[y][x] == self.points_per_super_pacgum:
                         self.putImage(self.screen, x, y, "images/black.png")
                         self.specialData.score += self.points_per_super_pacgum
                         pickups.pacgums[y][x] = 0

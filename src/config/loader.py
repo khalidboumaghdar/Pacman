@@ -155,12 +155,6 @@ class Parser:
                             print("\n================ ! Using default height "
                                   "data =============\n")
                             value[i]["height"] = default_value[i]["height"]
-                        m_pucgam = level["width"] * level["height"] - 19
-                        if level["pacgum"] > m_pucgam:
-                            print(" !warning pacgum is to long ")
-                            print("\n================ ! Using default pacgame "
-                                  "data =============\n")
-                            value[i]["pacgum"] = default_value[i]["pacgum"]
                     result[key] = value
                     continue
                 except ValidationError as e:

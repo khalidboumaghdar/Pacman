@@ -96,6 +96,10 @@ class RunGame:
                 # exit(0)
             map_width = (map_width * 2) + 1
             map_height = (map_height * 2) + 1
+
+            # print(map_width)
+            # print(map_height)
+            # exit(0)
             ghost = Ghost(
                 Entity(1, 1),
                 Entity(map_width - 2, 1),
@@ -127,11 +131,13 @@ class RunGame:
             if self.config:
                 pickups = Pickups(
                     player,
-                    self.config["levels"][i].get("pacgum"),
+                    self.config["levels"][i]["pacgum"],
                     map_width,
                     map_height,
                     game.map,
-                    ghost
+                    ghost,
+                    self.config["points_per_pacgum"],
+                    self.config["points_per_super_pacgum"]
                 )
             game.runGameWindow()
             game.displayMapInfastructor(pickups)
